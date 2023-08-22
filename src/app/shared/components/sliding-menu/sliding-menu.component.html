@@ -1,0 +1,17 @@
+<div
+  class="overlay"
+  tabindex="0"
+  (click)="closeMenu()"
+  (keyup.enter)="closeMenu()"
+  [class.open]="menuOpen"
+></div>
+<nav class="sliding-menu" [class.open]="menuOpen">
+  <a href="#">Link 1</a>
+  <button
+    (click)="closeMenu()"
+    (keyup)="($event.key === 'Enter' || $event.key === ' ') && closeMenu()"
+  >
+    Link 2
+  </button>
+  <!-- Add more links as needed -->
+</nav>

@@ -1,0 +1,28 @@
+/* You can add global styles to this file, and also import other style files */
+// "@angular/material/prebuilt-themes/deeppurple-amber.css", on angular.json
+
+@use "@angular/material" as mat;
+@use "./app/shared/components/main-nav/main-nav.component.theme.scss" as navigation;
+
+@include mat.core();
+
+$primary: mat.define-palette(mat.$deep-purple-palette);
+$accent: mat.define-palette(mat.$amber-palette, A200, A100, A400);
+$warn: mat.define-palette(mat.$red-palette);
+
+$theme: mat.define-light-theme(
+  (
+    color: (
+      primary: $primary,
+      accent: $accent,
+      warn: $warn,
+    ),
+    typography: mat.define-typography-config(),
+    density: 0,
+  )
+);
+
+@include mat.all-component-themes($theme);
+@include mat.typography-hierarchy($theme);
+
+@include navigation.theme($theme);

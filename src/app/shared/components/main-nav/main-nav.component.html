@@ -1,0 +1,29 @@
+<nav class="main-nav">
+  <div class="logo">
+    <a href="#">
+      <img src="assets/images/logo.png" alt="Logo" height="80" />
+    </a>
+  </div>
+  <ul
+    role="menubar"
+    class="links stretch"
+    *ngIf="(showHamburgerMenu | async) === false"
+  >
+    <li role="menuitem"><a href="#">Login</a></li>
+    <li role="menuitem"><a href="#">Cadastro</a></li>
+  </ul>
+  <div class="location" *ngIf="(showHamburgerMenu | async) === false">
+    <mat-icon color="accent">gps_fixed</mat-icon>
+    <div class="location-text">Localização</div>
+  </div>
+  <div
+    class="mobile-menu"
+    *ngIf="showHamburgerMenu | async"
+    [class.mobile-menu-end]="showHamburgerMenu | async"
+  >
+    <button mat-button color="primary" (click)="slidingMenu.toggleMenu()">
+      <mat-icon color="accent" class="menu-icon">menu</mat-icon>
+    </button>
+  </div>
+  <app-sliding-menu #slidingMenu></app-sliding-menu>
+</nav>

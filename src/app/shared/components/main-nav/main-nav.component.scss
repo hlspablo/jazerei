@@ -1,0 +1,54 @@
+.main-nav {
+  display: flex;
+  flex-direction: row;
+  height: 80px;
+
+  .stretch {
+    flex-grow: 1;
+  }
+
+  .logo {
+    margin-left: 30px;
+  }
+
+  .links {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    li a {
+      text-decoration: none;
+      display: inline-block;
+      cursor: pointer;
+    }
+  }
+
+  .location {
+    display: flex;
+    margin-right: 20px;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .mobile-menu {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    margin-right: 20px;
+    .menu-icon {
+      font-size: 40px;
+      line-height: 40px;
+      width: 40px;
+      height: 40px;
+      display: inline-block;
+    }
+  }
+
+  .mobile-menu-end {
+    flex-grow: 1;
+    align-items: center;
+    justify-content: flex-end;
+  }
+}

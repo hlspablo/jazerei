@@ -1,0 +1,68 @@
+/* Box sizing border-box for all elements */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100%;
+}
+body {
+  margin: 0;
+  padding: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
+/* Remove margin and padding */
+body,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+blockquote,
+pre,
+dl,
+dd,
+ol,
+ul,
+figure,
+hr {
+  margin: 0;
+  padding: 0;
+}
+
+/* Set a baseline font-size and line height */
+body {
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+/* Remove list styles */
+ul,
+ol {
+  list-style: none;
+}
+
+/* Remove default hyperlink styling */
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+/* Remove underlines from links within buttons */
+button,
+[type="button"],
+[type="reset"],
+[type="submit"] {
+  text-decoration: none;
+}
+
+/* Remove outline from focused elements */
+:focus {
+  outline: none;
+}
