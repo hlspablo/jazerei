@@ -1,6 +1,6 @@
 import { Component, OnInit } from "@angular/core"
-import { BreakpointObserver, Breakpoints } from "@angular/cdk/layout"
-import { Observable, map } from "rxjs"
+import { Observable } from "rxjs"
+import { BreakpointService } from "src/app/services/breakpoint-service.service"
 
 @Component({
   selector: "app-main-nav",
@@ -10,11 +10,10 @@ import { Observable, map } from "rxjs"
 export class MainNavComponent implements OnInit {
   showHamburgerMenu: Observable<boolean>
 
-  constructor(private breakpointObserver: BreakpointObserver) {}
+  constructor(private breakpointService: BreakpointService) {}
 
   ngOnInit() {
-    this.showHamburgerMenu = this.breakpointObserver
-      .observe([Breakpoints.Handset, Breakpoints.Small])
-      .pipe(map((result) => result.matches))
+    this.showHamburgerMenu = this.showHamburgerMenu =
+      this.breakpointService.isHandsetOrSmall()
   }
 }

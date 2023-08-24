@@ -1,3 +1,63 @@
 <nav class="sub-nav">
   <app-search-bar></app-search-bar>
 </nav>
+<nav class="sub-nav-bottom">
+  <ul class="consoles" *ngIf="(showHamburgerMenu | async) === false">
+    <li>
+      <a href="#"
+        ><img
+          src="assets/images/svg/ps5.svg"
+          alt="Playstation 5"
+          title="Playstation 5"
+      /></a>
+    </li>
+    <li>
+      <a href="#"
+        ><img
+          src="assets/images/svg/ps4.svg"
+          alt="Playstation 4"
+          title="Playstation 4"
+      /></a>
+    </li>
+    <li>
+      <a href="#"
+        ><img
+          src="assets/images/svg/ps3.svg"
+          alt="Playstation 3"
+          title="Playstation 3"
+      /></a>
+    </li>
+    <li>
+      <a href="#"
+        ><img
+          src="assets/images/svg/xbox-one.svg"
+          alt="Xbox One"
+          title="Xbox One"
+      /></a>
+    </li>
+    <li>
+      <a href="#"
+        ><img
+          src="assets/images/svg/xbox360.svg"
+          alt="Xbox 360"
+          title="Xbox 360"
+      /></a>
+    </li>
+    <li>
+      <a href="#"
+        ><img
+          src="assets/images/svg/nintendo-switch.svg"
+          alt="Nitendo Switch"
+          title="Nitendo Switch"
+      /></a>
+    </li>
+    <li>
+      <a href="#"
+        ><img
+          src="assets/images/svg/nintendo-3ds.svg"
+          alt="Nintendo 3DS"
+          title="Nintendo 3DS"
+      /></a>
+    </li>
+  </ul>
+</nav>

@@ -11,6 +11,9 @@
   .sub-nav {
     background-color: mat.get-color-from-palette($primary-palette, 400);
   }
+  .sub-nav-bottom {
+    background-color: mat.get-color-from-palette($primary-palette, 400);
+  }
 }
 
 @mixin typography($theme) {
