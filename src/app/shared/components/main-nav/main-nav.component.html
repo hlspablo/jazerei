@@ -1,7 +1,7 @@
 <nav class="main-nav">
-  <div class="logo">
+  <div class="logo" [class.mobile-logo]="showHamburgerMenu | async">
     <a href="#">
-      <img src="assets/images/logo.png" alt="Logo" height="80" />
+      <img src="assets/images/logo.png" alt="Logo" height="70" />
     </a>
   </div>
   <ul

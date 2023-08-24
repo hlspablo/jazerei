@@ -1,0 +1,18 @@
+<div class="search-bar">
+  <form class="search-bar-form">
+    <mat-form-field class="search-bar-form-field">
+      <input
+      type="text"
+      matInput
+      [matAutocomplete]="auto"
+      [formControl]="gameControl"
+      placeholder="Digite o nome do jogo"
+      />
+      <mat-autocomplete #auto="matAutocomplete" [panelWidth]="350">
+        <mat-option *ngFor="let game of items$ | async" [value]="game.name">
+          {{ game.name }}
+        </mat-option>
+      </mat-autocomplete>
+    </mat-form-field>
+  </form>
+</div>

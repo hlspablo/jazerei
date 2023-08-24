@@ -1,7 +1,7 @@
 .main-nav {
   display: flex;
   flex-direction: row;
-  height: 80px;
+  height: 100px;
 
   .stretch {
     flex-grow: 1;
@@ -11,6 +11,10 @@
     margin-left: 30px;
   }
 
+  .mobile-logo {
+    margin-left: 0px;
+  }
+
   .links {
     display: flex;
     flex-direction: row;
@@ -18,9 +22,7 @@
     justify-content: center;
     gap: 20px;
     li a {
-      text-decoration: none;
       display: inline-block;
-      cursor: pointer;
     }
   }
 
@@ -38,10 +40,10 @@
     justify-content: center;
     margin-right: 20px;
     .menu-icon {
-      font-size: 40px;
-      line-height: 40px;
-      width: 40px;
-      height: 40px;
+      font-size: 35px;
+      line-height: 35px;
+      width: 35px;
+      height: 35px;
       display: inline-block;
     }
   }
@@ -50,5 +52,6 @@
     flex-grow: 1;
     align-items: center;
     justify-content: flex-end;
+    margin-right: 0px;
   }
 }

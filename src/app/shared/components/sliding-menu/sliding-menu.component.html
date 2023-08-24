@@ -6,12 +6,25 @@
   [class.open]="menuOpen"
 ></div>
 <nav class="sliding-menu" [class.open]="menuOpen">
-  <a href="#">Link 1</a>
-  <button
-    (click)="closeMenu()"
-    (keyup)="($event.key === 'Enter' || $event.key === ' ') && closeMenu()"
-  >
-    Link 2
-  </button>
+  <div class="slide-header">
+    <div class="logo">
+      <a href="#">
+        <img src="assets/images/logo.png" alt="Logo" height="80" />
+      </a>
+    </div>
+    <button
+      mat-button
+      color="primary"
+      (click)="closeMenu()"
+      (keyup.enter)="closeMenu()"
+    >
+      <mat-icon color="accent" class="medium-icon">close</mat-icon>
+    </button>
+  </div>
+  <mat-divider></mat-divider>
+  <ul class="mobile-links" role="menubar">
+    <li role="menuitem"><a href="#">Login</a></li>
+    <li role="menuitem"><a href="#">Cadastro</a></li>
+  </ul>
   <!-- Add more links as needed -->
 </nav>

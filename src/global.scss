@@ -1,0 +1,14 @@
+body .mat-icon.medium-icon {
+  font-size: 40px;
+  line-height: 40px;
+  width: 40px;
+  height: 40px;
+  display: inline-block;
+}
+
+.mat-mdc-form-field .mat-mdc-text-field-wrapper {
+  border-radius: 30px;
+}
+.cdk-overlay-container .cdk-overlay-pane div.mat-mdc-autocomplete-panel  {
+  border-radius: 10px !important;
+}

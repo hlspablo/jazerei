@@ -1,12 +1,11 @@
 .sliding-menu {
   width: 350px;
   height: 100%;
-  background-color: #111;
   position: fixed;
   top: 0;
   right: -350px;
   overflow-x: hidden;
-  transition: right 0.5s ease; /* Smooth sliding animation */
+  transition: right 0.5s ease;
   z-index: 2;
 }
 
@@ -15,15 +14,10 @@
 }
 
 .sliding-menu a {
-  padding: 15px;
+  padding: 4px 15px;
   text-decoration: none;
-  color: #818181;
   display: block;
   transition: 0.3s;
-}
-
-.sliding-menu a:hover {
-  color: #f1f1f1;
 }
 
 .overlay {
@@ -32,11 +26,22 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.4); /* Transparent black background */
-  z-index: 1; /* Place it below the menu */
-  display: none; /* Initially hidden */
+  background-color: rgba(0, 0, 0, 0.4);
+  z-index: 1;
+  display: none;
 }
 
 .overlay.open {
   display: block;
+}
+
+.slide-header {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.mobile-links {
+  margin-top: 20px;
 }

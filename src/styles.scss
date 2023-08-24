@@ -2,7 +2,14 @@
 // "@angular/material/prebuilt-themes/deeppurple-amber.css", on angular.json
 
 @use "@angular/material" as mat;
-@use "./app/shared/components/main-nav/main-nav.component.theme.scss" as navigation;
+@use "./app/shared/components/main-nav/main-nav.component.theme.scss" as
+  navigation;
+@use "./app/shared/components/sliding-menu/sliding-menu.component.theme" as
+  sliding-menu;
+
+  @use "./app/shared/components/sub-nav/sub-nav.component.theme" as
+  sub-nav;
+
 
 @include mat.core();
 
@@ -24,5 +31,8 @@ $theme: mat.define-light-theme(
 
 @include mat.all-component-themes($theme);
 @include mat.typography-hierarchy($theme);
+@include mat.form-field-density(-4);
 
 @include navigation.theme($theme);
+@include sliding-menu.theme($theme);
+@include sub-nav.theme($theme);

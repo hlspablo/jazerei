@@ -1,0 +1,16 @@
+.search-bar {
+  min-width: 350px;
+  position: relative;
+  top: -22px;
+}
+
+.search-bar-form {
+  width: 100%;
+  .search-bar-form-field {
+    width: 100%;
+  }
+}
+
+.mat-mdc-form-field .mat-mdc-text-field-wrapper {
+  border-top-right-radius: 20px;
+}
