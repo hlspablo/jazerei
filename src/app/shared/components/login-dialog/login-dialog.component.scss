@@ -1,0 +1,13 @@
+.form-container {
+  min-width: 300px;
+  form .mat-mdc-form-field {
+    width: 100%;
+  }
+}
+.login-actions {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: center;
+  margin-top: 20px;
+}

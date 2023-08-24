@@ -1,18 +1,37 @@
 <h2 mat-dialog-title>Login</h2>
 <mat-dialog-content>
-  <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
-    <mat-form-field>
-      <mat-label>Login</mat-label>
-      <input matInput type="text" formControlName="username" required placeholder="Login" />
-    </mat-form-field>
-    <mat-form-field>
-      <mat-label>Senha</mat-label>
-      <input matInput type="password" formControlName="password" required />
-    </mat-form-field>
-  </form>
+  <div class="form-container">
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+      <div>
+        <mat-form-field floatLabel="always">
+          <mat-label>Login</mat-label>
+          <input
+            matInput
+            type="text"
+            formControlName="username"
+            required
+            placeholder="Login"
+          />
+        </mat-form-field>
+      </div>
+      <div>
+        <mat-form-field floatLabel="always">
+          <mat-label>Senha</mat-label>
+          <input
+            matInput
+            type="password"
+            formControlName="password"
+            required
+            placeholder="Senha"
+          />
+        </mat-form-field>
+      </div>
+      <button type="submit" style="display: none"></button>
+    </form>
+  </div>
 </mat-dialog-content>
-<mat-dialog-actions>
-  <button mat-button mat-dialog-close>Cancel</button>
+<mat-dialog-actions class="login-actions">
+  <button mat-button mat-dialog-close>Cancelar</button>
   <button mat-button (click)="onSubmit()" [disabled]="loginForm.invalid">
     Login
   </button>
