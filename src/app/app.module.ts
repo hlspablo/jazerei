@@ -11,6 +11,8 @@ import { getFirestore, provideFirestore } from "@angular/fire/firestore"
 import { MatFormFieldModule } from "@angular/material/form-field"
 import { MatInputModule } from "@angular/material/input"
 import { MatAutocompleteModule } from "@angular/material/autocomplete"
+import { MatCardModule } from "@angular/material/card"
+import { MatDialogModule } from "@angular/material/dialog"
 
 import { AppRoutingModule } from "./app-routing.module"
 import { HomeComponent } from "./pages/home/home.component"
@@ -20,6 +22,8 @@ import { SlidingMenuComponent } from "./shared/components/sliding-menu/sliding-m
 import { SubNavComponent } from "./shared/components/sub-nav/sub-nav.component"
 import { SearchBarComponent } from "./shared/components/search-bar/search-bar.component"
 import { environment } from "../environments/environment"
+import { MainSectionComponent } from "./pages/home/main-section/main-section.component"
+import { LoginDialogComponent } from "./shared/components/login-dialog/login-dialog.component"
 
 @NgModule({
   declarations: [
@@ -29,6 +33,8 @@ import { environment } from "../environments/environment"
     SlidingMenuComponent,
     SubNavComponent,
     SearchBarComponent,
+    MainSectionComponent,
+    LoginDialogComponent,
   ],
   imports: [
     provideFirebaseApp(() => initializeApp(environment.firebase)),
@@ -43,6 +49,8 @@ import { environment } from "../environments/environment"
     MatFormFieldModule,
     MatInputModule,
     MatAutocompleteModule,
+    MatCardModule,
+    MatDialogModule,
   ],
   providers: [],
   bootstrap: [AppComponent],

@@ -9,7 +9,14 @@
     class="links stretch"
     *ngIf="(showHamburgerMenu | async) === false"
   >
-    <li role="menuitem"><a href="#">Login</a></li>
+    <li
+      role="menuitem"
+      (click)="openLoginDialog()"
+      (keyup.enter)="openLoginDialog()"
+      tabindex="2"
+    >
+      <a>Login</a>
+    </li>
     <li role="menuitem"><a href="#">Cadastro</a></li>
   </ul>
   <div class="location" *ngIf="(showHamburgerMenu | async) === false">

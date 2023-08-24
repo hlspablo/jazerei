@@ -60,4 +60,8 @@
       /></a>
     </li>
   </ul>
+  <div class="location" *ngIf="showHamburgerMenu | async">
+    <mat-icon color="accent">gps_fixed</mat-icon>
+    <div class="location-text">Localização</div>
+  </div>
 </nav>

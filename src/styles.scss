@@ -6,10 +6,9 @@
   navigation;
 @use "./app/shared/components/sliding-menu/sliding-menu.component.theme" as
   sliding-menu;
-
-  @use "./app/shared/components/sub-nav/sub-nav.component.theme" as
-  sub-nav;
-
+@use "./app/shared/components/sub-nav/sub-nav.component.theme" as sub-nav;
+@use "./app/pages/home/main-section/main-section.component.theme" as
+  main-section;
 
 @include mat.core();
 
@@ -17,12 +16,15 @@ $primary: mat.define-palette(mat.$deep-purple-palette);
 $accent: mat.define-palette(mat.$amber-palette, A200, A100, A400);
 $warn: mat.define-palette(mat.$red-palette);
 
+
 $theme: mat.define-light-theme(
   (
     color: (
       primary: $primary,
       accent: $accent,
       warn: $warn,
+      background: mat.$light-theme-background-palette,
+      foreground: mat.$light-theme-foreground-palette,
     ),
     typography: mat.define-typography-config(),
     density: 0,
@@ -37,3 +39,23 @@ $theme: mat.define-light-theme(
 @include navigation.theme($theme);
 @include sliding-menu.theme($theme);
 @include sub-nav.theme($theme);
+@include main-section.theme($theme);
+
+
+// $light-theme-foreground-palette: (
+//   base:              black,
+//   divider:           $dark-dividers,
+//   dividers:          $dark-dividers,
+//   disabled:          $dark-disabled-text,
+//   disabled-button:   rgba(black, 0.26),
+//   disabled-text:     $dark-disabled-text,
+//   elevation:         black,
+//   hint-text:         $dark-disabled-text,
+//   secondary-text:    $dark-secondary-text,
+//   icon:              rgba(black, 0.54),
+//   icons:             rgba(black, 0.54),
+//   text:              rgba(black, 0.87),
+//   slider-min:        rgba(black, 0.87),
+//   slider-off:        rgba(black, 0.26),
+//   slider-off-active: rgba(black, 0.38),
+// );
