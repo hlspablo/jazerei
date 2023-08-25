@@ -3,6 +3,7 @@ import { BrowserModule } from "@angular/platform-browser"
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations"
 import { MatIconModule } from "@angular/material/icon"
 import { ReactiveFormsModule } from "@angular/forms"
+import { MatStepperModule } from "@angular/material/stepper"
 
 import { MatButtonModule } from "@angular/material/button"
 import { MatDividerModule } from "@angular/material/divider"
@@ -24,6 +25,7 @@ import { SearchBarComponent } from "./shared/components/search-bar/search-bar.co
 import { environment } from "../environments/environment"
 import { MainSectionComponent } from "./pages/home/main-section/main-section.component"
 import { LoginDialogComponent } from "./shared/components/login-dialog/login-dialog.component"
+import { RegistrationDialogComponent } from "./shared/components/registration-dialog/registration-dialog.component"
 
 @NgModule({
   declarations: [
@@ -35,6 +37,7 @@ import { LoginDialogComponent } from "./shared/components/login-dialog/login-dia
     SearchBarComponent,
     MainSectionComponent,
     LoginDialogComponent,
+    RegistrationDialogComponent,
   ],
   imports: [
     provideFirebaseApp(() => initializeApp(environment.firebase)),
@@ -51,6 +54,7 @@ import { LoginDialogComponent } from "./shared/components/login-dialog/login-dia
     MatAutocompleteModule,
     MatCardModule,
     MatDialogModule,
+    MatStepperModule,
   ],
   providers: [],
   bootstrap: [AppComponent],

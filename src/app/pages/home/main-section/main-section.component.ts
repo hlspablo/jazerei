@@ -6,5 +6,5 @@ import { Component } from "@angular/core"
   styleUrls: ["./main-section.component.scss"],
 })
 export class MainSectionComponent {
-  times = new Array(5).fill(0)
+  times = new Array(3).fill(0)
 }

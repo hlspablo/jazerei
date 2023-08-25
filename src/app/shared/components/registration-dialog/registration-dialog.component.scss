@@ -1,0 +1,15 @@
+.form-container {
+  min-width: 400px;
+  padding: 0 24px;
+  padding-bottom: 10px;
+  form .mat-mdc-form-field {
+    width: 100%;
+  }
+
+  .actions {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    padding-top: 24px;
+  }
+}

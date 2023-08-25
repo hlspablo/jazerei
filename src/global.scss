@@ -8,9 +8,20 @@ body .mat-icon.medium-icon {
 .mat-mdc-form-field .mat-mdc-text-field-wrapper {
   border-radius: 30px;
 }
-.cdk-overlay-container .cdk-overlay-pane div.mat-mdc-autocomplete-panel  {
+.cdk-overlay-container .cdk-overlay-pane div.mat-mdc-autocomplete-panel {
   border-radius: 10px !important;
 }
 .mat-mdc-card-content {
   padding: 10px 16px !important;
+}
+
+.mat-step-header.cdk-focused,
+.mat-step-header.cdk-program-focused {
+  background-color: transparent !important;
+}
+.mat-horizontal-stepper-header:hover {
+  background-color: transparent !important;
+}
+form .mat-horizontal-content-container {
+  padding: 0 !important;
 }

@@ -17,7 +17,14 @@
     >
       <a>Login</a>
     </li>
-    <li role="menuitem"><a href="#">Cadastro</a></li>
+    <li
+      (click)="openRegistrationDialog()"
+      (keyup.enter)="openRegistrationDialog()"
+      tabindex="3"
+      role="menuitem"
+    >
+      <a>Cadastro</a>
+    </li>
   </ul>
   <div class="location" *ngIf="(showHamburgerMenu | async) === false">
     <mat-icon color="accent">gps_fixed</mat-icon>

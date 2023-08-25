@@ -3,6 +3,7 @@ import { MatDialog } from "@angular/material/dialog"
 import { Observable } from "rxjs"
 import { BreakpointService } from "src/app/services/breakpoint-service.service"
 import { LoginDialogComponent } from "../login-dialog/login-dialog.component"
+import { RegistrationDialogComponent } from "../registration-dialog/registration-dialog.component"
 
 @Component({
   selector: "app-main-nav",
@@ -20,6 +21,11 @@ export class MainNavComponent implements OnInit {
   openLoginDialog() {
     console.log("Opening login dialog")
     this.dialog.open(LoginDialogComponent)
+  }
+
+  openRegistrationDialog() {
+    console.log("Opening register dialog")
+    this.dialog.open(RegistrationDialogComponent)
   }
 
   ngOnInit() {
