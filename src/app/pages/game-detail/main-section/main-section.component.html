@@ -1,32 +1,43 @@
-<section class="main">
-  <div class="showing">
-    <span class="showing-text">Exibindo: Mais Procurados</span>
-  </div>
-  <div class="cards">
-    <div *ngFor="let n of times; let i = index">
-      <mat-card class="game-card">
-        <mat-card-header>
-          <div mat-card-avatar class="game-header-image"></div>
-          <mat-card-title>Shiba Inu</mat-card-title>
-          <mat-card-subtitle>Dog Breed</mat-card-subtitle>
-        </mat-card-header>
+<section class="main-section">
+  <div class="game-container">
+    <mat-card [style.max-width]="cardMaxWidth$ | async" class="responsive-card">
+      <div class="slider-container">
         <img
-          mat-card-image
-          src="https://material.angular.io/assets/img/examples/shiba2.jpg"
-          alt="Photo of a Shiba Inu"
+          [src]="images[currentIndex]"
+          [style.max-height]="imageMaxHeight$ | async"
+          alt="Image"
+          class="slider-image"
         />
-        <mat-card-content>
-          <p>
-            The Shiba Inu is the smallest of the six original and distinct spitz
-            breeds of dog from Japan. A small, agile dog that copes very well
-            with mountainous terrain, the Shiba Inu was originally bred for
-            hunting.
-          </p>
-        </mat-card-content>
-        <mat-card-actions align="end">
-          <button mat-button disabled>PS3</button>
-        </mat-card-actions>
-      </mat-card>
-    </div>
+        <button mat-mini-fab class="arrow left" (click)="prevImage()">
+          <mat-icon>arrow_back</mat-icon>
+        </button>
+        <button mat-mini-fab class="arrow right" (click)="nextImage()">
+          <mat-icon>arrow_forward</mat-icon>
+        </button>
+        <div class="dots">
+          <span
+            *ngFor="let image of images; let i = index"
+            [class.active]="i === currentIndex"
+            tabindex="1"
+            (keyup)="(null)"
+            (click)="goToImage(i)"
+          ></span>
+        </div>
+      </div>
+      <mat-card-content>
+        <div class="card-title">Card Title</div>
+        <div class="card-description">
+          Lorem ipsum dolor sit amet consectetur adipisicing elit. Hic sit enim
+          distinctio modi laboriosam quo delectus, placeat nam harum nihil!
+        </div>
+        <div class="chat-button">
+          <button mat-raised-button color="primary" class="btn-rounded">Negociar</button>
+        </div>
+        <div class="card-informations disabled-typography">
+          <span class="game-owner">Fernando Santana</span>
+          <span class="console">PS3</span>
+        </div>
+      </mat-card-content>
+    </mat-card>
   </div>
 </section>

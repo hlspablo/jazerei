@@ -1,6 +1,5 @@
 import { NgModule } from "@angular/core"
 import { CommonModule } from "@angular/common"
-import { BrowserAnimationsModule } from "@angular/platform-browser/animations"
 import { MatIconModule } from "@angular/material/icon"
 import { ReactiveFormsModule } from "@angular/forms"
 import { MatStepperModule } from "@angular/material/stepper"

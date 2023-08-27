@@ -1,27 +1,80 @@
-.showing {
+.main-section {
+  min-height: 980px;
+  padding-top: 50px;
+}
+.game-container {
   display: flex;
   flex-direction: row;
-  height: 60px;
-  justify-content: center;
-  align-items: center;
-  padding-top: 10px;
+  flex-grow: 1;
+  margin: 0 20px;
 }
 
-.cards {
+.responsive-card {
+  max-width: 400px;
+  margin: auto;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.slider-container {
+  position: relative;
+}
+
+.slider-image {
+  width: 100%;
+  height: auto;
+}
+
+.arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 1;
+}
+
+.left {
+  left: 10px;
+}
+
+.right {
+  right: 10px;
+}
+
+.dots {
+  position: absolute;
+  bottom: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.dots span {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  margin: 0 4px;
+  background: gray;
+  border-radius: 50%;
+  cursor: pointer;
+}
+.dots span.active {
+  background: white;
+}
+.card-title {
+  display: flex;
+  justify-content: center;
+}
+.card-description {
+  display: flex;
+  justify-content: center;
+  padding: 10px 15px;
+}
+.chat-button {
   display: flex;
   flex-grow: 1;
-  flex-direction: row;
-  flex-wrap: wrap;
-  gap: 20px;
-  padding: 20px 40px;
   justify-content: center;
 }
-
-.game-card {
-  max-width: 350px;
-}
-
-.game-header-image {
-  background-image: url('https://material.angular.io/assets/img/examples/shiba1.jpg');
-  background-size: cover;
+.card-informations {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.9rem;
 }

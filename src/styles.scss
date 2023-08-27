@@ -4,13 +4,9 @@
 @use "@angular/material" as mat;
 @use "sass:map";
 @use "@fireflysemantics/sass-logger" as logger;
-@use "./app/shared/components/main-nav/main-nav.component.theme.scss" as
-  navigation;
-@use "./app/shared/components/sliding-menu/sliding-menu.component.theme" as
-  sliding-menu;
-@use "./app/shared/components/sub-nav/sub-nav.component.theme" as sub-nav;
-@use "./app/pages/home/main-section/main-section.component.theme" as
-  main-section;
+@use "./app/shared/shared.theme" as shared;
+@use "./app/pages/home/home.theme" as home-page;
+@use "./app/pages/game-detail/game-detail.theme" as game-detail-page;
 
 @include mat.core();
 
@@ -35,7 +31,6 @@ $theme: mat.define-light-theme(
 @include mat.form-field-density(-4);
 @include mat.icon-button-density(-4);
 
-@include navigation.theme($theme);
-@include sliding-menu.theme($theme);
-@include sub-nav.theme($theme);
-@include main-section.theme($theme);
+@include shared.apply-theme($theme);
+@include home-page.apply-theme($theme);
+@include game-detail-page.apply-theme($theme);
