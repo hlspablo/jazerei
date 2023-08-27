@@ -1,0 +1,11 @@
+.form-container {
+  min-width: 350px;
+  form .mat-mdc-form-field {
+    width: 100%;
+  }
+}
+
+.text-message-actions{
+  display: flex;
+  justify-content: space-around;
+}

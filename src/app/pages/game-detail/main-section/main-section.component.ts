@@ -1,6 +1,8 @@
 import { Component, Input, OnInit } from "@angular/core"
 import { BreakpointObserver, Breakpoints } from "@angular/cdk/layout"
 import { Observable, map } from "rxjs"
+import { TextMessageDialogComponent } from "src/app/shared/components/text-message-dialog/text-message-dialog.component"
+import { MatDialog } from "@angular/material/dialog"
 
 @Component({
   selector: "app-game-detail-main-section",
@@ -20,7 +22,15 @@ export class MainSectionComponent implements OnInit {
   cardMaxWidth$: Observable<string>
   imageMaxHeight$: Observable<string>
 
-  constructor(private breakpointObserver: BreakpointObserver) {}
+  constructor(
+    private breakpointObserver: BreakpointObserver,
+    private dialog: MatDialog,
+  ) {}
+
+  openTextMessageDialog() {
+    console.log("Open Dialog")
+    this.dialog.open(TextMessageDialogComponent)
+  }
 
   ngOnInit(): void {
     this.cardMaxWidth$ = this.breakpointObserver

@@ -17,6 +17,7 @@ import { RegistrationDialogComponent } from "./components/registration-dialog/re
 import { SearchBarComponent } from "./components/search-bar/search-bar.component"
 import { SlidingMenuComponent } from "./components/sliding-menu/sliding-menu.component"
 import { SubNavComponent } from "./components/sub-nav/sub-nav.component"
+import { TextMessageDialogComponent } from "./components/text-message-dialog/text-message-dialog.component"
 
 @NgModule({
   declarations: [
@@ -26,6 +27,7 @@ import { SubNavComponent } from "./components/sub-nav/sub-nav.component"
     SearchBarComponent,
     SlidingMenuComponent,
     SubNavComponent,
+    TextMessageDialogComponent,
   ],
   imports: [
     CommonModule,
@@ -48,6 +50,7 @@ import { SubNavComponent } from "./components/sub-nav/sub-nav.component"
     SearchBarComponent,
     SlidingMenuComponent,
     SubNavComponent,
+    TextMessageDialogComponent,
   ],
 })
 export class SharedModule {}

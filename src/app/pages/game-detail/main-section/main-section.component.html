@@ -31,7 +31,14 @@
           distinctio modi laboriosam quo delectus, placeat nam harum nihil!
         </div>
         <div class="chat-button">
-          <button mat-raised-button color="primary" class="btn-rounded">Negociar</button>
+          <button
+            (click)="openTextMessageDialog()"
+            mat-raised-button
+            color="primary"
+            class="btn-rounded"
+          >
+            Negociar
+          </button>
         </div>
         <div class="card-informations disabled-typography">
           <span class="game-owner">Fernando Santana</span>
