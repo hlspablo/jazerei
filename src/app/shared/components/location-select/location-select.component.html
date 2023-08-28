@@ -1,0 +1,41 @@
+<div class="location-select">
+  <mat-dialog-content>
+    <mat-form-field class="search-bar-form-field">
+      <input
+        type="text"
+        matInput
+        [matAutocomplete]="auto"
+        [formControl]="searchControl"
+        placeholder="Digite o nome da cidade"
+        (input)="filterLocations()"
+      />
+      <mat-autocomplete
+        #auto="matAutocomplete"
+        [panelWidth]="300"
+        style="z-index: 20"
+        (optionSelected)="onOptionSelected($event)"
+        [displayWith]="displayFn"
+      >
+        <mat-option
+          *ngFor="let location of filteredLocations$ | async"
+          [value]="location"
+        >
+          {{ location.name }}
+        </mat-option>
+      </mat-autocomplete>
+      <button
+        *ngIf="searchControl.value"
+        matSuffix
+        mat-icon-button
+        aria-label="Limpar"
+        (click)="searchControl.setValue('')"
+        style="margin-right: 5px"
+      >
+        <mat-icon>close</mat-icon>
+      </button>
+    </mat-form-field>
+    <mat-dialog-actions>
+      <button mat-button matDialogClose>Cancelar</button>
+    </mat-dialog-actions>
+  </mat-dialog-content>
+</div>

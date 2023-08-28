@@ -26,9 +26,16 @@
       <a>Cadastro</a>
     </li>
   </ul>
-  <div class="location" *ngIf="(showHamburgerMenu | async) === false">
+  <div
+    (click)="openLocationDialog()"
+    class="location"
+    (keyup)="(null)"
+    tabindex="0"
+    *ngIf="(showHamburgerMenu | async) === false"
+  >
     <mat-icon color="accent">gps_fixed</mat-icon>
-    <div class="location-text">Localização</div>
+    <button mat-raised-button color="accent">Localização</button>
+    <!-- <div class="location-text">Localização</div> -->
   </div>
   <div
     class="mobile-menu"

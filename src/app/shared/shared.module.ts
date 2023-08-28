@@ -18,6 +18,9 @@ import { SearchBarComponent } from "./components/search-bar/search-bar.component
 import { SlidingMenuComponent } from "./components/sliding-menu/sliding-menu.component"
 import { SubNavComponent } from "./components/sub-nav/sub-nav.component"
 import { TextMessageDialogComponent } from "./components/text-message-dialog/text-message-dialog.component"
+import { LocationSelectComponent } from "./components/location-select/location-select.component"
+import { MatMenuModule } from "@angular/material/menu"
+import { MatSelectModule } from "@angular/material/select"
 
 @NgModule({
   declarations: [
@@ -28,6 +31,7 @@ import { TextMessageDialogComponent } from "./components/text-message-dialog/tex
     SlidingMenuComponent,
     SubNavComponent,
     TextMessageDialogComponent,
+    LocationSelectComponent,
   ],
   imports: [
     CommonModule,
@@ -42,6 +46,8 @@ import { TextMessageDialogComponent } from "./components/text-message-dialog/tex
     MatCardModule,
     MatDialogModule,
     MatStepperModule,
+    MatMenuModule,
+    MatSelectModule,
   ],
   exports: [
     LoginDialogComponent,
