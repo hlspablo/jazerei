@@ -1,0 +1,47 @@
+<section class="main-section">
+  <div
+    class="chat-selection"
+    [class.hide]="(showHamburgerMenu | async) === true"
+    [class.active]="showConversations"
+  >
+    <div class="chat-item">
+      <div class="left-container">
+        <div class="owner">Pablo Henrique</div>
+        <div class="game">God Of War</div>
+      </div>
+      <div class="right-container">
+        <div class="messages-count">20</div>
+      </div>
+    </div>
+  </div>
+  <div class="chat-container">
+    <div class="chat-messages">
+      <div class="message-wrapper received">
+        <div class="message received">
+          <div class="message-content">
+            Hello, how are you?
+            <span class="message-time">10:30</span>
+          </div>
+        </div>
+      </div>
+      <div class="message-wrapper sent">
+        <div class="message sent">
+          <div class="message-content">
+            I'm good, thanks!
+            <span class="message-time">10:31</span>
+            <span class="message-read-indicator"></span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="chat-input-container" [class.full]="(showHamburgerMenu | async) === true">
+      <mat-form-field class="chat-input-field">
+        <input matInput type="text" placeholder="Digite sua mensagem..." />
+      </mat-form-field>
+      <button mat-icon-button class="send-button">
+        <mat-icon>send</mat-icon>
+      </button>
+    </div>
+  </div>
+</section>

@@ -15,7 +15,11 @@ const routes: Routes = [
         (m) => m.GameDetailPageModule,
       ),
   },
-  // ... other routes
+  {
+    path: "chat",
+    loadChildren: () =>
+      import("./pages/chat/chat.module").then((m) => m.ChatPageModule),
+  },
 ]
 
 @NgModule({

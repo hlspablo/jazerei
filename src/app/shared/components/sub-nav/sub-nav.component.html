@@ -64,4 +64,8 @@
     <mat-icon color="accent">gps_fixed</mat-icon>
     <button mat-raised-button color="accent">Localização</button>
   </div>
+  <div (click)="toggleConversations()" (keyup)="null" tabindex="0" class="location" *ngIf="showHamburgerMenu | async">
+    <mat-icon color="accent">sms</mat-icon>
+    <button mat-raised-button color="accent">Conversas</button>
+  </div>
 </nav>
