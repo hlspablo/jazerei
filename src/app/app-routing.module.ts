@@ -20,6 +20,11 @@ const routes: Routes = [
     loadChildren: () =>
       import("./pages/chat/chat.module").then((m) => m.ChatPageModule),
   },
+  {
+    path: "publish",
+    loadChildren: () =>
+      import("./pages/publish/publish.module").then((m) => m.PublishPageModule),
+  },
 ]
 
 @NgModule({

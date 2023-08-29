@@ -1,0 +1,5 @@
+@use "./main-section/main-section.component.theme" as main-section;
+
+@mixin apply-theme($theme) {
+  @include main-section.theme($theme);
+}

@@ -1,0 +1,52 @@
+<section class="main-section">
+  <h2>Publicar Jogo</h2>
+  <div class="form-container" [class.mobile]="showHamburgerMenu | async">
+    <form [formGroup]="registrationForm">
+      <mat-horizontal-stepper #stepper linear="true" [disableRipple]="true">
+        <mat-step formGroupName="stepOne">
+          <ng-template matStepLabel>Passo 1</ng-template>
+          <div class="field-container">
+            <mat-form-field floatLabel="always">
+              <mat-label>Name</mat-label>
+              <input
+                matInput
+                formControlName="name"
+                type="text"
+                placeholder="Nome"
+              />
+            </mat-form-field>
+          </div>
+          <div class="field-container">
+            <mat-form-field>
+              <mat-label>Password</mat-label>
+              <input matInput formControlName="pass" type="password" />
+            </mat-form-field>
+          </div>
+          <div class="actions">
+            <button mat-button matDialogClose>Cancelar</button>
+            <button mat-button matStepperNext>Próximo</button>
+          </div>
+        </mat-step>
+        <mat-step formGroupName="stepTwo">
+          <ng-template matStepLabel>Passo 2</ng-template>
+          <div class="field-container">
+            <mat-form-field>
+              <mat-label>Phone</mat-label>
+              <input matInput formControlName="phone" type="tel" />
+            </mat-form-field>
+          </div>
+          <div class="field-container">
+            <mat-form-field>
+              <mat-label>Email</mat-label>
+              <input matInput formControlName="email" type="email" />
+            </mat-form-field>
+          </div>
+          <div class="actions">
+            <button mat-button matStepperPrevious>Voltar</button>
+            <button mat-button (click)="submit()">Registrar</button>
+          </div>
+        </mat-step>
+      </mat-horizontal-stepper>
+    </form>
+  </div>
+</section>

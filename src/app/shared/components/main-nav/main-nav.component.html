@@ -4,44 +4,36 @@
       <img src="assets/images/logo.png" alt="Logo" height="70" />
     </a>
   </div>
-  <ul
-    role="menubar"
-    class="links stretch"
-    *ngIf="(showHamburgerMenu | async) === false"
-  >
-    <li
-      role="menuitem"
-      (click)="openLoginDialog()"
-      (keyup.enter)="openLoginDialog()"
-      tabindex="2"
-    >
-      <a>Login</a>
-    </li>
-    <li
-      (click)="openRegistrationDialog()"
-      (keyup.enter)="openRegistrationDialog()"
-      tabindex="3"
-      role="menuitem"
-    >
-      <a>Cadastro</a>
-    </li>
+  <ul role="menubar" class="links stretch" *ngIf="(showHamburgerMenu | async) === false">
+    <ng-template #loggedOut>
+      <li (click)="openLoginDialog()" (keyup.enter)="(null)" tabindex="2" role="menuitem">
+        <a>Login</a>
+      </li>
+      <li (click)="openRegistrationDialog()" (keyup.enter)="(null)" tabindex="3" role="menuitem">
+        <a>Cadastro</a>
+      </li>
+    </ng-template>
+    <ng-container *ngIf="currentUser; else loggedOut">
+      <li (click)="openLoginDialog()" (keyup.enter)="(null)" tabindex="2" role="menuitem">
+        <a>Publicar Jogo</a>
+      </li>
+      <li (click)="openLoginDialog()" (keyup.enter)="(null)" tabindex="2" role="menuitem">
+        <a>Conversas</a>
+      </li>
+      <li (keyup.enter)="(null)" tabindex="3" role="menuitem">
+        <a>Oi, {{ currentUser.displayName | getFirstName }}</a>
+      </li>
+      <li (click)="logout()" (keyup.enter)="(null)" tabindex="3" role="menuitem">
+        <a>Deslogar</a>
+      </li>
+    </ng-container>
   </ul>
-  <div
-    (click)="openLocationDialog()"
-    class="location"
-    (keyup)="(null)"
-    tabindex="0"
-    *ngIf="(showHamburgerMenu | async) === false"
-  >
+  <div (click)="openLocationDialog()" class="location" (keyup)="(null)" tabindex="0" *ngIf="(showHamburgerMenu | async) === false">
     <mat-icon color="accent">gps_fixed</mat-icon>
     <button mat-raised-button color="accent">Localização</button>
     <!-- <div class="location-text">Localização</div> -->
   </div>
-  <div
-    class="mobile-menu"
-    *ngIf="showHamburgerMenu | async"
-    [class.mobile-menu-end]="showHamburgerMenu | async"
-  >
+  <div class="mobile-menu" *ngIf="showHamburgerMenu | async" [class.mobile-menu-end]="showHamburgerMenu | async">
     <button mat-button color="primary" (click)="slidingMenu.toggleMenu()">
       <mat-icon color="accent" class="menu-icon">menu</mat-icon>
     </button>

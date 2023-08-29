@@ -1,0 +1,26 @@
+.main-section {
+  display: flex;
+  flex-direction: column;
+  background-color: #fff;
+  height: calc(100vh - 182px);
+  align-items: center;
+  padding-top: 30px;
+}
+.form-container {
+  min-width: 800px;
+  padding: 0 24px;
+  padding-bottom: 10px;
+  form .mat-mdc-form-field {
+    width: 100%;
+  }
+
+  .actions {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    padding-top: 24px;
+  }
+}
+.form-container.mobile {
+  min-width: 400px;
+}

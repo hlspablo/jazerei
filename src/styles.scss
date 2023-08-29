@@ -8,6 +8,7 @@
 @use "./app/pages/home/home.theme" as home-page;
 @use "./app/pages/game-detail/game-detail.theme" as game-detail-page;
 @use "./app/pages/chat/chat.theme" as chat;
+@use "./app/pages/publish/publish.theme" as publish;
 
 @include mat.core();
 
@@ -36,3 +37,4 @@ $theme: mat.define-light-theme(
 @include home-page.apply-theme($theme);
 @include game-detail-page.apply-theme($theme);
 @include chat.apply-theme($theme);
+@include publish.apply-theme($theme);

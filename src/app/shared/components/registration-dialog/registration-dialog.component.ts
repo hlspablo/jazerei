@@ -1,5 +1,7 @@
 import { Component } from "@angular/core"
 import { FormBuilder, FormGroup, Validators } from "@angular/forms"
+import { AuthService } from "src/app/services/auth.service"
+import { cpfValidator } from "./cpf.validator"
 
 @Component({
   selector: "app-registration-dialog",
@@ -9,15 +11,18 @@ import { FormBuilder, FormGroup, Validators } from "@angular/forms"
 export class RegistrationDialogComponent {
   registrationForm: FormGroup
 
-  constructor(private fb: FormBuilder) {
+  constructor(
+    private fb: FormBuilder,
+    private authService: AuthService,
+  ) {
     this.registrationForm = this.fb.group({
       stepOne: this.fb.group({
-        name: ["", Validators.required],
-        pass: ["", Validators.required],
+        email: ["", [Validators.required, Validators.email]],
+        password: ["", Validators.required],
       }),
       stepTwo: this.fb.group({
-        phone: ["", Validators.required],
-        email: ["", [Validators.required, Validators.email]],
+        name: ["", Validators.required],
+        cpf: ["", [Validators.required, cpfValidator]],
       }),
     })
   }
@@ -25,8 +30,12 @@ export class RegistrationDialogComponent {
     console.log("Submitting registration form")
     if (this.registrationForm.valid) {
       const values = this.registrationForm.value
-      console.log("Registration data:", values)
-      // Handle submission logic here
+      this.authService.register({
+        email: values.stepOne.email,
+        password: values.stepOne.password,
+        name: values.stepTwo.name,
+        cpf: values.stepTwo.cpf,
+      })
     }
   }
 }

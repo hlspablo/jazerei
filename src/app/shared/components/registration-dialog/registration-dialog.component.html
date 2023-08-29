@@ -6,19 +6,24 @@
         <ng-template matStepLabel>Passo 1</ng-template>
         <div class="field-container">
           <mat-form-field floatLabel="always">
-            <mat-label>Name</mat-label>
+            <mat-label>Email</mat-label>
             <input
               matInput
-              formControlName="name"
-              type="text"
-              placeholder="Nome"
+              formControlName="email"
+              type="email"
+              placeholder="Email"
             />
           </mat-form-field>
         </div>
         <div class="field-container">
-          <mat-form-field>
-            <mat-label>Password</mat-label>
-            <input matInput formControlName="pass" type="password" />
+          <mat-form-field floatLabel="always">
+            <mat-label>Senha</mat-label>
+            <input
+              matInput
+              formControlName="password"
+              type="password"
+              placeholder="Senha"
+            />
           </mat-form-field>
         </div>
         <div class="actions">
@@ -29,20 +34,37 @@
       <mat-step formGroupName="stepTwo">
         <ng-template matStepLabel>Passo 2</ng-template>
         <div class="field-container">
-          <mat-form-field>
-            <mat-label>Phone</mat-label>
-            <input matInput formControlName="phone" type="tel" />
+          <mat-form-field floatLabel="always">
+            <mat-label>Nome Completo</mat-label>
+            <input
+              matInput
+              formControlName="name"
+              type="text"
+              placeholder="Nome Completo"
+            />
           </mat-form-field>
         </div>
         <div class="field-container">
-          <mat-form-field>
-            <mat-label>Email</mat-label>
-            <input matInput formControlName="email" type="email" />
+          <mat-form-field floatLabel="always">
+            <mat-label>CPF</mat-label>
+            <input
+              matInput
+              formControlName="cpf"
+              type="text"
+              placeholder="CPF"
+              mask="000.000.000-00"
+            />
           </mat-form-field>
         </div>
         <div class="actions">
           <button mat-button matStepperPrevious>Voltar</button>
-          <button mat-button (click)="submit()">Registrar</button>
+          <button
+            mat-button
+            (click)="submit()"
+            [disabled]="registrationForm.invalid"
+          >
+            Registrar
+          </button>
         </div>
       </mat-step>
     </mat-horizontal-stepper>

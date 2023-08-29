@@ -21,6 +21,18 @@ import { TextMessageDialogComponent } from "./components/text-message-dialog/tex
 import { LocationSelectComponent } from "./components/location-select/location-select.component"
 import { MatMenuModule } from "@angular/material/menu"
 import { MatSelectModule } from "@angular/material/select"
+import { NgxMaskDirective, NgxMaskPipe } from "ngx-mask"
+import { MatProgressSpinnerModule } from "@angular/material/progress-spinner"
+import { GetFirstNamePipe } from "../pipes/getfirstname.pipe"
+
+@NgModule({
+  imports: [
+    // ... your other imports ...
+    MatProgressSpinnerModule,
+  ],
+  // ... other module configurations ...
+})
+export class YourModule {}
 
 @NgModule({
   declarations: [
@@ -32,6 +44,7 @@ import { MatSelectModule } from "@angular/material/select"
     SubNavComponent,
     TextMessageDialogComponent,
     LocationSelectComponent,
+    GetFirstNamePipe,
   ],
   imports: [
     CommonModule,
@@ -48,6 +61,9 @@ import { MatSelectModule } from "@angular/material/select"
     MatStepperModule,
     MatMenuModule,
     MatSelectModule,
+    NgxMaskDirective,
+    NgxMaskPipe,
+    MatProgressSpinnerModule,
   ],
   exports: [
     LoginDialogComponent,
