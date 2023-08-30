@@ -25,6 +25,7 @@ import { NgxMaskDirective, NgxMaskPipe } from "ngx-mask"
 import { MatProgressSpinnerModule } from "@angular/material/progress-spinner"
 import { GetFirstNamePipe } from "../pipes/getfirstname.pipe"
 import { RouterModule } from "@angular/router"
+import { GameCardComponent } from "./components/game-card/game-card.component"
 
 @NgModule({
   declarations: [
@@ -36,6 +37,7 @@ import { RouterModule } from "@angular/router"
     SubNavComponent,
     TextMessageDialogComponent,
     LocationSelectComponent,
+    GameCardComponent,
     GetFirstNamePipe,
   ],
   imports: [
@@ -66,6 +68,7 @@ import { RouterModule } from "@angular/router"
     SlidingMenuComponent,
     SubNavComponent,
     TextMessageDialogComponent,
+    GameCardComponent,
   ],
 })
 export class SharedModule {}

@@ -10,6 +10,7 @@ import { MatFormFieldModule } from "@angular/material/form-field"
 import { MatInputModule } from "@angular/material/input"
 import { MatStepperModule } from "@angular/material/stepper"
 import { ReactiveFormsModule } from "@angular/forms"
+import { MatRadioModule } from "@angular/material/radio"
 
 @NgModule({
   declarations: [PublishPageComponent, MainSectionComponent],
@@ -23,6 +24,7 @@ import { ReactiveFormsModule } from "@angular/forms"
     MatFormFieldModule,
     MatInputModule,
     MatStepperModule,
+    MatRadioModule,
   ],
 })
 export class PublishPageModule {}
