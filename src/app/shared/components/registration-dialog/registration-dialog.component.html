@@ -1,5 +1,8 @@
 <h6 mat-dialog-title>Registro</h6>
 <div class="form-container">
+  <div *ngIf="registerErrorMessage" class="error-message mat-headline-6">
+    {{ registerErrorMessage }}
+  </div>
   <form [formGroup]="registrationForm">
     <mat-horizontal-stepper #stepper linear="true" [disableRipple]="true">
       <mat-step formGroupName="stepOne">
@@ -7,23 +10,13 @@
         <div class="field-container">
           <mat-form-field floatLabel="always">
             <mat-label>Email</mat-label>
-            <input
-              matInput
-              formControlName="email"
-              type="email"
-              placeholder="Email"
-            />
+            <input matInput formControlName="email" type="email" placeholder="Email" />
           </mat-form-field>
         </div>
         <div class="field-container">
           <mat-form-field floatLabel="always">
             <mat-label>Senha</mat-label>
-            <input
-              matInput
-              formControlName="password"
-              type="password"
-              placeholder="Senha"
-            />
+            <input matInput formControlName="password" type="password" placeholder="Senha" />
           </mat-form-field>
         </div>
         <div class="actions">
@@ -36,34 +29,20 @@
         <div class="field-container">
           <mat-form-field floatLabel="always">
             <mat-label>Nome Completo</mat-label>
-            <input
-              matInput
-              formControlName="name"
-              type="text"
-              placeholder="Nome Completo"
-            />
+            <input matInput formControlName="name" type="text" placeholder="Nome Completo" />
           </mat-form-field>
         </div>
         <div class="field-container">
           <mat-form-field floatLabel="always">
             <mat-label>CPF</mat-label>
-            <input
-              matInput
-              formControlName="cpf"
-              type="text"
-              placeholder="CPF"
-              mask="000.000.000-00"
-            />
+            <input matInput formControlName="cpf" type="text" placeholder="CPF" mask="000.000.000-00" />
           </mat-form-field>
         </div>
         <div class="actions">
           <button mat-button matStepperPrevious>Voltar</button>
-          <button
-            mat-button
-            (click)="submit()"
-            [disabled]="registrationForm.invalid"
-          >
-            Registrar
+          <button mat-button (click)="submit()" [disabled]="registrationForm.invalid || isLoading">
+            <mat-spinner *ngIf="isLoading; else buttonText" diameter="24"></mat-spinner>
+            <ng-template #buttonText>Registrar</ng-template>
           </button>
         </div>
       </mat-step>

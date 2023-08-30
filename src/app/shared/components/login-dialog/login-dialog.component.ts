@@ -2,7 +2,7 @@ import { Component } from "@angular/core"
 import { FormBuilder, FormGroup, Validators } from "@angular/forms"
 import { MatDialog } from "@angular/material/dialog"
 import { AuthService } from "src/app/services/auth.service"
-import { getErrorTranslate } from "src/app/utils/firebase.translate"
+import { loginErrorTranslate } from "src/app/utils/firebase.translate"
 
 interface LoginFormValues {
   email: string
@@ -40,7 +40,7 @@ export class LoginDialogComponent {
         this.loginErrorMessage = ""
         this.dialog.closeAll()
       } catch (error) {
-        this.loginErrorMessage = getErrorTranslate(error)
+        this.loginErrorMessage = loginErrorTranslate(error)
       } finally {
         this.isLoading = false
       }

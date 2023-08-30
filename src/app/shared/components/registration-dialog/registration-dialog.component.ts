@@ -1,7 +1,9 @@
-import { Component } from "@angular/core"
-import { FormBuilder, FormGroup, Validators } from "@angular/forms"
+import { Component, inject } from "@angular/core"
+import { NonNullableFormBuilder, Validators } from "@angular/forms"
 import { AuthService } from "src/app/services/auth.service"
 import { cpfValidator } from "./cpf.validator"
+import { registerErrorTranslate } from "src/app/utils/firebase.translate"
+import { MatDialog } from "@angular/material/dialog"
 
 @Component({
   selector: "app-registration-dialog",
@@ -9,33 +11,44 @@ import { cpfValidator } from "./cpf.validator"
   styleUrls: ["./registration-dialog.component.scss"],
 })
 export class RegistrationDialogComponent {
-  registrationForm: FormGroup
+  private fb = inject(NonNullableFormBuilder)
+  private authService = inject(AuthService)
+  private matDialog = inject(MatDialog)
+  registerErrorMessage = ""
+  isLoading = false
 
-  constructor(
-    private fb: FormBuilder,
-    private authService: AuthService,
-  ) {
-    this.registrationForm = this.fb.group({
-      stepOne: this.fb.group({
-        email: ["", [Validators.required, Validators.email]],
-        password: ["", Validators.required],
-      }),
-      stepTwo: this.fb.group({
-        name: ["", Validators.required],
-        cpf: ["", [Validators.required, cpfValidator]],
-      }),
-    })
-  }
-  submit() {
+  protected registrationForm = this.fb.group({
+    stepOne: this.fb.group({
+      email: ["", [Validators.required, Validators.email]],
+      password: ["", Validators.required],
+    }),
+    stepTwo: this.fb.group({
+      name: ["", Validators.required],
+      cpf: ["", [Validators.required, cpfValidator]],
+    }),
+  })
+
+  async submit() {
     console.log("Submitting registration form")
     if (this.registrationForm.valid) {
       const values = this.registrationForm.value
-      this.authService.register({
-        email: values.stepOne.email,
-        password: values.stepOne.password,
-        name: values.stepTwo.name,
-        cpf: values.stepTwo.cpf,
-      })
+      if (values) {
+        try {
+          this.registerErrorMessage = ""
+          this.isLoading = true
+          await this.authService.register({
+            email: values.stepOne?.email || "",
+            password: values.stepOne?.password || "",
+            name: values.stepTwo?.name || "",
+            cpf: values.stepTwo?.cpf || "",
+          })
+          this.matDialog.closeAll()
+        } catch (error) {
+          this.registerErrorMessage = registerErrorTranslate(error)
+        } finally {
+          this.isLoading = false
+        }
+      }
     }
   }
 }

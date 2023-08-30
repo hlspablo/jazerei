@@ -4,7 +4,7 @@ interface FirebaseError {
   code: string
 }
 
-export function getErrorTranslate(error: unknown) {
+export function loginErrorTranslate(error: unknown) {
   const firebaseError = error as FirebaseError
   const errorCode = firebaseError.code
   return match(errorCode)
@@ -16,5 +16,19 @@ export function getErrorTranslate(error: unknown) {
       "auth/too-many-requests",
       () => "Muitas tentativas de login. Tente novamente mais tarde.",
     )
+    .otherwise(() => "Ocorreu um erro desconhecido.")
+}
+
+export function registerErrorTranslate(error: unknown) {
+  const firebaseError = error as FirebaseError
+  const errorCode = firebaseError.code
+  return match(errorCode)
+    .with(
+      "auth/email-already-in-use",
+      () => "O email já está em uso por outra conta.",
+    )
+    .with("auth/invalid-email", () => "Email inválido.")
+    .with("auth/operation-not-allowed", () => "Operação não permitida.")
+    .with("auth/weak-password", () => "A senha é muito fraca.")
     .otherwise(() => "Ocorreu um erro desconhecido.")
 }

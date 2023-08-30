@@ -8,7 +8,7 @@ import {
   User,
 } from "@angular/fire/auth"
 import * as fire from "@angular/fire/firestore"
-import { Subject, Subscription } from "rxjs"
+import { Subscription } from "rxjs"
 
 interface UserData {
   email: string
@@ -42,37 +42,24 @@ export class AuthService implements OnDestroy {
   }
 
   async register(userData: UserData) {
-    try {
-      const { user } = await createUserWithEmailAndPassword(
-        this.auth,
-        userData.email,
-        userData.password,
-      )
+    const { user } = await createUserWithEmailAndPassword(
+      this.auth,
+      userData.email,
+      userData.password,
+    )
 
-      await updateProfile(user, {
-        displayName: userData.name,
-      })
+    await updateProfile(user, {
+      displayName: userData.name,
+    })
 
-      try {
-        fire.setDoc(fire.doc(this.firestore, "profiles", user.uid), {
-          name: userData.name,
-          cpf: userData.cpf,
-        })
-      } catch (error) {
-        console.error("failed firestore", error)
-      }
-    } catch (error) {
-      console.error("Registration error:", error)
-    }
+    await fire.setDoc(fire.doc(this.firestore, "profiles", user.uid), {
+      name: userData.name,
+      cpf: userData.cpf,
+    })
   }
 
   async logout() {
-    try {
-      await this.auth.signOut()
-      console.log("Logout successful")
-    } catch (error) {
-      console.error("Logout error:", error)
-    }
+    await this.auth.signOut()
   }
   ngOnDestroy(): void {
     this.userSubscription.unsubscribe()
