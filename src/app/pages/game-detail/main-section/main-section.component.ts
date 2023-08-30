@@ -29,7 +29,12 @@ export class MainSectionComponent implements OnInit {
 
   openTextMessageDialog() {
     console.log("Open Dialog")
-    this.dialog.open(TextMessageDialogComponent)
+    this.dialog.open(TextMessageDialogComponent, {
+      autoFocus: true,
+      position: {
+        top: "10vh",
+      },
+    })
   }
 
   ngOnInit(): void {

@@ -24,15 +24,7 @@ import { MatSelectModule } from "@angular/material/select"
 import { NgxMaskDirective, NgxMaskPipe } from "ngx-mask"
 import { MatProgressSpinnerModule } from "@angular/material/progress-spinner"
 import { GetFirstNamePipe } from "../pipes/getfirstname.pipe"
-
-@NgModule({
-  imports: [
-    // ... your other imports ...
-    MatProgressSpinnerModule,
-  ],
-  // ... other module configurations ...
-})
-export class YourModule {}
+import { RouterModule } from "@angular/router"
 
 @NgModule({
   declarations: [
@@ -48,6 +40,7 @@ export class YourModule {}
   ],
   imports: [
     CommonModule,
+    RouterModule,
     MatCardModule,
     ReactiveFormsModule,
     MatIconModule,

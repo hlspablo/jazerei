@@ -6,7 +6,7 @@ import { LoginDialogComponent } from "../login-dialog/login-dialog.component"
 import { RegistrationDialogComponent } from "../registration-dialog/registration-dialog.component"
 import { MatMenuTrigger } from "@angular/material/menu"
 import { LocationSelectComponent } from "../location-select/location-select.component"
-import { Auth, User, user } from "@angular/fire/auth"
+import { Auth, User } from "@angular/fire/auth"
 import { AuthService } from "src/app/services/auth.service"
 
 @Component({
@@ -18,7 +18,6 @@ export class MainNavComponent implements OnInit, OnDestroy {
   private auth: Auth = inject(Auth)
   showHamburgerMenu: Observable<boolean>
   menuTrigger: MatMenuTrigger
-  user$ = user(this.auth)
   userSubscription: Subscription
   currentUser: User | null
 
@@ -26,27 +25,36 @@ export class MainNavComponent implements OnInit, OnDestroy {
     private breakpointService: BreakpointService,
     private dialog: MatDialog,
     private authService: AuthService,
-  ) {
-    this.userSubscription = this.user$.subscribe((aUser: User | null) => {
-      this.currentUser = aUser
-    })
-  }
+  ) {}
 
   openLocationDialog() {
     console.log("Opening location dialog")
-    this.dialog.open(LocationSelectComponent)
+    this.dialog.open(LocationSelectComponent, {
+      autoFocus: true,
+      position: {
+        top: "10vh",
+      },
+    })
   }
 
   openLoginDialog() {
     console.log("Opening login dialog")
     this.dialog.open(LoginDialogComponent, {
       autoFocus: true,
+      position: {
+        top: "10vh",
+      },
     })
   }
 
   openRegistrationDialog() {
     console.log("Opening register dialog")
-    this.dialog.open(RegistrationDialogComponent)
+    this.dialog.open(RegistrationDialogComponent, {
+      autoFocus: true,
+      position: {
+        top: "10vh",
+      },
+    })
   }
 
   logout() {
@@ -57,9 +65,14 @@ export class MainNavComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.showHamburgerMenu = this.showHamburgerMenu =
       this.breakpointService.isHandsetOrSmall()
-  }
 
-  ngOnDestroy(): void {
+    this.currentUser = this.authService.getCachedUser()
+
+    this.userSubscription = this.authService.user$.subscribe((updatedUser) => {
+      this.currentUser = updatedUser
+    })
+  }
+  ngOnDestroy() {
     this.userSubscription.unsubscribe()
   }
 }

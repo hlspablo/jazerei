@@ -7,25 +7,27 @@
   <ul role="menubar" class="links stretch" *ngIf="(showHamburgerMenu | async) === false">
     <ng-template #loggedOut>
       <li (click)="openLoginDialog()" (keyup.enter)="(null)" tabindex="2" role="menuitem">
+        <mat-icon color="accent" class="menu-icon">login</mat-icon>
         <a>Login</a>
       </li>
       <li (click)="openRegistrationDialog()" (keyup.enter)="(null)" tabindex="3" role="menuitem">
+        <mat-icon color="accent" class="menu-icon">person_add</mat-icon>
         <a>Cadastro</a>
       </li>
     </ng-template>
     <ng-container *ngIf="currentUser; else loggedOut">
-      <li (click)="openLoginDialog()" (keyup.enter)="(null)" tabindex="2" role="menuitem">
-        <a>Publicar Jogo</a>
+      <li tabindex="1" role="menuitem">
+        <mat-icon color="accent" class="menu-icon">publish</mat-icon>
+        <a routerLink="/publish">Publicar Jogo</a>
       </li>
-      <li (click)="openLoginDialog()" (keyup.enter)="(null)" tabindex="2" role="menuitem">
-        <a>Conversas</a>
+      <li tabindex="2" role="menuitem">
+        <mat-icon color="accent" class="menu-icon">sms</mat-icon>
+        <a routerLink="/chat">Conversas </a>
       </li>
-      <li (keyup.enter)="(null)" tabindex="3" role="menuitem">
-        <a>Oi, {{ currentUser.displayName | getFirstName }}</a>
-      </li>
-      <li (click)="logout()" (keyup.enter)="(null)" tabindex="3" role="menuitem">
-        <a>Deslogar</a>
-      </li>
+      <button mat-raised-button color="accent" (click)="logout()">
+        Sair
+        <mat-icon color="primary" class="menu-icon">logout</mat-icon>
+      </button>
     </ng-container>
   </ul>
   <div (click)="openLocationDialog()" class="location" (keyup)="(null)" tabindex="0" *ngIf="(showHamburgerMenu | async) === false">

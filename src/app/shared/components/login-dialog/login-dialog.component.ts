@@ -2,6 +2,7 @@ import { Component } from "@angular/core"
 import { FormBuilder, FormGroup, Validators } from "@angular/forms"
 import { MatDialog } from "@angular/material/dialog"
 import { AuthService } from "src/app/services/auth.service"
+import { getErrorTranslate } from "src/app/utils/firebase.translate"
 
 interface LoginFormValues {
   email: string
@@ -16,6 +17,7 @@ interface LoginFormValues {
 export class LoginDialogComponent {
   loginForm: FormGroup
   isLoading = false
+  loginErrorMessage = ""
 
   constructor(
     private fb: FormBuilder,
@@ -35,14 +37,13 @@ export class LoginDialogComponent {
       try {
         await this.authService.login(email, password)
         await new Promise((resolve) => setTimeout(resolve, 500)) // add one second delay for UX
+        this.loginErrorMessage = ""
         this.dialog.closeAll()
       } catch (error) {
-        console.log("Error from Login", error)
+        this.loginErrorMessage = getErrorTranslate(error)
       } finally {
         this.isLoading = false
       }
-    } else {
-      console.log(this.loginForm.errors)
     }
   }
 }

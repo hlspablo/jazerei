@@ -1,11 +1,14 @@
-import { Injectable, inject } from "@angular/core"
+import { Injectable, OnDestroy, inject } from "@angular/core"
 import {
   Auth,
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
   updateProfile,
+  user,
+  User,
 } from "@angular/fire/auth"
 import * as fire from "@angular/fire/firestore"
+import { Subject, Subscription } from "rxjs"
 
 interface UserData {
   email: string
@@ -17,9 +20,22 @@ interface UserData {
 @Injectable({
   providedIn: "root",
 })
-export class AuthService {
+export class AuthService implements OnDestroy {
   private auth: Auth = inject(Auth)
   private firestore: fire.Firestore = inject(fire.Firestore)
+  user$ = user(this.auth)
+  userSubscription: Subscription
+  currentUser: User | null
+
+  constructor() {
+    this.userSubscription = this.user$.subscribe((aUser: User | null) => {
+      this.currentUser = aUser
+    })
+  }
+
+  getCachedUser(): User | null {
+    return this.currentUser
+  }
 
   async login(email: string, password: string) {
     await signInWithEmailAndPassword(this.auth, email, password)
@@ -57,5 +73,8 @@ export class AuthService {
     } catch (error) {
       console.error("Logout error:", error)
     }
+  }
+  ngOnDestroy(): void {
+    this.userSubscription.unsubscribe()
   }
 }
