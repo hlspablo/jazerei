@@ -3,6 +3,7 @@ import { BrowserModule } from "@angular/platform-browser"
 import { provideFirebaseApp, initializeApp } from "@angular/fire/app"
 import { getFirestore, provideFirestore } from "@angular/fire/firestore"
 import { getAuth, provideAuth } from "@angular/fire/auth"
+import { getStorage, provideStorage } from "@angular/fire/storage"
 
 import { AppRoutingModule } from "./app-routing.module"
 import { AppComponent } from "./app.component"
@@ -16,6 +17,7 @@ import { provideEnvironmentNgxMask } from "ngx-mask"
     provideFirebaseApp(() => initializeApp(environment.firebase)),
     provideFirestore(() => getFirestore()),
     provideAuth(() => getAuth()),
+    provideStorage(() => getStorage()),
     BrowserModule,
     BrowserAnimationsModule,
     AppRoutingModule,

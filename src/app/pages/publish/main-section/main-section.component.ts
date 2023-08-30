@@ -3,6 +3,13 @@ import { FormBuilder, Validators } from "@angular/forms"
 import { Observable } from "rxjs"
 import { BreakpointService } from "src/app/services/breakpoint-service.service"
 import { GameInfo } from "src/app/shared/interfaces/game.interface"
+import {
+  Storage,
+  uploadBytesResumable,
+  getDownloadURL,
+  ref,
+} from "@angular/fire/storage"
+import { Firestore, collection, addDoc } from "@angular/fire/firestore"
 
 @Component({
   selector: "app-publish-main-section",
@@ -16,6 +23,8 @@ export class MainSectionComponent implements OnInit {
   private selectedFile: File
   imagePreview: string | ArrayBuffer | null = "https://placehold.co/600x400"
   gameInfo: Partial<GameInfo>
+  private storage = inject(Storage)
+  private firestore = inject(Firestore)
 
   protected showHamburgerMenu: Observable<boolean>
   protected publishForm = this.fb.group({
@@ -30,6 +39,32 @@ export class MainSectionComponent implements OnInit {
     }),
     stepThree: true,
   })
+
+  uploadFile(): Promise<string> {
+    return new Promise<string>((resolve, reject) => {
+      const filePath = `${this.selectedFile.name}_${new Date().getTime()}`
+      const storageRef = ref(this.storage, filePath)
+
+      const uploadTask = uploadBytesResumable(storageRef, this.selectedFile)
+
+      uploadTask.on(
+        "state_changed",
+        (snapshot) => {
+          const progress =
+            (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+          console.log("Upload is " + progress + "% done")
+        },
+        (error) => {
+          reject(error)
+        },
+        () => {
+          getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+            resolve(downloadURL)
+          })
+        },
+      )
+    })
+  }
 
   mapFormToGameInfo(value: typeof this.publishForm.value): void {
     const stepOne = value.stepOne
@@ -66,12 +101,27 @@ export class MainSectionComponent implements OnInit {
     }
   }
 
-  submit() {
-    console.log("Submitting registration form")
+  async submit() {
     if (this.publishForm.valid) {
       const values = this.publishForm.value
-      console.log("Registration data:", values)
-      // Handle submission logic here
+      if (values) {
+        const { stepOne, stepTwo } = values
+        if (stepOne && stepTwo) {
+          const { gameName, description, platform, usedTime } = stepOne
+          // const { fileData } = stepTwo
+
+          const imageUrl = await this.uploadFile()
+
+          await addDoc(collection(this.firestore, "games"), {
+            gameName,
+            description,
+            platform,
+            usedTime,
+            approved: false,
+            imageUrl,
+          })
+        }
+      }
     }
   }
 
