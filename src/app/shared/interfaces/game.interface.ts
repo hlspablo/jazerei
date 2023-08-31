@@ -2,7 +2,7 @@ export interface GameInfo {
   maxWidth?: string
   avatarUrl: string
   imageSource: string
-  ownerName: string
+  gameOwner: string
   gameTitle: string
   gameDescription: string
   gamePlatform: string

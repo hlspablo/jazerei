@@ -11,6 +11,7 @@ import { MatInputModule } from "@angular/material/input"
 import { MatStepperModule } from "@angular/material/stepper"
 import { ReactiveFormsModule } from "@angular/forms"
 import { MatRadioModule } from "@angular/material/radio"
+import { MatProgressSpinnerModule } from "@angular/material/progress-spinner"
 
 @NgModule({
   declarations: [PublishPageComponent, MainSectionComponent],
@@ -25,6 +26,7 @@ import { MatRadioModule } from "@angular/material/radio"
     MatInputModule,
     MatStepperModule,
     MatRadioModule,
+    MatProgressSpinnerModule,
   ],
 })
 export class PublishPageModule {}

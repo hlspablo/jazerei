@@ -26,6 +26,7 @@
     "@fireflysemantics/sass-logger": "^1.0.2",
     "firebase": "^9.23.0",
     "ngx-mask": "^16.2.9",
+    "ngx-toastr": "^17.0.2",
     "normalize.css": "^8.0.1",
     "rxjs": "~7.8.0",
     "ts-pattern": "^5.0.5",

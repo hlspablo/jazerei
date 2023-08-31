@@ -4,6 +4,7 @@ import { AuthService } from "src/app/services/auth.service"
 import { cpfValidator } from "./cpf.validator"
 import { registerErrorTranslate } from "src/app/utils/firebase.translate"
 import { MatDialog } from "@angular/material/dialog"
+import { sleepFor } from "src/app/utils/time.utils"
 
 @Component({
   selector: "app-registration-dialog",
@@ -42,6 +43,7 @@ export class RegistrationDialogComponent {
             name: values.stepTwo?.name || "",
             cpf: values.stepTwo?.cpf || "",
           })
+          await sleepFor(500)
           this.matDialog.closeAll()
         } catch (error) {
           this.registerErrorMessage = registerErrorTranslate(error)

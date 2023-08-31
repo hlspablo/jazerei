@@ -14,7 +14,7 @@
           <div class="field-container">
             <mat-form-field floatLabel="always">
               <mat-label>Descrição do Jogo</mat-label>
-              <textarea matInput formControlName="description" required placeholder="Descrição, Informaçōes sobre o estado do jogo" rows="4"></textarea>
+              <textarea matInput formControlName="gameDescription" required placeholder="Informaçooes adicionais sobre o jogo" rows="4"></textarea>
             </mat-form-field>
           </div>
           <div class="field-container">
@@ -24,7 +24,7 @@
             </mat-form-field>
           </div>
           <div class="field-container">
-            <mat-radio-group aria-label="Plataforma" name="platform" formControlName="platform">
+            <mat-radio-group aria-label="Plataforma" name="platform" formControlName="gamePlatform">
               <mat-radio-button value="ps5">PS5</mat-radio-button>
               <mat-radio-button value="ps4">PS4</mat-radio-button>
               <mat-radio-button value="ps3">PS3</mat-radio-button>
@@ -44,11 +44,17 @@
           <div class="field-container">
             <div class="upload-container">
               <mat-form-field appearance="outline">
-                <mat-label>Upload da Capa</mat-label>
-                <input type="file" #fileInput (change)="onFileSelected($event)" style="display: none" />
-                <button mat-raised-button color="accent" (click)="fileInput.click()">Selecionar Imagem</button>
-                <input matInput placeholder="Select a file" [value]="fileName || 'Selecione uma Imagem'" readonly />
+                <mat-label>Upload das Imagens</mat-label>
+                <input type="file" #fileInput (change)="onFileSelected($event)" multiple style="display: none" />
+                <button mat-raised-button color="accent" (click)="fileInput.click()">Selecionar Imagens</button>
+                <input matInput placeholder="Selecionar Imagens" value="A primeira imagem selecionada será a principal." readonly />
               </mat-form-field>
+              <div *ngIf="selectedFiles && selectedFiles.length > 0">
+                <span class="mat-h3">Imagens Selecionadas: </span>
+                <ul>
+                  <li *ngFor="let file of selectedFiles">{{ file.name }}</li>
+                </ul>
+              </div>
             </div>
           </div>
           <div class="actions">
@@ -63,7 +69,10 @@
           </div>
           <div class="actions">
             <button mat-button matStepperPrevious>Voltar</button>
-            <button mat-raised-button color="accent" (click)="submit()">Publicar</button>
+            <button mat-raised-button color="accent" (click)="submit()" [disabled]="publishForm.invalid || isLoading">
+              <mat-spinner *ngIf="isLoading; else buttonText" diameter="24"></mat-spinner>
+              <ng-template #buttonText>Publicar</ng-template>
+            </button>
           </div>
         </mat-step>
       </mat-horizontal-stepper>

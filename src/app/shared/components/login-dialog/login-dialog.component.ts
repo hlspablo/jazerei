@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from "@angular/forms"
 import { MatDialog } from "@angular/material/dialog"
 import { AuthService } from "src/app/services/auth.service"
 import { loginErrorTranslate } from "src/app/utils/firebase.translate"
+import { sleepFor } from "src/app/utils/time.utils"
 
 interface LoginFormValues {
   email: string
@@ -36,7 +37,7 @@ export class LoginDialogComponent {
       const { email, password } = this.loginForm.value as LoginFormValues
       try {
         await this.authService.login(email, password)
-        await new Promise((resolve) => setTimeout(resolve, 500)) // add one second delay for UX
+        await sleepFor(500)
         this.loginErrorMessage = ""
         this.dialog.closeAll()
       } catch (error) {

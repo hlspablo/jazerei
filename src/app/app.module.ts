@@ -10,6 +10,7 @@ import { AppComponent } from "./app.component"
 import { environment } from "../environments/environment"
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations"
 import { provideEnvironmentNgxMask } from "ngx-mask"
+import { ToastrModule } from "ngx-toastr"
 
 @NgModule({
   declarations: [AppComponent],
@@ -21,6 +22,7 @@ import { provideEnvironmentNgxMask } from "ngx-mask"
     BrowserModule,
     BrowserAnimationsModule,
     AppRoutingModule,
+    ToastrModule.forRoot(),
   ],
   providers: [provideEnvironmentNgxMask()],
   bootstrap: [AppComponent],
