@@ -1,10 +1,10 @@
 <mat-card [ngStyle]="{ 'max-width': defaultGameInfo.maxWidth }">
   <mat-card-header>
-    <div mat-card-avatar class="game-header-image" [ngStyle]="{ 'background-image': 'url(' + gameInfo.avatarUrl + ')' }"></div>
-    <mat-card-title>{{ defaultGameInfo.gameTitle }}</mat-card-title>
+    <div mat-card-avatar class="game-header-image" [ngStyle]="{ 'background-image': 'url(' + getAvatarUrl() + ')' }"></div>
+    <mat-card-title>{{ defaultGameInfo.gameName }}</mat-card-title>
     <mat-card-subtitle>{{ gameInfo.gameOwner }}</mat-card-subtitle>
   </mat-card-header>
-  <img mat-card-image [src]="previewMode ? imageSourcePreview : defaultGameInfo.imageSource" class="rounded-image" alt="Imagem do Jogo" />
+  <img mat-card-image [src]="getMainImage()" class="rounded-image" alt="Imagem do Jogo" />
   <mat-card-content>
     <p>{{ defaultGameInfo.gameDescription }}</p>
   </mat-card-content>

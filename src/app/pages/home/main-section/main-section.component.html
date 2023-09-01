@@ -3,9 +3,9 @@
     <span class="showing-text">Exibindo: Mais Procurados</span>
   </div>
   <div class="cards">
-    <div *ngFor="let n of times; let i = index">
-      <a [routerLink]="['/game/20']">
-        <app-game-card></app-game-card>
+    <div *ngFor="let game of games$ | async; let i = index">
+      <a [routerLink]="['/game', game.id]">
+        <app-game-card [gameInfo]="game"></app-game-card>
       </a>
     </div>
   </div>

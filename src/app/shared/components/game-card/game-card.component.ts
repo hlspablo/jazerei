@@ -11,18 +11,26 @@ export class GameCardComponent implements OnChanges {
 
   protected defaultGameInfo = {
     maxWidth: "350px",
-    imageSource: "https://placehold.co/600x400",
-    gameTitle: "Default Game Title",
+    imagesUrls: ["https://placehold.co/600x400"],
+    gameName: "Default Game Title",
     gameOwner: "Default Game Owner",
     gameDescription: "Default Game Description",
     gamePlatform: "Default Platform",
-    avatarUrl: "https://ui-avatars.com/api/?name=User",
-  }
+  } satisfies GameInfo
 
   @Input()
   previewMode = false
   @Input()
   imageSourcePreview: string | ArrayBuffer | null = null
+
+  getAvatarUrl() {
+    const gameOwner = this.defaultGameInfo.gameOwner || "User"
+    return `https://ui-avatars.com/api/?name=${encodeURIComponent(gameOwner)}`
+  }
+
+  getMainImage() {
+    return this.previewMode ? this.imageSourcePreview : this.defaultGameInfo.imagesUrls[0]
+  }
 
   ngOnChanges(changes: SimpleChanges): void {
     console.log("Called ngOnChanges")

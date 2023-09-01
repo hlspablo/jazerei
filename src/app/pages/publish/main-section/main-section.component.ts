@@ -3,12 +3,7 @@ import { FormBuilder, Validators } from "@angular/forms"
 import { Observable } from "rxjs"
 import { BreakpointService } from "src/app/services/breakpoint-service.service"
 import { GameInfo } from "src/app/shared/interfaces/game.interface"
-import {
-  Storage,
-  uploadBytesResumable,
-  getDownloadURL,
-  ref,
-} from "@angular/fire/storage"
+import { Storage, uploadBytesResumable, getDownloadURL, ref } from "@angular/fire/storage"
 import { Firestore, collection, addDoc } from "@angular/fire/firestore"
 import { translatePlatform } from "src/app/utils/game.translate"
 import { AuthService } from "src/app/services/auth.service"
@@ -67,8 +62,7 @@ export class MainSectionComponent implements OnInit {
         uploadTask.on(
           "state_changed",
           (snapshot) => {
-            const progress =
-              (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+            const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100
             console.log(`Upload of ${file.name} is ${progress}% done`)
           },
           (error) => {
@@ -89,15 +83,11 @@ export class MainSectionComponent implements OnInit {
     })
   }
 
-  updateAvatarUrl(displayName: string): void {
+  updateGameOwner(): void {
     console.log("Called updateAvatarUrl")
-    const newAvatarUrl = `https://ui-avatars.com/api/?name=${encodeURIComponent(
-      displayName,
-    )}`
     this.gameInfo = {
       ...this.gameInfo,
       gameOwner: this.getDisplayName(),
-      avatarUrl: newAvatarUrl,
     }
   }
 
@@ -108,7 +98,7 @@ export class MainSectionComponent implements OnInit {
 
     this.gameInfo = {
       ...this.gameInfo,
-      gameTitle: stepOne.gameName || "Default Game Title",
+      gameName: stepOne.gameName || "Default Game Title",
       gameDescription: stepOne.gameDescription || "Default Description",
       gamePlatform: stepOne.gamePlatform || "Default Platform",
     }
@@ -148,8 +138,7 @@ export class MainSectionComponent implements OnInit {
         if (values) {
           const { stepOne, stepTwo } = values
           if (stepOne && stepTwo) {
-            const { gameName, gameDescription, gamePlatform, usedTime } =
-              stepOne
+            const { gameName, gameDescription, gamePlatform, usedTime } = stepOne
 
             const imagesUrls = await this.uploadFiles(this.selectedFiles)
 
@@ -162,10 +151,7 @@ export class MainSectionComponent implements OnInit {
               approved: false,
               imagesUrls,
             })
-            this.toastr.success(
-              "O Anúncio do seu jogo foi publicado.",
-              "Sucesso!",
-            )
+            this.toastr.success("O Anúncio do seu jogo foi publicado.", "Sucesso!")
             // await one second to show the success message
             await sleepFor(500)
             this.router.navigate(["/"])
@@ -182,18 +168,17 @@ export class MainSectionComponent implements OnInit {
   ngOnInit() {
     this.gameInfo = {}
 
-    this.showHamburgerMenu = this.showHamburgerMenu =
-      this.breakpointService.isHandsetOrSmall()
+    this.showHamburgerMenu = this.showHamburgerMenu = this.breakpointService.isHandsetOrSmall()
 
     this.publishForm.valueChanges.subscribe((value) => {
       this.mapFormToGameInfo(value)
     })
 
     this.currentUser = this.authService.getCachedUser()
-    this.updateAvatarUrl(this.getDisplayName())
+    this.updateGameOwner()
     this.authService.user$.subscribe((user) => {
       this.currentUser = user
-      this.updateAvatarUrl(this.getDisplayName())
+      this.updateGameOwner()
     })
   }
 }

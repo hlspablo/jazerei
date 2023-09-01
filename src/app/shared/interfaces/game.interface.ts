@@ -1,9 +1,10 @@
 export interface GameInfo {
+  id?: string
   maxWidth?: string
-  avatarUrl: string
-  imageSource: string
+  //avatarUrl: string
+  imagesUrls: string[]
   gameOwner: string
-  gameTitle: string
+  gameName: string
   gameDescription: string
   gamePlatform: string
 }

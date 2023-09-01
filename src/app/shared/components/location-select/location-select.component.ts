@@ -37,13 +37,7 @@ export class LocationSelectComponent implements OnInit {
 
   filterLocations(): void {
     const filterValue = this.searchControl.value.toLowerCase()
-    this.filteredLocations$ = this.locations$.pipe(
-      map((locations) =>
-        locations.filter((location) =>
-          location.name.toLowerCase().includes(filterValue),
-        ),
-      ),
-    )
+    this.filteredLocations$ = this.locations$.pipe(map((locations) => locations.filter((location) => location.name.toLowerCase().includes(filterValue))))
     this.showDropdown = true
   }
 
