@@ -38,6 +38,18 @@
             <input matInput formControlName="cpf" type="text" placeholder="CPF" mask="000.000.000-00" />
           </mat-form-field>
         </div>
+        <div class="field-container">
+          <ng-select
+            [items]="locations$ | async"
+            (search)="onSearch($event)"
+            [addTag]="false"
+            placeholder="Selecione sua cidade"
+            [clearable]="true"
+            bindLabel="name"
+            bindValue="id"
+          >
+          </ng-select>
+        </div>
         <div class="actions">
           <button mat-button matStepperPrevious>Voltar</button>
           <button mat-button (click)="submit()" [disabled]="registrationForm.invalid || isLoading">

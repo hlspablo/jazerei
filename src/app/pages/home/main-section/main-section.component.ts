@@ -1,6 +1,6 @@
 import { Component, OnInit, inject } from "@angular/core"
 import { Observable } from "rxjs"
-import { GameInfo } from "src/app/shared/interfaces/game.interface"
+import { GameInfo } from "src/app/shared/interfaces/app.interface"
 import { Firestore, collection, collectionData } from "@angular/fire/firestore"
 
 @Component({

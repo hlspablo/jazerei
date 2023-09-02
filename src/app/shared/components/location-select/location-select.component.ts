@@ -4,11 +4,7 @@ import { Firestore, collectionData, collection } from "@angular/fire/firestore"
 import { Observable } from "rxjs"
 import { map } from "rxjs/operators"
 import { MatAutocompleteSelectedEvent } from "@angular/material/autocomplete"
-
-interface Location {
-  id: string
-  name: string
-}
+import { MyLocation } from "../../interfaces/app.interface"
 
 @Component({
   selector: "app-location-select",
@@ -21,8 +17,8 @@ export class LocationSelectComponent implements OnInit {
 
   searchControl = new FormControl()
 
-  locations$: Observable<Location[]>
-  filteredLocations$: Observable<Location[]>
+  locations$: Observable<MyLocation[]>
+  filteredLocations$: Observable<MyLocation[]>
 
   onOptionSelected(event: MatAutocompleteSelectedEvent): void {
     const selectedLocation = event.option.value
@@ -31,13 +27,15 @@ export class LocationSelectComponent implements OnInit {
   }
 
   // Add this function
-  displayFn(location: Location): string {
+  displayFn(location: MyLocation): string {
     return location && location.name ? location.name : ""
   }
 
   filterLocations(): void {
     const filterValue = this.searchControl.value.toLowerCase()
-    this.filteredLocations$ = this.locations$.pipe(map((locations) => locations.filter((location) => location.name.toLowerCase().includes(filterValue))))
+    this.filteredLocations$ = this.locations$.pipe(
+      map((locations) => locations.filter((location) => location.name.toLowerCase().includes(filterValue))),
+    )
     this.showDropdown = true
   }
 
@@ -45,7 +43,7 @@ export class LocationSelectComponent implements OnInit {
     const locations = collection(this.firestore, "locations")
     this.locations$ = collectionData(locations, {
       idField: "id",
-    }) as Observable<Location[]>
+    }) as Observable<MyLocation[]>
 
     this.filteredLocations$ = this.locations$
   }

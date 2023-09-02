@@ -1,5 +1,5 @@
 import { Component, Input, OnChanges, SimpleChanges } from "@angular/core"
-import { GameInfo } from "../../interfaces/game.interface"
+import { GameInfo } from "../../interfaces/app.interface"
 
 @Component({
   selector: "app-game-card",

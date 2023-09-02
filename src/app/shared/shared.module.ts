@@ -26,6 +26,7 @@ import { MatProgressSpinnerModule } from "@angular/material/progress-spinner"
 import { GetFirstNamePipe } from "../pipes/getfirstname.pipe"
 import { RouterModule } from "@angular/router"
 import { GameCardComponent } from "./components/game-card/game-card.component"
+import { NgSelectModule } from "@ng-select/ng-select"
 
 @NgModule({
   declarations: [
@@ -59,6 +60,7 @@ import { GameCardComponent } from "./components/game-card/game-card.component"
     NgxMaskDirective,
     NgxMaskPipe,
     MatProgressSpinnerModule,
+    NgSelectModule,
   ],
   exports: [
     LoginDialogComponent,

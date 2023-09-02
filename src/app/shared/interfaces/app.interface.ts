@@ -8,3 +8,8 @@ export interface GameInfo {
   gameDescription: string
   gamePlatform: string
 }
+
+export interface MyLocation {
+  id: string
+  name: string
+}
