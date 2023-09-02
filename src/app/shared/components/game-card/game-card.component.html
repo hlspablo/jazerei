@@ -4,9 +4,21 @@
     <mat-card-title>{{ defaultGameInfo.gameName }}</mat-card-title>
     <mat-card-subtitle>{{ gameInfo.gameOwner }}</mat-card-subtitle>
   </mat-card-header>
-  <img mat-card-image [src]="getMainImage()" class="rounded-image" alt="Imagem do Jogo" />
-  <mat-card-content>
-    <p>{{ defaultGameInfo.gameDescription }}</p>
+  <div class="image-container">
+    <img mat-card-image [src]="getMainImage()" class="rounded-image" alt="Imagem do Jogo" />
+  </div>
+  <mat-card-content class="description" ellipsis>
+    Lorem ipsum dolor sit amet consectetur, adipisicing elit. Explicabo aliquid porro odit praesentium minus? Explicabo atque adipisci nisi rem ab
+    expedita tenetur nam accusamus in aperiam necessitatibus eius, at officiis voluptas quaerat ipsum quidem aut placeat quae voluptates deserunt
+    veniam! Debitis consequatur vitae harum dolores hic vero dolor, sequi iure voluptate ea ducimus eos iste rem aliquid, totam molestiae quasi
+    perspiciatis laudantium. Autem eaque facere harum non amet pariatur nisi molestias id molestiae. Aliquid maiores perspiciatis culpa tempore illo
+    praesentium ut ducimus, repudiandae impedit. Eveniet mollitia excepturi vero, expedita similique corporis rem aspernatur, eum ratione dolorum
+    cumque exercitationem quaerat labore blanditiis, totam minus sequi quibusdam voluptatem consequatur odio. Magnam deleniti nam explicabo tempora
+    labore sunt soluta distinctio assumenda dolore deserunt neque dicta, obcaecati est repellat hic, eligendi error in, iste maxime id laudantium
+    necessitatibus delectus velit placeat. Nemo, delectus quod eveniet magnam quas cupiditate sed perferendis officiis dolorem laudantium repudiandae,
+    saepe at sit alias maiores quis enim impedit quasi, reiciendis harum necessitatibus dolore sunt debitis? Sequi ipsa maxime nemo. Sequi repellat
+    est quae magni ipsam nesciunt possimus voluptatem atque officia deleniti impedit esse vero ipsum, eveniet consequuntur dolor laboriosam,
+    perspiciatis ratione magnam nostrum! A voluptates aperiam necessitatibus expedita aspernatur reprehenderit.
   </mat-card-content>
   <mat-card-actions align="end">
     <span>{{ defaultGameInfo.gamePlatform }}</span>

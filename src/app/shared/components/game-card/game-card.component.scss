@@ -1,11 +1,17 @@
 .game-header-image {
-  background-image: url("https://ui-avatars.com/api/?name=User");
   background-size: cover;
 }
 .rounded-image {
-  border-radius: 8px;
-  width: 300px;
-  height: 300px;
-  object-fit: cover;
+  width: 330px;
+  height: 330px;
   margin: 0 4px;
+  object-fit: cover;
+  border-radius: 20px !important;
+}
+.description {
+  height: 100px;
+}
+.image-container {
+  display: flex;
+  justify-content: center;
 }

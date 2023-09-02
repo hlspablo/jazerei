@@ -6,7 +6,6 @@
   align-items: center;
   padding-top: 10px;
 }
-
 .cards {
   display: flex;
   flex-grow: 1;
@@ -16,11 +15,9 @@
   padding: 20px 40px;
   justify-content: center;
 }
-
 .game-card {
   max-width: 350px;
 }
-
 .game-header-image {
   background-image: url("https://material.angular.io/assets/img/examples/shiba1.jpg");
   background-size: cover;

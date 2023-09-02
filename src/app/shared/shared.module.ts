@@ -27,6 +27,7 @@ import { GetFirstNamePipe } from "../pipes/getfirstname.pipe"
 import { RouterModule } from "@angular/router"
 import { GameCardComponent } from "./components/game-card/game-card.component"
 import { NgSelectModule } from "@ng-select/ng-select"
+import { EllipsisModule } from "ngx-ellipsis"
 
 @NgModule({
   declarations: [
@@ -40,6 +41,7 @@ import { NgSelectModule } from "@ng-select/ng-select"
     LocationSelectComponent,
     GameCardComponent,
     GetFirstNamePipe,
+
   ],
   imports: [
     CommonModule,
@@ -62,6 +64,7 @@ import { NgSelectModule } from "@ng-select/ng-select"
     NgxMaskPipe,
     MatProgressSpinnerModule,
     NgSelectModule,
+    EllipsisModule,
   ],
   exports: [
     LoginDialogComponent,
