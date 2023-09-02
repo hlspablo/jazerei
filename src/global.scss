@@ -34,3 +34,8 @@ form .mat-horizontal-content-container {
 .chat-input-field .mat-mdc-form-field-subscript-wrapper {
   display: none !important;
 }
+
+.ng-select.location-select .ng-select-container {
+  min-height: 0px;
+  border-radius: 15px;
+}

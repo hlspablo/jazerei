@@ -1,12 +1,5 @@
 import { Injectable, OnDestroy, inject } from "@angular/core"
-import {
-  Auth,
-  signInWithEmailAndPassword,
-  createUserWithEmailAndPassword,
-  updateProfile,
-  user,
-  User,
-} from "@angular/fire/auth"
+import { Auth, signInWithEmailAndPassword, createUserWithEmailAndPassword, updateProfile, user, User } from "@angular/fire/auth"
 import * as fire from "@angular/fire/firestore"
 import { Subscription } from "rxjs"
 
@@ -15,6 +8,7 @@ interface UserData {
   password: string
   name: string
   cpf: string
+  location: string
 }
 
 @Injectable({
@@ -42,11 +36,7 @@ export class AuthService implements OnDestroy {
   }
 
   async register(userData: UserData) {
-    const { user } = await createUserWithEmailAndPassword(
-      this.auth,
-      userData.email,
-      userData.password,
-    )
+    const { user } = await createUserWithEmailAndPassword(this.auth, userData.email, userData.password)
 
     await updateProfile(user, {
       displayName: userData.name,
@@ -55,6 +45,7 @@ export class AuthService implements OnDestroy {
     await fire.setDoc(fire.doc(this.firestore, "profiles", user.uid), {
       name: userData.name,
       cpf: userData.cpf,
+      location: userData.location,
     })
   }
 

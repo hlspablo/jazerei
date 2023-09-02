@@ -3,5 +3,9 @@
   background-size: cover;
 }
 .rounded-image {
-  border-radius: 3px;
+  border-radius: 8px;
+  width: 300px;
+  height: 300px;
+  object-fit: cover;
+  margin: 0 4px;
 }

@@ -10,7 +10,7 @@
         <div class="field-container">
           <mat-form-field floatLabel="always">
             <mat-label>Email</mat-label>
-            <input matInput formControlName="email" type="email" placeholder="Email" />
+            <input matInput formControlName="email" type="email" placeholder="Email" #emailInput />
           </mat-form-field>
         </div>
         <div class="field-container">
@@ -21,7 +21,7 @@
         </div>
         <div class="actions">
           <button mat-button matDialogClose>Cancelar</button>
-          <button mat-button matStepperNext>Próximo</button>
+          <button mat-button matStepperNext [disabled]="!registrationForm.get('stepOne')?.valid">Próximo</button>
         </div>
       </mat-step>
       <mat-step formGroupName="stepTwo">
@@ -40,19 +40,23 @@
         </div>
         <div class="field-container">
           <ng-select
+            class="location-select"
             [items]="locations$ | async"
             (search)="onSearch($event)"
-            [addTag]="false"
-            placeholder="Selecione sua cidade"
+            placeholder="Pesquisa sua cidade"
             [clearable]="true"
             bindLabel="name"
             bindValue="id"
+            appearance="outline"
+            notFoundText="Cidade não encontrada."
+            formControlName="selectedLocation"
           >
           </ng-select>
         </div>
+        <button type="submit" style="display: none"></button>
         <div class="actions">
           <button mat-button matStepperPrevious>Voltar</button>
-          <button mat-button (click)="submit()" [disabled]="registrationForm.invalid || isLoading">
+          <button mat-raised-button color="accent" (click)="submit()" [disabled]="registrationForm.invalid || isLoading">
             <mat-spinner *ngIf="isLoading; else buttonText" diameter="24"></mat-spinner>
             <ng-template #buttonText>Registrar</ng-template>
           </button>

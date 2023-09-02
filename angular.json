@@ -28,7 +28,7 @@
               "src/styles.scss",
               "src/global.scss",
               "node_modules/ngx-toastr/toastr.css",
-              "node_modules/@ng-select/ng-select/themes/material.theme.css"
+              "node_modules/@ng-select/ng-select/themes/default.theme.css"
             ],
             "scripts": []
           },

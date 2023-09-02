@@ -20,10 +20,11 @@ exports.makeNameLowercase = functions.firestore
     }
 
     // Get the name value
-    const original = afterData.name;
+    const original = afterData.name as string;
 
-    // Transform it to lowercase
-    const nameLowercase = original.toLowerCase();
+    // Transform it
+    const nameLowercase = original.trim().toLowerCase()
+      .normalize("NFD").replace(/[\u0300-\u036f]/g, "");
 
     // Update the document
     return change.after.ref.set({

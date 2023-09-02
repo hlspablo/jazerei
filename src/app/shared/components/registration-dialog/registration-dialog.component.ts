@@ -1,5 +1,5 @@
-import { Component, OnInit, inject } from "@angular/core"
-import { FormControl, NonNullableFormBuilder, Validators } from "@angular/forms"
+import { AfterViewInit, Component, ElementRef, OnInit, ViewChild, inject } from "@angular/core"
+import { NonNullableFormBuilder, Validators } from "@angular/forms"
 import { AuthService } from "src/app/services/auth.service"
 import { cpfValidator } from "./cpf.validator"
 import { registerErrorTranslate } from "src/app/utils/firebase.translate"
@@ -8,13 +8,14 @@ import { sleepFor } from "src/app/utils/time.utils"
 import { Firestore, collection, collectionData, query, where } from "@angular/fire/firestore"
 import { Observable, Subject, debounceTime, startWith, switchMap } from "rxjs"
 import { MyLocation } from "../../interfaces/app.interface"
+import { removeDiacritics } from "src/app/utils/string.utils"
 
 @Component({
   selector: "app-registration-dialog",
   templateUrl: "./registration-dialog.component.html",
   styleUrls: ["./registration-dialog.component.scss"],
 })
-export class RegistrationDialogComponent implements OnInit {
+export class RegistrationDialogComponent implements OnInit, AfterViewInit {
   private fb = inject(NonNullableFormBuilder)
   private authService = inject(AuthService)
   private matDialog = inject(MatDialog)
@@ -22,15 +23,23 @@ export class RegistrationDialogComponent implements OnInit {
   protected registerErrorMessage = ""
   protected isLoading = false
 
-  searchControl = new FormControl()
   searchTerms = new Subject<string>()
   private locationCollection = collection(this.firestore, "locations")
   protected locations$: Observable<MyLocation[]>
 
+  @ViewChild('emailInput') emailInput: ElementRef;
+
+  ngAfterViewInit() {
+    console.log(this.emailInput)
+    setTimeout(() => {
+      this.emailInput.nativeElement.focus();
+    }, 300);
+  }
+
   onSearch(event: { term: string }) {
     const searchTerm = event.term
-    this.searchTerms.next(searchTerm)
-    console.log("Search term:", searchTerm)
+    const preparedSearchTerm = removeDiacritics(searchTerm.trim().toLowerCase())
+    this.searchTerms.next(preparedSearchTerm)
   }
 
   protected registrationForm = this.fb.group({
@@ -41,6 +50,7 @@ export class RegistrationDialogComponent implements OnInit {
     stepTwo: this.fb.group({
       name: ["", Validators.required],
       cpf: ["", [Validators.required, cpfValidator]],
+      selectedLocation: [null, Validators.required],
     }),
   })
 
@@ -51,18 +61,8 @@ export class RegistrationDialogComponent implements OnInit {
         observer.complete()
       })
     }
-    const locationQuery = query(this.locationCollection, where("name", ">=", term), where("name", "<=", term + "\uf8ff"))
+    const locationQuery = query(this.locationCollection, where("name_lowercase", ">=", term), where("name_lowercase", "<=", term + "\uf8ff"))
     const locationData$ = collectionData(locationQuery, { idField: "id" }) as Observable<MyLocation[]>
-
-    // For debugging: Subscribe to the observable to see the data
-    locationData$.subscribe(
-      (data) => {
-        console.log("Data received:", data)
-      },
-      (error) => {
-        console.log("Error:", error)
-      },
-    )
 
     return locationData$
   }
@@ -80,6 +80,7 @@ export class RegistrationDialogComponent implements OnInit {
             password: values.stepOne?.password || "",
             name: values.stepTwo?.name || "",
             cpf: values.stepTwo?.cpf || "",
+            location: values.stepTwo?.selectedLocation || "",
           })
           await sleepFor(500)
           this.matDialog.closeAll()
