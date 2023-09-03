@@ -1,9 +1,11 @@
 @use "./components/main-nav/main-nav.component.theme" as main-nav;
 @use "./components/sliding-menu/sliding-menu.component.theme" as sliding-menu;
 @use "./components/sub-nav/sub-nav.component.theme" as sub-nav;
+@use "./components/game-card/game-card.component.theme" as game-card;
 
 @mixin apply-theme($theme) {
   @include main-nav.theme($theme);
   @include sliding-menu.theme($theme);
   @include sub-nav.theme($theme);
+  @include game-card.theme($theme);
 }
