@@ -1,13 +1,8 @@
 <section class="main-section">
-  <div class="game-container">
+  <div class="game-container" *ngIf="game; else loading">
     <mat-card [style.max-width]="cardMaxWidth$ | async" class="responsive-card">
       <div class="slider-container">
-        <img
-          [src]="images[currentIndex]"
-          [style.max-height]="imageMaxHeight$ | async"
-          alt="Image"
-          class="slider-image"
-        />
+        <img [src]="game.imagesUrls[currentIndex]" alt="Image" [class.mobile]="isMobile$ | async" class="slider-image" />
         <button mat-mini-fab class="arrow left" (click)="prevImage()">
           <mat-icon>arrow_back</mat-icon>
         </button>
@@ -16,7 +11,7 @@
         </button>
         <div class="dots">
           <span
-            *ngFor="let image of images; let i = index"
+            *ngFor="let imageUrl of game.imagesUrls; let i = index"
             [class.active]="i === currentIndex"
             tabindex="1"
             (keyup)="(null)"
@@ -25,26 +20,26 @@
         </div>
       </div>
       <mat-card-content>
-        <div class="card-title">Card Title</div>
+        <div class="card-title">{{ game.gameName }}</div>
         <div class="card-description">
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Hic sit enim
-          distinctio modi laboriosam quo delectus, placeat nam harum nihil!
+          {{ game.gameDescription }}
         </div>
         <div class="chat-button">
-          <button
-            (click)="openTextMessageDialog()"
-            mat-raised-button
-            color="primary"
-            class="btn-rounded"
-          >
+          <button (click)="openTextMessageDialog()" mat-raised-button color="accent" class="btn-rounded">
+            <mat-icon>chat</mat-icon>
             Negociar
           </button>
         </div>
-        <div class="card-informations disabled-typography">
-          <span class="game-owner">Fernando Santana</span>
-          <span class="console">PS3</span>
+        <div class="card-informations">
+          <span class="game-owner">{{ game.gameOwner }}</span>
+          <span class="console">{{ game.gamePlatform }}</span>
         </div>
       </mat-card-content>
     </mat-card>
   </div>
+  <ng-template #loading>
+    <div class="loading-container">
+      <mat-spinner color="accent"></mat-spinner>
+    </div>
+  </ng-template>
 </section>

@@ -1,8 +1,9 @@
-import { Component, Input, OnInit } from "@angular/core"
-import { BreakpointObserver, Breakpoints } from "@angular/cdk/layout"
+import { Component, Input, OnInit, inject } from "@angular/core"
 import { Observable, map } from "rxjs"
 import { TextMessageDialogComponent } from "src/app/shared/components/text-message-dialog/text-message-dialog.component"
 import { MatDialog } from "@angular/material/dialog"
+import { GameInfo } from "src/app/shared/interfaces/app.interface"
+import { BreakpointService } from "src/app/services/breakpoint-service.service"
 
 @Component({
   selector: "app-game-detail-main-section",
@@ -10,22 +11,18 @@ import { MatDialog } from "@angular/material/dialog"
   styleUrls: ["./main-section.component.scss"],
 })
 export class MainSectionComponent implements OnInit {
-  @Input()
-  game_id: string
+  private breakpointService = inject(BreakpointService)
+  private dialog = inject(MatDialog)
+  isMobile$: Observable<boolean>
 
-  images = [
-    "https://placekitten.com/800/550",
-    "https://placekitten.com/800/551",
-    "https://placekitten.com/800/552",
-  ]
+  @Input()
+  game$: Observable<GameInfo>
+  game: GameInfo
+
   currentIndex = 0
   cardMaxWidth$: Observable<string>
   imageMaxHeight$: Observable<string>
 
-  constructor(
-    private breakpointObserver: BreakpointObserver,
-    private dialog: MatDialog,
-  ) {}
 
   openTextMessageDialog() {
     console.log("Open Dialog")
@@ -38,44 +35,19 @@ export class MainSectionComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.cardMaxWidth$ = this.breakpointObserver
-      .observe([Breakpoints.Handset, Breakpoints.Tablet, Breakpoints.Web])
-      .pipe(
-        map((result) => {
-          if (result.breakpoints[Breakpoints.Handset]) {
-            return "400px"
-          } else if (result.breakpoints[Breakpoints.Tablet]) {
-            return "600px"
-          } else {
-            return "800px"
-          }
-        }),
-      )
-
-    this.imageMaxHeight$ = this.breakpointObserver
-      .observe([Breakpoints.Handset, Breakpoints.Tablet, Breakpoints.Web])
-      .pipe(
-        map((result) => {
-          if (result.breakpoints[Breakpoints.Handset]) {
-            return "auto"
-          } else if (result.breakpoints[Breakpoints.Tablet]) {
-            return "600px"
-          } else {
-            return "800px"
-          }
-        }),
-      )
+    this.game$.subscribe((game) => {
+      this.game = game
+    })
+    this.isMobile$ = this.breakpointService.isHandsetOrSmall()
   }
 
   prevImage() {
     this.currentIndex =
-      (this.currentIndex - 1 + this.images.length) % this.images.length
+      (this.currentIndex - 1 + this.game.imagesUrls.length) % this.game.imagesUrls.length
   }
-
   nextImage() {
-    this.currentIndex = (this.currentIndex + 1) % this.images.length
+    this.currentIndex = (this.currentIndex + 1) % this.game.imagesUrls.length
   }
-
   goToImage(index: number) {
     this.currentIndex = index
   }

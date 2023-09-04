@@ -7,14 +7,12 @@
   $primary-palette: map.get($color-config, "primary");
   $background-palette: map.get($theme, "custom-background");
 
-  .showing {
+  .main {
+    height: 100vh;
     background-color: mat.get-color-from-palette($background-palette, 50);
-    .showing-text {
-      color: mat.get-contrast-color-from-palette($background-palette, 50);
-    }
   }
-  .cards {
-    background-color: mat.get-color-from-palette($background-palette, 50);
+  .showing-text {
+    color: mat.get-contrast-color-from-palette($background-palette, 50);
   }
 }
 

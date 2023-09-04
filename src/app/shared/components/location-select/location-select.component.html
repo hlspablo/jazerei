@@ -1,41 +1,24 @@
 <div class="location-select">
   <mat-dialog-content>
-    <mat-form-field class="search-bar-form-field">
-      <input
-        type="text"
-        matInput
-        [matAutocomplete]="auto"
-        [formControl]="searchControl"
-        placeholder="Digite o nome da cidade"
-        (input)="filterLocations()"
-      />
-      <mat-autocomplete
-        #auto="matAutocomplete"
-        [panelWidth]="300"
-        style="z-index: 20"
-        (optionSelected)="onOptionSelected($event)"
-        [displayWith]="displayFn"
-      >
-        <mat-option
-          *ngFor="let location of filteredLocations$ | async"
-          [value]="location"
-        >
-          {{ location.name }}
-        </mat-option>
-      </mat-autocomplete>
-      <button
-        *ngIf="searchControl.value"
-        matSuffix
-        mat-icon-button
-        aria-label="Limpar"
-        (click)="searchControl.setValue('')"
-        style="margin-right: 5px"
-      >
-        <mat-icon>close</mat-icon>
-      </button>
-    </mat-form-field>
-    <mat-dialog-actions>
-      <button mat-button matDialogClose>Cancelar</button>
-    </mat-dialog-actions>
+    <ng-select
+      class="location-select"
+      [items]="locations$ | async"
+      (search)="onSearch($event)"
+      placeholder="Pesquisa uma cidade"
+      [clearable]="true"
+      bindLabel="name"
+      bindValue="id"
+      appearance="outline"
+      notFoundText="Cidade não encontrada."
+      [formControl]="searchControl"
+      appendTo="body"
+      (change)="onChange($event)"
+    >
+    </ng-select>
   </mat-dialog-content>
+  <mat-dialog-actions>
+    <div class="actions-container">
+      <button mat-button matDialogClose>Cancelar</button>
+    </div>
+  </mat-dialog-actions>
 </div>

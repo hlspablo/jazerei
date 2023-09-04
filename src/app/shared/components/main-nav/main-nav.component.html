@@ -32,8 +32,7 @@
   </ul>
   <div (click)="openLocationDialog()" class="location" (keyup)="(null)" tabindex="0" *ngIf="(showHamburgerMenu | async) === false">
     <mat-icon color="accent">gps_fixed</mat-icon>
-    <button mat-raised-button color="accent">Localização</button>
-    <!-- <div class="location-text">Localização</div> -->
+    <button mat-raised-button color="accent">{{ cityName }}</button>
   </div>
   <div class="mobile-menu" *ngIf="showHamburgerMenu | async" [class.mobile-menu-end]="showHamburgerMenu | async">
     <button mat-button color="primary" (click)="slidingMenu.toggleMenu()">

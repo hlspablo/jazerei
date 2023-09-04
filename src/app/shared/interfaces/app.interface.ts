@@ -12,4 +12,5 @@ export interface GameInfo {
 export interface MyLocation {
   id: string
   name: string
+  name_lowercase: string
 }

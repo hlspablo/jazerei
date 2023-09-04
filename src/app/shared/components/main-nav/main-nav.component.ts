@@ -4,10 +4,10 @@ import { Observable, Subscription } from "rxjs"
 import { BreakpointService } from "src/app/services/breakpoint-service.service"
 import { LoginDialogComponent } from "../login-dialog/login-dialog.component"
 import { RegistrationDialogComponent } from "../registration-dialog/registration-dialog.component"
-import { MatMenuTrigger } from "@angular/material/menu"
 import { LocationSelectComponent } from "../location-select/location-select.component"
 import { Auth, User } from "@angular/fire/auth"
 import { AuthService } from "src/app/services/auth.service"
+import { LocationFilterService } from "src/app/services/location-filter.service"
 
 @Component({
   selector: "app-main-nav",
@@ -17,15 +17,13 @@ import { AuthService } from "src/app/services/auth.service"
 export class MainNavComponent implements OnInit, OnDestroy {
   private auth: Auth = inject(Auth)
   showHamburgerMenu: Observable<boolean>
-  menuTrigger: MatMenuTrigger
   userSubscription: Subscription
   currentUser: User | null
-
-  constructor(
-    private breakpointService: BreakpointService,
-    private dialog: MatDialog,
-    private authService: AuthService,
-  ) {}
+  private locationService = inject(LocationFilterService)
+  private breakpointService =  inject(BreakpointService)
+  private dialog = inject (MatDialog)
+  private authService = inject (AuthService)
+  protected cityName: string
 
   openLocationDialog() {
     console.log("Opening location dialog")
@@ -71,6 +69,11 @@ export class MainNavComponent implements OnInit, OnDestroy {
     this.userSubscription = this.authService.user$.subscribe((updatedUser) => {
       this.currentUser = updatedUser
     })
+
+    this.locationService.city$.subscribe((city) => {
+      this.cityName = city?.name ?? "Localização"
+    })
+
   }
   ngOnDestroy() {
     this.userSubscription.unsubscribe()

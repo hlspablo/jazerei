@@ -1,6 +1,6 @@
 .main-section {
-  min-height: 980px;
   padding-top: 50px;
+  padding-bottom: 100px;
 }
 .game-container {
   display: flex;
@@ -8,45 +8,42 @@
   flex-grow: 1;
   margin: 0 20px;
 }
-
 .responsive-card {
-  max-width: 400px;
   margin: auto;
   border-radius: 10px;
   overflow: hidden;
 }
-
 .slider-container {
   position: relative;
 }
 
 .slider-image {
-  width: 100%;
-  height: auto;
+  width: 830px;
+  height: 630px;
+  object-fit: cover;
 }
-
+.slider-image.mobile {
+  width: 330px;
+  height: 330px;
+}
 .arrow {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
   z-index: 1;
 }
-
 .left {
   left: 10px;
 }
-
 .right {
   right: 10px;
 }
-
 .dots {
   position: absolute;
   bottom: 10px;
   left: 50%;
   transform: translateX(-50%);
 }
-
 .dots span {
   display: inline-block;
   width: 8px;
@@ -76,5 +73,11 @@
 .card-informations {
   display: flex;
   justify-content: space-between;
-  font-size: 0.9rem;
+  font-style: italic;
+  font-weight: bold;
+}
+.loading-container {
+  display: flex;
+  justify-content: center;
+  height: 100vh;
 }

@@ -7,6 +7,7 @@ import { MainSectionComponent } from "./main-section/main-section.component"
 import { GameDetailRoutingModule } from "./game-detail-routing.module"
 import { MatIconModule } from "@angular/material/icon"
 import { MatButtonModule } from "@angular/material/button"
+import { MatProgressSpinnerModule } from "@angular/material/progress-spinner"
 
 @NgModule({
   declarations: [GameDetailPageComponent, MainSectionComponent],
@@ -17,6 +18,7 @@ import { MatButtonModule } from "@angular/material/button"
     SharedModule,
     MatIconModule,
     MatButtonModule,
+    MatProgressSpinnerModule
   ],
 })
 export class GameDetailPageModule {}

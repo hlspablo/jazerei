@@ -10,6 +10,9 @@
   .main-section {
     background-color: mat.get-color-from-palette($background-palette, 50);
   }
+  .card-informations {
+    color: mat.get-color-from-palette($primary-palette, 500);
+  }
 }
 
 @mixin typography($theme) {
@@ -25,7 +28,7 @@
   }
 
   .card-informations {
-    @include mat.typography-level($typography-config, caption);
+    @include mat.typography-level($typography-config, body-2);
   }
 }
 

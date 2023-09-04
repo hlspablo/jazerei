@@ -18,8 +18,7 @@ export class MainSectionComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.showHamburgerMenu = this.showHamburgerMenu =
-      this.breakpointService.isHandsetOrSmall()
+    this.showHamburgerMenu = this.breakpointService.isHandsetOrSmall()
 
     this.conversationsService.showConversations$.subscribe((value) => {
       this.showConversations = value

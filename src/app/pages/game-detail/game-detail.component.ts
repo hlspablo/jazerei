@@ -1,5 +1,8 @@
-import { Component, OnInit } from "@angular/core"
+import { Component, OnInit, inject } from "@angular/core"
+import { Firestore, doc, docData } from "@angular/fire/firestore"
 import { ActivatedRoute } from "@angular/router"
+import { Observable } from "rxjs"
+import { GameInfo } from "src/app/shared/interfaces/app.interface"
 
 @Component({
   selector: "app-game-detail",
@@ -7,13 +10,25 @@ import { ActivatedRoute } from "@angular/router"
   styleUrls: ["./game-detail.component.scss"],
 })
 export class GameDetailPageComponent implements OnInit {
-  id: string
+  private routes = inject(ActivatedRoute)
+  private firestore = inject(Firestore)
 
-  constructor(private route: ActivatedRoute) {}
+
+  protected gameId: string
+
+
+  game$: Observable<GameInfo>
+
+  getGame() {
+    console.log('getting game', this.gameId)
+    const gameDoc = doc(this.firestore, "games", this.gameId)
+    this.game$ = docData(gameDoc) as Observable<GameInfo>
+  }
 
   ngOnInit(): void {
-    this.route.paramMap.subscribe((params) => {
-      this.id = params.get("id") || ""
+    this.routes.paramMap.subscribe((params) => {
+      this.gameId = params.get("id") || ""
+      this.getGame()
     })
   }
 }

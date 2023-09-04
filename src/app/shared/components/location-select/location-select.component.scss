@@ -1,6 +1,9 @@
 .location-select {
   min-width: 350px;
 }
-.search-bar-form-field {
-  width: 100%;
+.actions-container {
+  display: flex;
+  flex-grow: 1;
+  justify-content: center;
+  padding-bottom: 12px;
 }
