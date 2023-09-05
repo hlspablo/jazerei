@@ -39,6 +39,7 @@
             <div class="message-content">
               {{ message.message }}
               <span class="message-time">{{ message.timestamp | getHumanTime }}</span>
+              <span class="message-read-indicator"[class.read]="message.read" *ngIf="message.userId === currentUser?.uid"></span>
             </div>
           </div>
         </div>

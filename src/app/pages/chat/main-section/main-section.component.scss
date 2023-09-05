@@ -126,19 +126,22 @@
 }
 .message-time {
   position: absolute;
-  bottom: -8px;
-  right: 15px;
+  bottom: -7px;
+  right: -3px;
   font-size: 10px;
   color: #aaa;
 }
 .message-read-indicator {
   position: absolute;
-  bottom: 0px;
-  right: 0px;
+  bottom: 16px;
+  right: -2px;
   width: 6px;
   height: 6px;
   background-color: blue;
   border-radius: 50%;
+}
+.message-read-indicator.read{
+  background-color: green;
 }
 .message.received {
   background-color: #f1f1f1;

@@ -20,9 +20,18 @@
         <mat-icon color="accent" class="menu-icon">publish</mat-icon>
         <a routerLink="/publish">Publicar Jogo</a>
       </li>
-      <li tabindex="2" role="menuitem">
+      <!-- <li tabindex="2" role="menuitem">
         <mat-icon color="accent" class="menu-icon">sms</mat-icon>
         <a routerLink="/chat">Conversas </a>
+      </li> -->
+      <li tabindex="2" role="menuitem">
+        <div class="icon-wrapper">
+          <span class="badge" *ngIf="(totalUnread$ | async) ? (totalUnread$ | async) : 0 > 0">{{
+            totalUnread$ | async
+          }}</span>
+          <mat-icon color="accent" class="menu-icon">sms</mat-icon>
+        </div>
+        <a routerLink="/chat">Conversas</a>
       </li>
       <button mat-raised-button color="accent" (click)="logout()">
         Sair
@@ -30,11 +39,21 @@
       </button>
     </ng-container>
   </ul>
-  <div (click)="openLocationDialog()" class="location" (keyup)="(null)" tabindex="0" *ngIf="(showHamburgerMenu | async) === false">
+  <div
+    (click)="openLocationDialog()"
+    class="location"
+    (keyup)="(null)"
+    tabindex="0"
+    *ngIf="(showHamburgerMenu | async) === false"
+  >
     <mat-icon color="accent">gps_fixed</mat-icon>
     <button mat-raised-button color="accent">{{ cityName }}</button>
   </div>
-  <div class="mobile-menu" *ngIf="showHamburgerMenu | async" [class.mobile-menu-end]="showHamburgerMenu | async">
+  <div
+    class="mobile-menu"
+    *ngIf="showHamburgerMenu | async"
+    [class.mobile-menu-end]="showHamburgerMenu | async"
+  >
     <button mat-button color="primary" (click)="slidingMenu.toggleMenu()">
       <mat-icon color="accent" class="menu-icon">menu</mat-icon>
     </button>

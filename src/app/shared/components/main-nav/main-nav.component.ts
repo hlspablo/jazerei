@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit, inject } from "@angular/core"
 import { MatDialog } from "@angular/material/dialog"
-import { Observable, Subscription } from "rxjs"
+import { Observable, Subscription, firstValueFrom, of } from "rxjs"
 import { BreakpointService } from "src/app/services/breakpoint-service.service"
 import { LoginDialogComponent } from "../login-dialog/login-dialog.component"
 import { RegistrationDialogComponent } from "../registration-dialog/registration-dialog.component"
@@ -8,6 +8,7 @@ import { LocationSelectComponent } from "../location-select/location-select.comp
 import { Auth, User } from "@angular/fire/auth"
 import { AuthService } from "src/app/services/auth.service"
 import { LocationFilterService } from "src/app/services/location-filter.service"
+import { ChatService } from "src/app/services/chat.service"
 
 @Component({
   selector: "app-main-nav",
@@ -16,14 +17,17 @@ import { LocationFilterService } from "src/app/services/location-filter.service"
 })
 export class MainNavComponent implements OnInit, OnDestroy {
   private auth: Auth = inject(Auth)
+  private chatService = inject(ChatService)
   showHamburgerMenu: Observable<boolean>
   userSubscription: Subscription
   currentUser: User | null
   private locationService = inject(LocationFilterService)
-  private breakpointService =  inject(BreakpointService)
-  private dialog = inject (MatDialog)
-  private authService = inject (AuthService)
+  private breakpointService = inject(BreakpointService)
+  private dialog = inject(MatDialog)
+  private authService = inject(AuthService)
   protected cityName: string
+  protected incomingMessagesCount = 20
+  totalUnread$ = of(0)
 
   openLocationDialog() {
     console.log("Opening location dialog")
@@ -60,20 +64,18 @@ export class MainNavComponent implements OnInit, OnDestroy {
     this.authService.logout()
   }
 
-  ngOnInit() {
-    this.showHamburgerMenu = this.showHamburgerMenu =
-      this.breakpointService.isHandsetOrSmall()
-
+  async ngOnInit() {
+    this.showHamburgerMenu = this.showHamburgerMenu = this.breakpointService.isHandsetOrSmall()
     this.currentUser = this.authService.getCachedUser()
-
     this.userSubscription = this.authService.user$.subscribe((updatedUser) => {
       this.currentUser = updatedUser
     })
-
     this.locationService.city$.subscribe((city) => {
       this.cityName = city?.name ?? "Localização"
     })
-
+    await this.chatService.initialize()
+    this.totalUnread$ = this.chatService.getTotalUnreadMessagesCount()
+    console.log("totalUnread", firstValueFrom(this.totalUnread$))
   }
   ngOnDestroy() {
     this.userSubscription.unsubscribe()

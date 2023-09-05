@@ -1,4 +1,4 @@
-import { Injectable, inject } from "@angular/core"
+import { Injectable, OnInit, inject } from "@angular/core"
 import {
   Firestore,
   collectionData,
@@ -7,8 +7,10 @@ import {
   query,
   orderBy,
   where,
+  getDocs,
+  updateDoc,
 } from "@angular/fire/firestore"
-import { Observable, firstValueFrom, map } from "rxjs"
+import { Observable, combineLatest, firstValueFrom, map, of, switchMap } from "rxjs"
 import { Auth, user } from "@angular/fire/auth"
 import { doc, getDoc } from "@angular/fire/firestore"
 import {
@@ -27,6 +29,12 @@ export class ChatService {
   private firestore = inject(Firestore)
   private auth: Auth = inject(Auth)
   user$ = user(this.auth)
+  private totalUnread$: Observable<number>
+
+  async initialize() {
+    const chatRoomsObservable = await this.getChatRooms()
+    this.totalUnread$ = chatRoomsObservable.pipe(map((result) => result.totalUnread))
+  }
 
   async getProfileFields(otherUserId: string) {
     // TODO handle errors
@@ -41,28 +49,71 @@ export class ChatService {
     return { name, locationName }
   }
 
-  async getChatRooms(): Promise<Observable<UserChatRoom[]>> {
+  async setAllMessagesToRead(chatRoomId: string, currentUserId: string): Promise<void> {
+    const messagesCollection = collection(this.firestore, `chatRooms/${chatRoomId}/messages`)
+    const unreadMessagesQuery = query(
+      messagesCollection,
+      where("read", "==", false),
+      where("userId", "!=", currentUserId),
+    )
+    const querySnapshot = await getDocs(unreadMessagesQuery)
+
+    const updatePromises: Promise<void>[] = []
+    querySnapshot.forEach((documentSnapshot) => {
+      const messageId = documentSnapshot.id
+      const messageRef = doc(this.firestore, `chatRooms/${chatRoomId}/messages/${messageId}`)
+      updatePromises.push(updateDoc(messageRef, { read: true }))
+    })
+    await Promise.all(updatePromises)
+  }
+
+  getUnreadMessagesCount(chatRoomId: string, currentUserId: string): Observable<number> {
+    const messagesCollection = collection(this.firestore, `chatRooms/${chatRoomId}/messages`)
+    const unreadMessagesQuery = query(
+      messagesCollection,
+      where("read", "==", false),
+      where("userId", "!=", currentUserId),
+    )
+    const unreadMessagesData = collectionData(unreadMessagesQuery, { idField: "id" }) as Observable<
+      Message[]
+    >
+    return unreadMessagesData.pipe(map((messages: Message[]) => messages.length))
+  }
+
+  getTotalUnreadMessagesCount(): Observable<number> {
+    return this.totalUnread$
+  }
+
+  async getChatRooms(): Promise<Observable<{ rooms: UserChatRoom[]; totalUnread: number }>> {
     const currentUser = await firstValueFrom(this.user$)
     if (!currentUser) throw new Error("Must be logged to get chat rooms")
+
     const chatRoomsCollection = collection(this.firestore, "chatRooms")
     const chatRoomsQuery = query(
       chatRoomsCollection,
       where("members", "array-contains", currentUser.uid),
     )
+
     const chatRoomsData = collectionData(chatRoomsQuery, { idField: "id" }) as Observable<
       ChatRoom[]
     >
-    return chatRoomsData.pipe(
-      map((chatRooms: ChatRoom[]) => {
-        return chatRooms.map((chatRoom) => {
-          const index = chatRoom.members.findIndex((memberId) => memberId === currentUser.uid)
 
-          const rightIndex = switchValue(index)
+    return chatRoomsData.pipe(
+      switchMap((chatRooms: ChatRoom[]) => {
+        const unreadCounts = chatRooms.map((room) =>
+          this.getUnreadMessagesCount(room.id, currentUser.uid),
+        )
+        return combineLatest([of(chatRooms), ...unreadCounts])
+      }),
+      map(([chatRooms, ...unreadCounts]) => {
+        const rooms = chatRooms.map((chatRoom, index) => {
           const chatRoomId = chatRoom.id
+          const memberIndex = chatRoom.members.findIndex((memberId) => memberId === currentUser.uid)
+          const rightIndex = switchValue(memberIndex)
           const location = chatRoom.locations[rightIndex]
           const userName = chatRoom.names[rightIndex]
           const gameName = chatRoom.relatedGameName
-          const unreadMessages = 0
+          const unreadMessages = unreadCounts[index]
 
           return {
             id: chatRoomId,
@@ -72,9 +123,55 @@ export class ChatService {
             unreadMessages,
           }
         })
+
+        const totalUnread = unreadCounts.reduce((acc, count) => acc + count, 0)
+
+        return { rooms, totalUnread }
       }),
     )
   }
+
+  // async getChatRooms(): Promise<Observable<UserChatRoom[]>> {
+  //   const currentUser = await firstValueFrom(this.user$)
+  //   if (!currentUser) throw new Error("Must be logged to get chat rooms")
+
+  //   const chatRoomsCollection = collection(this.firestore, "chatRooms")
+  //   const chatRoomsQuery = query(
+  //     chatRoomsCollection,
+  //     where("members", "array-contains", currentUser.uid),
+  //   )
+  //   const chatRoomsData = collectionData(chatRoomsQuery, { idField: "id" }) as Observable<
+  //     ChatRoom[]
+  //   >
+
+  //   return chatRoomsData.pipe(
+  //     switchMap((chatRooms: ChatRoom[]) => {
+  //       const unreadCounts = chatRooms.map((room) =>
+  //         this.getUnreadMessagesCount(room.id, currentUser.uid),
+  //       )
+  //       return combineLatest([of(chatRooms), ...unreadCounts])
+  //     }),
+  //     map(([chatRooms, ...unreadCounts]) => {
+  //       return chatRooms.map((chatRoom, index) => {
+  //         const chatRoomId = chatRoom.id
+  //         const memberIndex = chatRoom.members.findIndex((memberId) => memberId === currentUser.uid)
+  //         const rightIndex = switchValue(memberIndex)
+  //         const location = chatRoom.locations[rightIndex]
+  //         const userName = chatRoom.names[rightIndex]
+  //         const gameName = chatRoom.relatedGameName
+  //         const unreadMessages = unreadCounts[index]
+
+  //         return {
+  //           id: chatRoomId,
+  //           location,
+  //           userName,
+  //           gameName,
+  //           unreadMessages,
+  //         }
+  //       })
+  //     }),
+  //   )
+  // }
 
   async checkIfChatRoomExists(otherUserId: string, relatedGameId: string) {
     const currentUser = await firstValueFrom(this.user$)

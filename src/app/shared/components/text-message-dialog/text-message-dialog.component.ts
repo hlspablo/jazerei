@@ -25,10 +25,12 @@ export class TextMessageDialogComponent {
     if (this.textMessageForm.valid) {
       const message = this.textMessageForm.get("message")?.value
       //console.log("[onSubmit]", this.gameData.game)
-      this.chatService.createChatRoom(this.gameData.game.gameOwnerId!, this.gameData.game.id!, this.gameData.game.gameName!, message!)
-      const chatRooms = await this.chatService.getChatRooms()
-      const data = await firstValueFrom(chatRooms)
-      console.log("[chatRooms]", data)
+      this.chatService.createChatRoom(
+        this.gameData.game.gameOwnerId!,
+        this.gameData.game.id!,
+        this.gameData.game.gameName!,
+        message!,
+      )
     }
   }
 }
