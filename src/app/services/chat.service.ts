@@ -1,9 +1,24 @@
 import { Injectable, inject } from "@angular/core"
-import { Firestore, collectionData, addDoc, collection, query, orderBy, where } from "@angular/fire/firestore"
+import {
+  Firestore,
+  collectionData,
+  addDoc,
+  collection,
+  query,
+  orderBy,
+  where,
+} from "@angular/fire/firestore"
 import { Observable, firstValueFrom, map } from "rxjs"
 import { Auth, user } from "@angular/fire/auth"
 import { doc, getDoc } from "@angular/fire/firestore"
-import { ChatRoom, MyLocation, Profile, UserChatRoom } from "../shared/interfaces/app.interface"
+import {
+  ChatRoom,
+  Message,
+  MyLocation,
+  Profile,
+  UserChatRoom,
+} from "../shared/interfaces/app.interface"
+import { switchValue } from "../utils/numbers.utils"
 
 @Injectable({
   providedIn: "root",
@@ -30,15 +45,22 @@ export class ChatService {
     const currentUser = await firstValueFrom(this.user$)
     if (!currentUser) throw new Error("Must be logged to get chat rooms")
     const chatRoomsCollection = collection(this.firestore, "chatRooms")
-    const chatRoomsQuery = query(chatRoomsCollection, where("members", "array-contains", currentUser.uid))
-    const chatRoomsData = collectionData(chatRoomsQuery, { idField: "id" }) as Observable<ChatRoom[]>
+    const chatRoomsQuery = query(
+      chatRoomsCollection,
+      where("members", "array-contains", currentUser.uid),
+    )
+    const chatRoomsData = collectionData(chatRoomsQuery, { idField: "id" }) as Observable<
+      ChatRoom[]
+    >
     return chatRoomsData.pipe(
       map((chatRooms: ChatRoom[]) => {
         return chatRooms.map((chatRoom) => {
           const index = chatRoom.members.findIndex((memberId) => memberId === currentUser.uid)
+
+          const rightIndex = switchValue(index)
           const chatRoomId = chatRoom.id
-          const location = chatRoom.locations[index]
-          const userName = chatRoom.names[index]
+          const location = chatRoom.locations[rightIndex]
+          const userName = chatRoom.names[rightIndex]
           const gameName = chatRoom.relatedGameName
           const unreadMessages = 0
 
@@ -59,21 +81,15 @@ export class ChatService {
     if (!currentUser) {
       throw new Error("Must be logged to check for existing chat rooms")
     }
-
-    // Initialize chat rooms collection reference and query
     const chatRoomsCollection = collection(this.firestore, "chatRooms")
-
-    // Query to check if chat room exists with the same members and relatedGameId
     const chatRoomsQuery = query(
       chatRoomsCollection,
       where("members", "array-contains", currentUser.uid),
       where("relatedGameId", "==", relatedGameId),
     )
-
-    // Execute the query
-    const chatRoomsData = await firstValueFrom(collectionData(chatRoomsQuery, { idField: "id" }) as Observable<ChatRoom[]>)
-
-    // Iterate through the results to confirm if the other user is also a member
+    const chatRoomsData = await firstValueFrom(
+      collectionData(chatRoomsQuery, { idField: "id" }) as Observable<ChatRoom[]>,
+    )
     for (const chatRoom of chatRoomsData) {
       if (chatRoom.members.includes(otherUserId)) {
         return {
@@ -82,14 +98,18 @@ export class ChatService {
         }
       }
     }
-
     return {
       exists: false,
       id: null,
     }
   }
 
-  async createChatRoom(otherUserId: string, relatedGameId: string, relatedGameName: string, initialMessage?: string) {
+  async createChatRoom(
+    otherUserId: string,
+    relatedGameId: string,
+    relatedGameName: string,
+    initialMessage?: string,
+  ) {
     const { exists, id } = await this.checkIfChatRoomExists(otherUserId, relatedGameId)
 
     if (exists) {
@@ -102,19 +122,26 @@ export class ChatService {
         throw new Error("Must be logged to create chat rooms")
       }
       const { locationName, name } = await this.getProfileFields(otherUserId)
-      const { locationName: currentUserLocationName, name: currentUserName } = await this.getProfileFields(currentUser.uid)
+      const { locationName: currentUserLocationName, name: currentUserName } =
+        await this.getProfileFields(currentUser.uid)
       const members = [currentUser.uid, otherUserId]
       const names = [currentUserName, name]
       const locations = [currentUserLocationName, locationName]
       const chatRoomsCollection = collection(this.firestore, "chatRooms")
-      await addDoc(chatRoomsCollection, { members, names, locations, relatedGameId, relatedGameName })
+      await addDoc(chatRoomsCollection, {
+        members,
+        names,
+        locations,
+        relatedGameId,
+        relatedGameName,
+      })
     }
   }
 
   getMessages(chatRoomId: string) {
     const messagesCollection = collection(this.firestore, `chatRooms/${chatRoomId}/messages`)
     const messagesQuery = query(messagesCollection, orderBy("timestamp"))
-    return collectionData(messagesQuery) as Observable<any[]>
+    return collectionData(messagesQuery) as Observable<Message[]>
   }
 
   async sendMessage(chatRoomId: string, message: string) {
@@ -125,6 +152,7 @@ export class ChatService {
       message,
       timestamp: new Date(),
       userId: currentUser?.uid,
+      read: false,
     })
   }
 }

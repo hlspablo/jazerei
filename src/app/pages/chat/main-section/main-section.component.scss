@@ -62,11 +62,14 @@
     margin-right: 5px;
   }
 }
+
+.chat-item.active {
+  border: 2px solid #007bff;  /* blue border for active chat */
+}
 .chat-input-container {
-  position: fixed;
+  position: relative;
   bottom: 0;
   right: 0;
-  width: calc(100% - 250px);
   background-color: #fff;
   padding: 10px;
   padding-bottom: 30px;
@@ -88,8 +91,6 @@
     font-size: 1.6rem;
   }
 }
-
-// chat messages
 .chat-container {
   flex-grow: 1; /* Allows the container to grow and take up available space */
   display: flex;
@@ -100,33 +101,29 @@
 .chat-messages {
   display: flex;
   flex-direction: column;
-  padding: 20px;
+  padding: 20px 30px;
   overflow-y: auto;
-  height: calc(100vh - 60px);
+  height: 100%;
+  padding-bottom: 80px;
 }
-
 .message-wrapper {
   display: flex;
   justify-content: flex-start; /* Default alignment */
   width: 100%;
 }
-
 .message-wrapper.sent {
   justify-content: flex-end; /* Aligns to the right */
 }
-
 .message {
   max-width: 60%;
   margin-bottom: 15px;
   padding: 10px;
   border-radius: 15px;
 }
-
 .message-content {
   position: relative;
   padding: 10px;
 }
-
 .message-time {
   position: absolute;
   bottom: -8px;
@@ -134,7 +131,6 @@
   font-size: 10px;
   color: #aaa;
 }
-
 .message-read-indicator {
   position: absolute;
   bottom: 0px;
@@ -144,11 +140,9 @@
   background-color: blue;
   border-radius: 50%;
 }
-
 .message.received {
   background-color: #f1f1f1;
 }
-
 .message.sent {
   background-color: #dcf8c6;
 }

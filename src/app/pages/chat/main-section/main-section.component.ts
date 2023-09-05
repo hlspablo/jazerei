@@ -1,9 +1,11 @@
-import { Component, OnInit, inject } from "@angular/core"
+import { Component, ElementRef, OnInit, ViewChild, inject } from "@angular/core"
 import { BreakpointService } from "src/app/services/breakpoint-service.service"
 import { Observable } from "rxjs"
 import { ConversationsService } from "../services/conversatios.service"
 import { ChatService } from "src/app/services/chat.service"
-import { UserChatRoom } from "src/app/shared/interfaces/app.interface"
+import { Message, UserChatRoom } from "src/app/shared/interfaces/app.interface"
+import { User } from "@angular/fire/auth"
+import { AuthService } from "src/app/services/auth.service"
 
 @Component({
   selector: "app-chat-main-section",
@@ -11,22 +13,68 @@ import { UserChatRoom } from "src/app/shared/interfaces/app.interface"
   styleUrls: ["./main-section.component.scss"],
 })
 export class MainSectionComponent implements OnInit {
-  showHamburgerMenu: Observable<boolean>
-  showConversations = false
+  private authService = inject(AuthService)
   private chatService = inject(ChatService)
-  protected chatRooms$: Observable<UserChatRoom[]>
+  private breakpointService = inject(BreakpointService)
+  private conversationsService = inject(ConversationsService)
 
-  constructor(
-    private breakpointService: BreakpointService,
-    private conversationsService: ConversationsService,
-  ) {}
+  protected showConversations$: Observable<boolean>
+  protected showHamburgerMenu$: Observable<boolean>
+  protected chatRooms$: Observable<UserChatRoom[]>
+  protected messages$: Observable<Message[]>
+  protected currentUser: User | null
+
+  protected activeChatRoom: string
+  protected currentMessageValue = ""
+
+  @ViewChild("chatMessages", { static: false }) private chatMessages: ElementRef
+
+  private scrollToBottom(): void {
+    try {
+      console.log(
+        this.chatMessages.nativeElement.scrollHeight,
+        this.chatMessages.nativeElement.scrollTop,
+      )
+      setTimeout(() => {
+        this.chatMessages.nativeElement.scrollTop = this.chatMessages.nativeElement.scrollHeight
+      }, 300)
+    } catch (err) {
+      console.log(err)
+    }
+  }
+
+  setChatRoom(chatRoomId: string) {
+    this.activeChatRoom = chatRoomId
+    this.getMessages(chatRoomId)
+  }
+
+  async getMessages(chatRoomId: string) {
+    this.messages$ = this.chatService.getMessages(chatRoomId)
+    this.messages$.subscribe(() => {
+      this.scrollToBottom()
+    })
+  }
+
+  sendMessage() {
+    this.chatService.sendMessage(this.activeChatRoom, this.currentMessageValue)
+    this.currentMessageValue = ""
+  }
+
+  handleEnterKey(event: KeyboardEvent) {
+    if (event.key === "Enter") {
+      this.sendMessage()
+    }
+  }
 
   async ngOnInit() {
-    this.showHamburgerMenu = this.breakpointService.isHandsetOrSmall()
-
-    this.conversationsService.showConversations$.subscribe((value) => {
-      this.showConversations = value
-    })
+    this.showHamburgerMenu$ = this.breakpointService.isHandsetOrSmall()
+    this.showConversations$ = this.conversationsService.showConversations$
     this.chatRooms$ = await this.chatService.getChatRooms()
+    this.authService.user$.subscribe((user) => {
+      this.currentUser = user
+    })
+    if (this.activeChatRoom) {
+      this.getMessages(this.activeChatRoom)
+    }
   }
 }

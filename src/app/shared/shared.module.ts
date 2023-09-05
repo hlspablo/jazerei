@@ -29,6 +29,7 @@ import { GameCardComponent } from "./components/game-card/game-card.component"
 import { NgSelectModule } from "@ng-select/ng-select"
 import { EllipsisModule } from "ngx-ellipsis"
 import { GetFirstTwoNamesPipe } from "../pipes/get-first-two-names.pipe"
+import { GetHumanTimePipe } from "../pipes/get-human-time.pipe"
 
 @NgModule({
   declarations: [
@@ -43,6 +44,7 @@ import { GetFirstTwoNamesPipe } from "../pipes/get-first-two-names.pipe"
     GameCardComponent,
     GetFirstNamePipe,
     GetFirstTwoNamesPipe,
+    GetHumanTimePipe,
   ],
   imports: [
     CommonModule,
@@ -78,6 +80,7 @@ import { GetFirstTwoNamesPipe } from "../pipes/get-first-two-names.pipe"
     GameCardComponent,
     GetFirstTwoNamesPipe,
     GetFirstNamePipe,
+    GetHumanTimePipe,
   ],
 })
 export class SharedModule {}

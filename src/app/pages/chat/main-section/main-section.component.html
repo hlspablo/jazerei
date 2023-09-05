@@ -1,48 +1,60 @@
 <section class="main-section">
   <div
     class="chat-selection"
-    [class.hide]="(showHamburgerMenu | async) === true"
-    [class.active]="showConversations"
+    [class.hide]="(showHamburgerMenu$ | async) === true"
+    [class.active]="showConversations$ | async"
   >
     <ng-container *ngFor="let chatRoom of chatRooms$ | async">
-      <div class="chat-item">
-        <div class="left-container">
-          <div class="owner">{{ chatRoom.userName | getFirstTwoNames }}</div>
-          <div class="game">{{ chatRoom.gameName }}</div>
-          <div class="location">{{ chatRoom.location}}</div>
+      <a (click)="setChatRoom(chatRoom.id)" (keyup)="(null)" tabindex="0">
+        <div class="chat-item" [class.active]="activeChatRoom === chatRoom.id">
+          <div class="left-container">
+            <div class="owner">{{ chatRoom.userName | getFirstTwoNames }}</div>
+            <div class="game">{{ chatRoom.gameName }}</div>
+            <div class="location">{{ chatRoom.location }}</div>
+          </div>
+          <div class="right-container">
+            <div class="messages-count">{{ chatRoom.unreadMessages }}</div>
+          </div>
         </div>
-        <div class="right-container">
-          <div class="messages-count">{{ chatRoom.unreadMessages }}</div>
-        </div>
-      </div>
+      </a>
     </ng-container>
   </div>
   <div class="chat-container">
-    <div class="chat-messages">
-      <div class="message-wrapper received">
-        <div class="message received">
-          <div class="message-content">
-            Hello, how are you?
-            <span class="message-time">10:30</span>
+    <div class="chat-messages" #chatMessages>
+      <ng-container *ngFor="let message of messages$ | async">
+        <div
+          class="message-wrapper"
+          [ngClass]="{
+            sent: message.userId === currentUser?.uid,
+            received: message.userId !== currentUser?.uid
+          }"
+        >
+          <div
+            class="message"
+            [ngClass]="{
+              sent: message.userId === currentUser?.uid,
+              received: message.userId !== currentUser?.uid
+            }"
+          >
+            <div class="message-content">
+              {{ message.message }}
+              <span class="message-time">{{ message.timestamp | getHumanTime }}</span>
+            </div>
           </div>
         </div>
-      </div>
-      <div class="message-wrapper sent">
-        <div class="message sent">
-          <div class="message-content">
-            I'm good, thanks!
-            <span class="message-time">10:31</span>
-            <span class="message-read-indicator"></span>
-          </div>
-        </div>
-      </div>
+      </ng-container>
     </div>
-
-    <div class="chat-input-container" [class.full]="(showHamburgerMenu | async) === true">
+    <div class="chat-input-container" [class.full]="showHamburgerMenu$ | async">
       <mat-form-field class="chat-input-field">
-        <input matInput type="text" placeholder="Digite sua mensagem..." />
+        <input
+          matInput
+          type="text"
+          placeholder="Digite sua mensagem..."
+          [(ngModel)]="currentMessageValue"
+          (keydown)="handleEnterKey($event)"
+        />
       </mat-form-field>
-      <button mat-icon-button class="send-button">
+      <button mat-icon-button class="send-button" (click)="sendMessage()">
         <mat-icon>send</mat-icon>
       </button>
     </div>
