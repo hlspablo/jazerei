@@ -23,11 +23,12 @@ import { MatMenuModule } from "@angular/material/menu"
 import { MatSelectModule } from "@angular/material/select"
 import { NgxMaskDirective, NgxMaskPipe } from "ngx-mask"
 import { MatProgressSpinnerModule } from "@angular/material/progress-spinner"
-import { GetFirstNamePipe } from "../pipes/getfirstname.pipe"
+import { GetFirstNamePipe } from "../pipes/get-first-name.pipe"
 import { RouterModule } from "@angular/router"
 import { GameCardComponent } from "./components/game-card/game-card.component"
 import { NgSelectModule } from "@ng-select/ng-select"
 import { EllipsisModule } from "ngx-ellipsis"
+import { GetFirstTwoNamesPipe } from "../pipes/get-first-two-names.pipe"
 
 @NgModule({
   declarations: [
@@ -41,7 +42,7 @@ import { EllipsisModule } from "ngx-ellipsis"
     LocationSelectComponent,
     GameCardComponent,
     GetFirstNamePipe,
-
+    GetFirstTwoNamesPipe,
   ],
   imports: [
     CommonModule,
@@ -75,6 +76,8 @@ import { EllipsisModule } from "ngx-ellipsis"
     SubNavComponent,
     TextMessageDialogComponent,
     GameCardComponent,
+    GetFirstTwoNamesPipe,
+    GetFirstNamePipe,
   ],
 })
 export class SharedModule {}

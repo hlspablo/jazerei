@@ -25,8 +25,10 @@ export class MainSectionComponent implements OnInit {
 
 
   openTextMessageDialog() {
-    console.log("Open Dialog")
     this.dialog.open(TextMessageDialogComponent, {
+      data: {
+        game: this.game,
+      },
       autoFocus: true,
       position: {
         top: "10vh",

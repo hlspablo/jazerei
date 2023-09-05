@@ -145,6 +145,7 @@ export class MainSectionComponent implements OnInit {
             await addDoc(collection(this.firestore, "games"), {
               gameName,
               gameOwner: this.getDisplayName(),
+              gameOwnerId: this.currentUser?.uid,
               gameDescription,
               gamePlatform: translatePlatform(gamePlatform),
               usedTime,

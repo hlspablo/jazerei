@@ -1,27 +1,34 @@
-import { Component, OnInit } from "@angular/core"
-import { FormBuilder, FormGroup, Validators } from "@angular/forms"
+import { Component, OnInit, inject } from "@angular/core"
+import { FormBuilder, Validators } from "@angular/forms"
+import { GameInfo } from "../../interfaces/app.interface"
+import { MAT_DIALOG_DATA } from "@angular/material/dialog"
+import { ChatService } from "src/app/services/chat.service"
+import { firstValueFrom } from "rxjs"
 
 @Component({
   selector: "app-text-message-dialog",
   templateUrl: "./text-message-dialog.component.html",
   styleUrls: ["./text-message-dialog.component.scss"],
 })
-export class TextMessageDialogComponent implements OnInit {
-  textMessageForm: FormGroup
+export class TextMessageDialogComponent {
+  private fb = inject(FormBuilder)
+  protected gameData: {
+    game: GameInfo
+  } = inject(MAT_DIALOG_DATA)
+  private chatService = inject(ChatService)
 
-  constructor(private fb: FormBuilder) {}
+  protected textMessageForm = this.fb.group({
+    message: ["", Validators.required],
+  })
 
-  ngOnInit(): void {
-    this.textMessageForm = this.fb.group({
-      message: ["", Validators.required],
-    })
-  }
-
-  onSubmit(): void {
+  async onSubmit(): Promise<void> {
     if (this.textMessageForm.valid) {
       const message = this.textMessageForm.get("message")?.value
-      // Implement your logic to send the message here
-      console.log("Message to send:", message)
+      //console.log("[onSubmit]", this.gameData.game)
+      this.chatService.createChatRoom(this.gameData.game.gameOwnerId!, this.gameData.game.id!, this.gameData.game.gameName!, message!)
+      const chatRooms = await this.chatService.getChatRooms()
+      const data = await firstValueFrom(chatRooms)
+      console.log("[chatRooms]", data)
     }
   }
 }

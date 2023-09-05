@@ -31,6 +31,15 @@ export class LocationSelectComponent implements OnInit {
     this.searchTerms.next(preparedSearchTerm)
   }
 
+  removeFilter(){
+    this.locationService.setCity(null)
+    setTimeout(() => {
+      this.toastr.success("Filtro removido com sucesso!")
+      this.modalService.closeAll()
+    }
+    , 300)
+  }
+
   onChange(event: MyLocation) {
     this.locationService.setCity(event)
     setTimeout(() => {
@@ -48,9 +57,7 @@ export class LocationSelectComponent implements OnInit {
       })
     }
     const locationQuery = query(this.locationCollection, where("name_lowercase", ">=", term), where("name_lowercase", "<=", term + "\uf8ff"))
-    const locationData$ = collectionData(locationQuery, { idField: "id" }) as Observable<MyLocation[]>
-
-    return locationData$
+    return collectionData(locationQuery, { idField: "id" }) as Observable<MyLocation[]>
   }
 
 

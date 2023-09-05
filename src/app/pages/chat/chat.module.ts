@@ -12,15 +12,6 @@ import { MatInputModule } from "@angular/material/input"
 
 @NgModule({
   declarations: [ChatPageComponent, MainSectionComponent],
-  imports: [
-    CommonModule,
-    ChatRoutingModule,
-    SharedModule,
-    MatCardModule,
-    MatIconModule,
-    MatButtonModule,
-    MatFormFieldModule,
-    MatInputModule,
-  ],
+  imports: [CommonModule, ChatRoutingModule, SharedModule, MatCardModule, MatIconModule, MatButtonModule, MatFormFieldModule, MatInputModule],
 })
 export class ChatPageModule {}

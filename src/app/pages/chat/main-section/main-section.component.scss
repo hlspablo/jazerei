@@ -26,7 +26,7 @@
 .chat-item {
   display: flex;
   align-items: center;
-  padding: 15px 5px;
+  padding: 10px 5px;
   border-radius: 10px;
   background-color: #fff;
   justify-content: space-between;
@@ -42,6 +42,9 @@
   }
   .game {
     color: rgba(128, 128, 128, 0.849);
+  }
+  .location {
+    color: #1a0202;
   }
 
   .right-container {

@@ -4,15 +4,18 @@
     [class.hide]="(showHamburgerMenu | async) === true"
     [class.active]="showConversations"
   >
-    <div class="chat-item">
-      <div class="left-container">
-        <div class="owner">Pablo Henrique</div>
-        <div class="game">God Of War</div>
+    <ng-container *ngFor="let chatRoom of chatRooms$ | async">
+      <div class="chat-item">
+        <div class="left-container">
+          <div class="owner">{{ chatRoom.userName | getFirstTwoNames }}</div>
+          <div class="game">{{ chatRoom.gameName }}</div>
+          <div class="location">{{ chatRoom.location}}</div>
+        </div>
+        <div class="right-container">
+          <div class="messages-count">{{ chatRoom.unreadMessages }}</div>
+        </div>
       </div>
-      <div class="right-container">
-        <div class="messages-count">20</div>
-      </div>
-    </div>
+    </ng-container>
   </div>
   <div class="chat-container">
     <div class="chat-messages">

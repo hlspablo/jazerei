@@ -12,17 +12,16 @@ import { GameInfo } from "src/app/shared/interfaces/app.interface"
 export class GameDetailPageComponent implements OnInit {
   private routes = inject(ActivatedRoute)
   private firestore = inject(Firestore)
-
-
   protected gameId: string
-
 
   game$: Observable<GameInfo>
 
   getGame() {
     console.log('getting game', this.gameId)
     const gameDoc = doc(this.firestore, "games", this.gameId)
-    this.game$ = docData(gameDoc) as Observable<GameInfo>
+    this.game$ = docData(gameDoc, {
+      idField: "id",
+    }) as Observable<GameInfo>
   }
 
   ngOnInit(): void {
