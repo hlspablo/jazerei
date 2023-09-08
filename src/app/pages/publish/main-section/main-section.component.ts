@@ -5,7 +5,7 @@ import { BreakpointService } from "src/app/services/breakpoint-service.service"
 import { GameInfo } from "src/app/shared/interfaces/app.interface"
 import { Storage, uploadBytesResumable, getDownloadURL, ref } from "@angular/fire/storage"
 import { Firestore, collection, addDoc } from "@angular/fire/firestore"
-import { translatePlatform } from "src/app/utils/game.translate"
+import { translateConsole } from "src/app/utils/game.translate"
 import { AuthService } from "src/app/services/auth.service"
 import { User } from "@angular/fire/auth"
 import { getFirstTwoNames } from "src/app/utils/string.utils"
@@ -147,7 +147,7 @@ export class MainSectionComponent implements OnInit {
               gameOwner: this.getDisplayName(),
               gameOwnerId: this.currentUser?.uid,
               gameDescription,
-              gamePlatform: translatePlatform(gamePlatform),
+              gamePlatform: translateConsole(gamePlatform),
               usedTime,
               approved: false,
               imagesUrls,

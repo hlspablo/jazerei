@@ -5,6 +5,7 @@ import { Firestore, collection, collectionData, query, where } from "@angular/fi
 import { LocationFilterService } from "src/app/services/location-filter.service"
 import { Auth, user } from "@angular/fire/auth"
 import { ActivatedRoute } from "@angular/router"
+import { translateConsole } from "src/app/utils/game.translate"
 
 @Component({
   selector: "app-home-main-section",
@@ -28,6 +29,7 @@ export class HomeMainSectionComponent implements OnInit {
     "nintendo-switch",
     "nintendo-3ds",
   ]
+  protected currentConsole: string | null
 
   ngOnInit() {
     // Combine latest values of user$ and city$ into one observable array [user, city]
@@ -50,8 +52,8 @@ export class HomeMainSectionComponent implements OnInit {
         }
 
         const myConsole = params.get("console")
+        this.currentConsole = myConsole ? translateConsole(myConsole) : "Todos os Jogos"
         if (myConsole && this.validConsoles.includes(myConsole)) {
-          console.log("ENTERED")
           queryConstraints.push(where("console", "==", myConsole))
         }
 
