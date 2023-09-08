@@ -8,6 +8,10 @@ const routes: Routes = [
     path: "",
     component: HomePageComponent,
   },
+  {
+    path: "console/:console",
+    component: HomePageComponent,
+  },
 ]
 
 @NgModule({

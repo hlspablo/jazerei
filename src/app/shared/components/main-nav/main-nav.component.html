@@ -20,10 +20,6 @@
         <mat-icon color="accent" class="menu-icon">publish</mat-icon>
         <a routerLink="/publish">Publicar Jogo</a>
       </li>
-      <!-- <li tabindex="2" role="menuitem">
-        <mat-icon color="accent" class="menu-icon">sms</mat-icon>
-        <a routerLink="/chat">Conversas </a>
-      </li> -->
       <li tabindex="2" role="menuitem">
         <div class="icon-wrapper">
           <span class="badge" *ngIf="(totalUnread$ | async) ? (totalUnread$ | async) : 0 > 0">{{

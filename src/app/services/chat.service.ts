@@ -1,4 +1,4 @@
-import { Injectable, OnInit, inject } from "@angular/core"
+import { Injectable, inject } from "@angular/core"
 import {
   Firestore,
   collectionData,
@@ -130,48 +130,6 @@ export class ChatService {
       }),
     )
   }
-
-  // async getChatRooms(): Promise<Observable<UserChatRoom[]>> {
-  //   const currentUser = await firstValueFrom(this.user$)
-  //   if (!currentUser) throw new Error("Must be logged to get chat rooms")
-
-  //   const chatRoomsCollection = collection(this.firestore, "chatRooms")
-  //   const chatRoomsQuery = query(
-  //     chatRoomsCollection,
-  //     where("members", "array-contains", currentUser.uid),
-  //   )
-  //   const chatRoomsData = collectionData(chatRoomsQuery, { idField: "id" }) as Observable<
-  //     ChatRoom[]
-  //   >
-
-  //   return chatRoomsData.pipe(
-  //     switchMap((chatRooms: ChatRoom[]) => {
-  //       const unreadCounts = chatRooms.map((room) =>
-  //         this.getUnreadMessagesCount(room.id, currentUser.uid),
-  //       )
-  //       return combineLatest([of(chatRooms), ...unreadCounts])
-  //     }),
-  //     map(([chatRooms, ...unreadCounts]) => {
-  //       return chatRooms.map((chatRoom, index) => {
-  //         const chatRoomId = chatRoom.id
-  //         const memberIndex = chatRoom.members.findIndex((memberId) => memberId === currentUser.uid)
-  //         const rightIndex = switchValue(memberIndex)
-  //         const location = chatRoom.locations[rightIndex]
-  //         const userName = chatRoom.names[rightIndex]
-  //         const gameName = chatRoom.relatedGameName
-  //         const unreadMessages = unreadCounts[index]
-
-  //         return {
-  //           id: chatRoomId,
-  //           location,
-  //           userName,
-  //           gameName,
-  //           unreadMessages,
-  //         }
-  //       })
-  //     }),
-  //   )
-  // }
 
   async checkIfChatRoomExists(otherUserId: string, relatedGameId: string) {
     const currentUser = await firstValueFrom(this.user$)

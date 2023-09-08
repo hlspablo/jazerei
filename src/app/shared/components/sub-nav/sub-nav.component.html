@@ -4,59 +4,66 @@
 <nav class="sub-nav-bottom">
   <ul class="consoles" *ngIf="(showHamburgerMenu | async) === false">
     <li>
-      <a href="#"
+      <a routerLink="/console/ps5"
         ><img
           src="assets/images/svg/ps5.svg"
           alt="Playstation 5"
           title="Playstation 5"
+          [routerLinkActive]="['active']"
       /></a>
     </li>
     <li>
-      <a href="#"
+      <a routerLink="/console/ps4"
         ><img
           src="assets/images/svg/ps4.svg"
           alt="Playstation 4"
           title="Playstation 4"
+          [routerLinkActive]="['active']"
       /></a>
     </li>
     <li>
-      <a href="#"
+      <a routerLink="/console/ps3"
         ><img
           src="assets/images/svg/ps3.svg"
           alt="Playstation 3"
           title="Playstation 3"
+          [routerLinkActive]="['active']"
       /></a>
     </li>
     <li>
-      <a href="#"
+      <a routerLink="/console/xbox-one"
         ><img
           src="assets/images/svg/xbox-one.svg"
           alt="Xbox One"
           title="Xbox One"
+          [routerLinkActive]="['active']"
       /></a>
     </li>
     <li>
-      <a href="#"
+      <a routerLink="/console/xbox-360"
         ><img
           src="assets/images/svg/xbox360.svg"
           alt="Xbox 360"
           title="Xbox 360"
+          [routerLinkActive]="['active']"
       /></a>
     </li>
     <li>
-      <a href="#"
+      <a routerLink="/console/nintendo-switch"
         ><img
           src="assets/images/svg/nintendo-switch.svg"
           alt="Nitendo Switch"
           title="Nitendo Switch"
+          [routerLinkActive]="['active']"
       /></a>
     </li>
     <li>
-      <a href="#"
+      <a routerLink="/console/nintendo-3ds"
         ><img
           src="assets/images/svg/nintendo-3ds.svg"
           alt="Nintendo 3DS"
           title="Nintendo 3DS"
+          [routerLinkActive]="['active']"
       /></a>
     </li>
   </ul>
@@ -64,7 +71,13 @@
     <mat-icon color="accent">gps_fixed</mat-icon>
     <button mat-raised-button color="accent">Localização</button>
   </div>
-  <div (click)="toggleConversations()" (keyup)="null" tabindex="0" class="location" *ngIf="showHamburgerMenu | async">
+  <div
+    (click)="toggleConversations()"
+    (keyup)="(null)"
+    tabindex="0"
+    class="location"
+    *ngIf="showHamburgerMenu | async"
+  >
     <mat-icon color="accent">sms</mat-icon>
     <button mat-raised-button color="accent">Conversas</button>
   </div>

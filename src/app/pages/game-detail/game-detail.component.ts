@@ -17,7 +17,6 @@ export class GameDetailPageComponent implements OnInit {
   game$: Observable<GameInfo>
 
   getGame() {
-    console.log('getting game', this.gameId)
     const gameDoc = doc(this.firestore, "games", this.gameId)
     this.game$ = docData(gameDoc, {
       idField: "id",
