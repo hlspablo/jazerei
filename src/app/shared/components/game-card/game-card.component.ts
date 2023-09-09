@@ -33,7 +33,6 @@ export class GameCardComponent implements OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    console.log("Called ngOnChanges")
     if ("gameInfo" in changes) {
       const gameInfoChange = changes["gameInfo"]
       if (gameInfoChange && gameInfoChange.currentValue) {

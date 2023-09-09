@@ -1,26 +1,30 @@
 <div class="search-bar">
-    <mat-form-field class="search-bar-form-field">
-      <input
-        type="text"
-        matInput
-        [matAutocomplete]="auto"
-        [formControl]="gameControl"
-        placeholder="Digite o nome do jogo"
-      />
-      <mat-autocomplete #auto="matAutocomplete" [panelWidth]="350">
-        <mat-option *ngFor="let game of items$ | async" [value]="game.name">
-          {{ game.name }}
-        </mat-option>
-      </mat-autocomplete>
-      <button
-        *ngIf="gameControl.value"
-        matSuffix
-        mat-icon-button
-        aria-label="Limpar"
-        (click)="gameControl.setValue('')"
-        style="margin-right: 5px;"
-      >
-        <mat-icon>close</mat-icon>
-      </button>
-    </mat-form-field>
+  <mat-form-field class="search-bar-form-field">
+    <input
+      type="text"
+      matInput
+      [formControl]="gameControl"
+      placeholder="Digite o nome do jogo"
+      value="gameControl.value"
+    />
+    <button
+      *ngIf="!gameControl.value"
+      matSuffix
+      mat-icon-button
+      aria-label="Buscar"
+      style="margin-right: 5px"
+    >
+      <mat-icon>search</mat-icon>
+    </button>
+    <button
+      *ngIf="gameControl.value"
+      matSuffix
+      mat-icon-button
+      aria-label="Limpar"
+      (click)="gameControl.setValue('')"
+      style="margin-right: 5px"
+    >
+      <mat-icon>clear</mat-icon>
+    </button>
+  </mat-form-field>
 </div>

@@ -6,6 +6,8 @@ import { LocationFilterService } from "src/app/services/location-filter.service"
 import { Auth, user } from "@angular/fire/auth"
 import { ActivatedRoute } from "@angular/router"
 import { translateConsole } from "src/app/utils/game.translate"
+import { SearchFilterService } from "src/app/services/search-filter.service"
+import { removeDiacritics } from "src/app/utils/string.utils"
 
 @Component({
   selector: "app-home-main-section",
@@ -17,6 +19,7 @@ export class HomeMainSectionComponent implements OnInit {
   private gamesCollection = collection(this.firestore, "games")
   protected games$: Observable<GameInfo[]>
   private locationService = inject(LocationFilterService)
+  private searchFilterService = inject(SearchFilterService)
   private auth = inject(Auth)
   private user$ = user(this.auth)
   private routes = inject(ActivatedRoute)
@@ -37,8 +40,9 @@ export class HomeMainSectionComponent implements OnInit {
       this.user$,
       this.locationService.city$,
       this.routes.paramMap,
+      this.searchFilterService.searchQuery$,
     ]).pipe(
-      switchMap(([user, city, params]) => {
+      switchMap(([user, city, params, searchQuery]) => {
         const queryConstraints = []
 
         // Apply location constraint if city exists
@@ -55,6 +59,14 @@ export class HomeMainSectionComponent implements OnInit {
         this.currentConsole = myConsole ? translateConsole(myConsole) : "Todos os Jogos"
         if (myConsole && this.validConsoles.includes(myConsole)) {
           queryConstraints.push(where("console", "==", myConsole))
+        }
+
+        if (searchQuery) {
+          const searchQueryNoDiacritics = removeDiacritics(searchQuery).toLowerCase()
+          queryConstraints.push(
+            where("name_lowercase", ">=", searchQueryNoDiacritics),
+            where("name_lowercase", "<=", searchQueryNoDiacritics + "\uf8ff"),
+          )
         }
 
         // Create and return the new query

@@ -1,25 +1,26 @@
-import { Component } from "@angular/core"
+import { Component, OnInit } from "@angular/core"
 import { FormControl } from "@angular/forms"
-import { Observable } from "rxjs"
 import { inject } from "@angular/core"
-import { Firestore, collectionData, collection } from "@angular/fire/firestore"
-
-interface Game {
-  name: string
-}
+import { SearchFilterService } from "src/app/services/search-filter.service"
+import { debounceTime, tap } from "rxjs"
 
 @Component({
   selector: "app-search-bar",
   templateUrl: "./search-bar.component.html",
   styleUrls: ["./search-bar.component.scss"],
 })
-export class SearchBarComponent {
+export class SearchBarComponent implements OnInit {
   gameControl = new FormControl()
-  firestore: Firestore = inject(Firestore)
-  items$: Observable<Game[]>
+  private searchFilterService = inject(SearchFilterService)
 
-  constructor() {
-    const itemCollection = collection(this.firestore, "games")
-    this.items$ = collectionData(itemCollection) as Observable<Game[]>
+  ngOnInit(): void {
+    this.gameControl.valueChanges
+      .pipe(
+        debounceTime(600), // Wait for 300ms pause in events
+        tap((value) => {
+          this.searchFilterService.setSearch(value) // Side-effect: update search query
+        }),
+      )
+      .subscribe()
   }
 }
