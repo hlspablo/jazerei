@@ -40,7 +40,7 @@ export class GameCardComponent implements OnInit {
         maxWidth: "350px",
         imagesUrls: ["https://placehold.co/600x400"],
         name: "Title",
-        avatarUrl: "https://ui-avatars.com/api/?name=Owner2",
+        avatarUrl: "https://ui-avatars.com/api/?name=Owner",
         description: "Description",
         consoleModel: "ConsoleModel",
         ...game,
