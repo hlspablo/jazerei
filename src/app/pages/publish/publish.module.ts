@@ -2,7 +2,6 @@ import { NgModule } from "@angular/core"
 import { CommonModule } from "@angular/common"
 import { PublishPageComponent } from "./publish.component"
 import { SharedModule } from "src/app/shared/shared.module"
-import { MainSectionComponent } from "./main-section/main-section.component"
 import { PublishRoutingModule } from "./publish-routing.module"
 import { MatIconModule } from "@angular/material/icon"
 import { MatButtonModule } from "@angular/material/button"
@@ -14,7 +13,7 @@ import { MatRadioModule } from "@angular/material/radio"
 import { MatProgressSpinnerModule } from "@angular/material/progress-spinner"
 
 @NgModule({
-  declarations: [PublishPageComponent, MainSectionComponent],
+  declarations: [PublishPageComponent],
   imports: [
     CommonModule,
     PublishRoutingModule,
