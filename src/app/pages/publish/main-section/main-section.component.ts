@@ -1,25 +1,24 @@
 import { Component, OnInit, inject } from "@angular/core"
 import { NonNullableFormBuilder, Validators } from "@angular/forms"
-import { Observable, map } from "rxjs"
+import { Observable, map, withLatestFrom } from "rxjs"
 import { BreakpointService } from "src/app/services/breakpoint-service.service"
-import { GameFirebaseRow } from "src/app/shared/interfaces/app.interface"
 import { ToastrService } from "ngx-toastr"
 import { Router } from "@angular/router"
 import { sleepFor } from "src/app/utils/time.utils"
-import { RxEffects } from "@rx-angular/state/effects"
 import { GameRepository } from "src/app/repositories/game.repository"
 import { RxState } from "@rx-angular/state"
-import { selectSlice } from "@rx-angular/state/selections"
+import { GameCardInput } from "src/app/shared/components/game-card/game-card.component"
+import { AuthService } from "src/app/services/auth.service"
 
 interface PublishState {
-  publishGame: Partial<GameFirebaseRow>
+  publishGame: GameCardInput
 }
 
 @Component({
   selector: "app-publish-main-section",
   templateUrl: "./main-section.component.html",
   styleUrls: ["./main-section.component.scss"],
-  providers: [RxEffects, RxState],
+  providers: [RxState],
 })
 export class MainSectionComponent implements OnInit {
   private _fb = inject(NonNullableFormBuilder)
@@ -27,12 +26,15 @@ export class MainSectionComponent implements OnInit {
   private _toastr = inject(ToastrService)
   private _router = inject(Router)
   private _gameRepository = inject(GameRepository)
+  private _authService = inject(AuthService)
 
   protected fileNames: string
   protected selectedFiles: File[] = []
   protected imagePreview: string | ArrayBuffer | null = "https://placehold.co/600x400"
   protected isLoading = false
   protected isHandsetOrSmall: Observable<boolean>
+  protected game$ = this._state.select("publishGame")
+
   protected publishForm = this._fb.group({
     stepOne: this._fb.group({
       name: ["", Validators.required],
@@ -46,38 +48,10 @@ export class MainSectionComponent implements OnInit {
     stepThree: true,
   })
 
-  protected game$ = this._state.select("publishGame")
-
-  constructor(
-    private _rxEffect: RxEffects,
-    private _state: RxState<PublishState>,
-  ) {
-    this._state.connect(
-      "publishGame",
-      this.publishForm.valueChanges.pipe(
-        map((formValues) => {
-          // id: string
-          // name: string
-          // description: string
-          // owner: string
-          // ownerId: string
-          // imagesUrls: string[]
-          // consoleModel: string
-          console.log(formValues)
-          return {
-            name: formValues.stepOne?.name,
-            description: formValues.stepOne?.description,
-            consoleModel: formValues.stepOne?.consoleModel,
-          }
-        }),
-      ),
-    )
-    this._rxEffect.register(this.game$, (value) => console.log("[Game]", value))
-  }
+  constructor(private _state: RxState<PublishState>) {}
 
   onFileSelected(event: Event): void {
     const input = event.target as HTMLInputElement
-
     if (input.files) {
       this.selectedFiles = Array.from(input.files) // Convert FileList to an array
 
@@ -130,7 +104,36 @@ export class MainSectionComponent implements OnInit {
     }
   }
 
-  ngOnInit() {
+  async ngOnInit() {
     this.isHandsetOrSmall = this._breakpointService.isHandsetOrSmall()
+
+    const user = await this._authService.getCurrentUserSnapshot()
+    this._state.set("publishGame", (_) => ({
+      id: "",
+      name: "",
+      description: "",
+      consoleModel: "",
+      usedTime: "",
+      imagesUrls: [],
+      owner: user?.displayName || "",
+      ownerId: user?.uid || "",
+    }))
+
+    this._state.connect(
+      "publishGame",
+      this.publishForm.valueChanges.pipe(
+        withLatestFrom(this._state.select("publishGame")),
+        map(([formValues, game]) => {
+          const { stepOne } = formValues
+          return {
+            ...game,
+            ...(stepOne?.name ? { name: stepOne.name } : {}),
+            ...(stepOne?.description ? { description: stepOne.description } : {}),
+            ...(stepOne?.consoleModel ? { consoleModel: stepOne.consoleModel } : {}),
+            ...(stepOne?.usedTime ? { usedTime: stepOne.usedTime } : {}),
+          }
+        }),
+      ),
+    )
   }
 }

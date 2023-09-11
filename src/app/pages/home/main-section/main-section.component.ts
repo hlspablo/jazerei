@@ -1,5 +1,5 @@
 import { Component, OnInit, inject } from "@angular/core"
-import { Observable, combineLatest, switchMap, of, tap } from "rxjs"
+import { Observable, combineLatest, switchMap, of, tap, map } from "rxjs"
 import { GameFirebaseRow } from "src/app/shared/interfaces/app.interface"
 import { Firestore, collection, collectionData, query, where } from "@angular/fire/firestore"
 import { LocationFilterService } from "src/app/services/location-filter.service"
@@ -8,6 +8,7 @@ import { ActivatedRoute } from "@angular/router"
 import { translateConsole } from "src/app/utils/game.translate"
 import { SearchFilterService } from "src/app/services/search-filter.service"
 import { removeDiacritics } from "src/app/utils/string.utils"
+import { GameCardInput } from "src/app/shared/components/game-card/game-card.component"
 
 @Component({
   selector: "app-home-main-section",
@@ -17,7 +18,7 @@ import { removeDiacritics } from "src/app/utils/string.utils"
 export class HomeMainSectionComponent implements OnInit {
   private firestore = inject(Firestore)
   private gamesCollection = collection(this.firestore, "games")
-  protected games$: Observable<GameFirebaseRow[]>
+  protected games$: Observable<GameCardInput[]>
   private locationService = inject(LocationFilterService)
   private searchFilterService = inject(SearchFilterService)
   private auth = inject(Auth)
@@ -34,13 +35,7 @@ export class HomeMainSectionComponent implements OnInit {
   ]
   protected currentConsole: string | null
 
-  toObservable<T>(value: T): Observable<T> {
-    console.log("toObservable", value)
-    return of(value)
-  }
-
   ngOnInit() {
-    // Combine latest values of user$ and city$ into one observable array [user, city]
     this.games$ = combineLatest([
       this.user$,
       this.locationService.city$,
@@ -57,18 +52,18 @@ export class HomeMainSectionComponent implements OnInit {
 
         const filter = params.get("filter")
         if (filter === "all" && user && user.uid) {
-          queryConstraints.push(where("gameOwnerId", "==", user.uid))
+          queryConstraints.push(where("ownerId", "==", user.uid))
         }
 
         // Apply user constraint if user exists
         if (user && user.uid && !filter) {
-          queryConstraints.push(where("gameOwnerId", "!=", user.uid))
+          queryConstraints.push(where("ownerId", "!=", user.uid))
         }
 
         const myConsole = params.get("console")
         this.currentConsole = myConsole ? translateConsole(myConsole) : "Todos os Jogos"
         if (myConsole && this.validConsoles.includes(myConsole)) {
-          queryConstraints.push(where("console", "==", myConsole))
+          queryConstraints.push(where("consoleModel", "==", myConsole))
         }
 
         if (searchQuery) {
@@ -81,9 +76,11 @@ export class HomeMainSectionComponent implements OnInit {
 
         // Create and return the new query
         const gamesQuery = query(this.gamesCollection, ...queryConstraints)
+        console.log("[Constraits]", queryConstraints)
         return collectionData(gamesQuery, { idField: "id" }) as Observable<GameFirebaseRow[]>
       }),
-      tap((games) => console.log("games from Tap", games)),
+      map((games) => games.map((game) => ({ ...game }))),
+      tap((games) => console.log(games)),
     )
   }
 }

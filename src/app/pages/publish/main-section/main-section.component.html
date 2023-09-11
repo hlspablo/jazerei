@@ -14,7 +14,7 @@
           <div class="field-container">
             <mat-form-field floatLabel="always">
               <mat-label>Descrição do Jogo</mat-label>
-              <textarea matInput formControlName="description" required placeholder="Informaçooes adicionais sobre o jogo" rows="4"></textarea>
+              <textarea matInput formControlName="description" required placeholder="Informaçōes adicionais sobre o jogo" rows="4"></textarea>
             </mat-form-field>
           </div>
           <div class="field-container">
@@ -64,8 +64,8 @@
         </mat-step>
         <mat-step formGroupName="stepThree">
           <ng-template matStepLabel>Pré-visualização</ng-template>
-          <div class="card-preview">
-            <app-game-card [previewMode]="true" [game$]="game$" [imagePreview]="imagePreview"></app-game-card>
+          <div class="card-preview" *rxIf="game$; let game">
+            <app-game-card [previewMode]="true" [game]="game" [imagePreview]="imagePreview"></app-game-card>
           </div>
           <div class="actions">
             <button mat-button matStepperPrevious>Voltar</button>

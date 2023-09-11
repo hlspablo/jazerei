@@ -1,26 +1,24 @@
-<ng-container *rxIf="gameCard$; let gameCard">
-  <mat-card [ngStyle]="{ 'max-width': gameCard.maxWidth }">
-    <mat-card-header>
-      <div
-        mat-card-avatar
-        class="game-header-image"
-        [ngStyle]="{ 'background-image': 'url(' + gameCard.avatarUrl + ')' }"
-      ></div>
-      <mat-card-title>{{ gameCard.name }}</mat-card-title>
-      <mat-card-subtitle>{{ gameCard.owner }}</mat-card-subtitle>
-    </mat-card-header>
-    <div class="image-container">
-      <img
-        mat-card-image
-        [src]="previewMode ? imagePreview : gameCard.imagesUrls[0]"
-        class="rounded-image"
-        alt="Imagem do Jogo"
-      />
-    </div>
-    <mat-card-content class="description" ellipsis [ellipsis-content]="gameCard.description">
-    </mat-card-content>
-    <mat-card-actions align="end">
-      <span class="platform">{{ gameCard.consoleModel }}</span>
-    </mat-card-actions>
-  </mat-card>
-</ng-container>
+<mat-card class="card-container" [class.large]="cardSize === 'large'">
+  <mat-card-header>
+    <div
+      mat-card-avatar
+      class="game-header-image"
+      [ngStyle]="{ 'background-image': 'url(' + avatarUrl + ')' }"
+    ></div>
+    <mat-card-title>{{ game.name }}</mat-card-title>
+    <mat-card-subtitle>{{ game.owner }}</mat-card-subtitle>
+  </mat-card-header>
+  <div class="image-container">
+    <img
+      mat-card-image
+      [src]="previewMode ? imagePreview : game.imagesUrls[0]"
+      class="rounded-image"
+      alt="Imagem do Jogo"
+    />
+  </div>
+  <mat-card-content class="description" ellipsis [ellipsis-content]="game.description">
+  </mat-card-content>
+  <mat-card-actions align="end">
+    <span class="platform">{{ game.consoleModel | translateConsolePipe }}</span>
+  </mat-card-actions>
+</mat-card>
