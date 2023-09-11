@@ -1,3 +1,26 @@
 <app-main-nav></app-main-nav>
 <app-sub-nav></app-sub-nav>
-<app-home-main-section></app-home-main-section>
+<section class="main">
+  <ng-container *rxIf="games$; else noGames; let games">
+    <div class="showing">
+      <span class="showing-text">{{
+        games.length > 0
+          ? "Filtros: " + this.filtersApplied
+          : "Nenhum Jogo encontrado para os seus filtros."
+      }}</span>
+    </div>
+    <div class="cards">
+      <div *rxFor="let game of games$; trackBy: 'id';">
+        <a [routerLink]="['/game', game.id]">
+          <app-game-card [game]="game"></app-game-card>
+        </a>
+      </div>
+    </div>
+  </ng-container>
+  <ng-template #noGames>
+    <div class="showing">
+      <span class="showing-text">Carregando...</span>
+    </div>
+  </ng-template>
+</section>
+

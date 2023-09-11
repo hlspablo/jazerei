@@ -42,5 +42,6 @@ export interface UserChatRoom {
 
 export interface Profile {
   name: string
+  cpf: string
   location: string // adjust according to your actual structure
 }

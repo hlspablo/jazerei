@@ -1,7 +1,9 @@
 import { Injectable, inject } from "@angular/core"
-import { Firestore, addDoc, collection } from "@angular/fire/firestore"
+import { Firestore, QueryFieldFilterConstraint, QueryFilterConstraint, addDoc, collection, collectionData, query } from "@angular/fire/firestore"
 import { AuthService } from "../services/auth.service"
 import { Storage, getDownloadURL, uploadBytesResumable, ref } from "@angular/fire/storage"
+import { Observable } from "rxjs"
+import { GameFirebaseRow } from "../shared/interfaces/app.interface"
 
 interface CreateGameDTO {
   name: string
@@ -15,11 +17,11 @@ interface CreateGameDTO {
 })
 export class GameRepository {
   private _storage = inject(Storage)
+  private _firestore = inject(Firestore)
+  private _authService = inject(AuthService)
+  private _gamesCollection = collection(this._firestore, "games")
 
-  constructor(
-    private _firestore: Firestore,
-    private _authService: AuthService,
-  ) {}
+
 
   uploadGameImages(selectedFiles: File[]): Promise<string[]> {
     return new Promise<string[]>((resolve, reject) => {
@@ -67,9 +69,10 @@ export class GameRepository {
     try {
       await addDoc(collection(this._firestore, "games"), {
         name,
-        ownerName: user.displayName,
-        ownerId: user.uid,
         description,
+        ownerId: user.uid,
+        owner: user.displayName,
+        location: user.location.id,
         consoleModel,
         usedTime,
         imagesUrls,
@@ -77,7 +80,13 @@ export class GameRepository {
       })
       console.log("Game document added successfully")
     } catch (error) {
+      // TODO handle errors
       console.error("Error adding game document:", error)
     }
+  }
+
+  getGames(queryConstraints: QueryFieldFilterConstraint[]) {
+    const gamesQuery = query(this._gamesCollection, ...queryConstraints)
+    return collectionData(gamesQuery, { idField: "id" }) as Observable<GameFirebaseRow[]>
   }
 }
