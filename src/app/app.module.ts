@@ -16,17 +16,7 @@ import { ToastrModule } from "ngx-toastr"
   declarations: [AppComponent],
   imports: [
     provideFirebaseApp(() => initializeApp(environment.firebase)),
-    provideAuth(() => {
-      const auth = getAuth()
-      // setPersistence(auth, browserLocalPersistence)
-      //   .then(() => {
-      //     console.log('Persistence set to "local"')
-      //   })
-      //   .catch((error) => {
-      //     console.error(error)
-      //   })
-      return auth
-    }),
+    provideAuth(() => getAuth()),
     provideFirestore(() => getFirestore()),
     provideStorage(() => getStorage()),
     BrowserModule,

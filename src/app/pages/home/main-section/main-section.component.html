@@ -8,7 +8,7 @@
       }}</span> -->
     </div>
     <div class="cards">
-      <div *rxFor="let game of games$">
+      <div *rxFor="let game of games$; trackBy: 'id';">
         <a [routerLink]="['/game', game.id]">
           <app-game-card [game$]="toObservable(game)"></app-game-card>
         </a>

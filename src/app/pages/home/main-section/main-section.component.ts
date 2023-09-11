@@ -83,7 +83,7 @@ export class HomeMainSectionComponent implements OnInit {
         const gamesQuery = query(this.gamesCollection, ...queryConstraints)
         return collectionData(gamesQuery, { idField: "id" }) as Observable<GameFirebaseRow[]>
       }),
-      tap((games) => console.log("games", games)),
+      tap((games) => console.log("games from Tap", games)),
     )
   }
 }

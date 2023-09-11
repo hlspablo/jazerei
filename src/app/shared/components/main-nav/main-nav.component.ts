@@ -63,7 +63,8 @@ export class MainNavComponent implements OnInit {
     this._locationService.city$.subscribe((city) => {
       this.cityName = city?.name ?? "Localização"
     })
-    await this._chatService.initialize()
+    // TODO initialize chat service
+    //await this._chatService.initialize()
     this.totalUnread$ = this._chatService.getTotalUnreadMessagesCount()
   }
 }

@@ -81,7 +81,8 @@ export class MainSectionComponent implements OnInit {
   async ngOnInit() {
     this.showHamburgerMenu$ = this.breakpointService.isHandsetOrSmall()
     this.showConversations$ = this.conversationsService.showConversations$
-    this.chatRooms$ = (await this.chatService.getChatRooms()).pipe(map((results) => results.rooms))
+    // TODO enable chat Rooms
+    //this.chatRooms$ = (await this.chatService.getChatRooms()).pipe(map((results) => results.rooms))
     if (this.activeChatRoom) {
       this.getMessages(this.activeChatRoom)
     }

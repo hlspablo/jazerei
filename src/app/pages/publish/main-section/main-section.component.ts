@@ -49,7 +49,7 @@ export class MainSectionComponent implements OnInit {
   protected game$ = this._state.select("publishGame")
 
   constructor(
-    //private _rxEffect: RxEffects,
+    private _rxEffect: RxEffects,
     private _state: RxState<PublishState>,
   ) {
     this._state.connect(
@@ -63,6 +63,7 @@ export class MainSectionComponent implements OnInit {
           // ownerId: string
           // imagesUrls: string[]
           // consoleModel: string
+          console.log(formValues)
           return {
             name: formValues.stepOne?.name,
             description: formValues.stepOne?.description,
@@ -71,6 +72,7 @@ export class MainSectionComponent implements OnInit {
         }),
       ),
     )
+    this._rxEffect.register(this.game$, (value) => console.log("[Game]", value))
   }
 
   onFileSelected(event: Event): void {
