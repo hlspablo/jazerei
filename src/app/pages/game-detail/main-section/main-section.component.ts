@@ -2,8 +2,9 @@ import { Component, Input, OnInit, inject } from "@angular/core"
 import { Observable, map } from "rxjs"
 import { TextMessageDialogComponent } from "src/app/shared/components/text-message-dialog/text-message-dialog.component"
 import { MatDialog } from "@angular/material/dialog"
-import { GameInfo } from "src/app/shared/interfaces/app.interface"
+import { GameFirebaseRow } from "src/app/shared/interfaces/app.interface"
 import { BreakpointService } from "src/app/services/breakpoint-service.service"
+import { Auth } from "@angular/fire/auth"
 
 @Component({
   selector: "app-game-detail-main-section",
@@ -14,15 +15,15 @@ export class MainSectionComponent implements OnInit {
   private breakpointService = inject(BreakpointService)
   private dialog = inject(MatDialog)
   isMobile$: Observable<boolean>
+  user$ = inject(Auth)
 
   @Input()
-  game$: Observable<GameInfo>
-  game: GameInfo
+  game$: Observable<GameFirebaseRow>
+  game: GameFirebaseRow
 
   currentIndex = 0
   cardMaxWidth$: Observable<string>
   imageMaxHeight$: Observable<string>
-
 
   openTextMessageDialog() {
     this.dialog.open(TextMessageDialogComponent, {

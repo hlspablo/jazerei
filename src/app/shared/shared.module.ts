@@ -30,6 +30,9 @@ import { NgSelectModule } from "@ng-select/ng-select"
 import { EllipsisModule } from "ngx-ellipsis"
 import { GetFirstTwoNamesPipe } from "../pipes/get-first-two-names.pipe"
 import { GetHumanTimePipe } from "../pipes/get-human-time.pipe"
+import { RxIf } from '@rx-angular/template/if';
+import { RxLet } from '@rx-angular/template/let';
+import { RxFor } from '@rx-angular/template/for';
 
 @NgModule({
   declarations: [
@@ -68,6 +71,9 @@ import { GetHumanTimePipe } from "../pipes/get-human-time.pipe"
     MatProgressSpinnerModule,
     NgSelectModule,
     EllipsisModule,
+    RxIf,
+    RxLet,
+    RxFor,
   ],
   exports: [
     LoginDialogComponent,
@@ -81,6 +87,9 @@ import { GetHumanTimePipe } from "../pipes/get-human-time.pipe"
     GetFirstTwoNamesPipe,
     GetFirstNamePipe,
     GetHumanTimePipe,
+    RxIf,
+    RxLet,
+    RxFor,
   ],
 })
 export class SharedModule {}

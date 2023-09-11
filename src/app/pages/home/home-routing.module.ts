@@ -11,6 +11,11 @@ const routes: Routes = [
     path: "console/:console",
     component: HomePageComponent,
   },
+  {
+    path: "my-games/:filter",
+    component: HomePageComponent,
+    title: "Meus Jogos",
+  },
 ]
 
 @NgModule({

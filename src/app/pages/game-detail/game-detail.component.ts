@@ -2,7 +2,7 @@ import { Component, OnInit, inject } from "@angular/core"
 import { Firestore, doc, docData } from "@angular/fire/firestore"
 import { ActivatedRoute } from "@angular/router"
 import { Observable } from "rxjs"
-import { GameInfo } from "src/app/shared/interfaces/app.interface"
+import { GameFirebaseRow } from "src/app/shared/interfaces/app.interface"
 
 @Component({
   selector: "app-game-detail",
@@ -14,13 +14,13 @@ export class GameDetailPageComponent implements OnInit {
   private firestore = inject(Firestore)
   protected gameId: string
 
-  game$: Observable<GameInfo>
+  game$: Observable<GameFirebaseRow>
 
   getGame() {
     const gameDoc = doc(this.firestore, "games", this.gameId)
     this.game$ = docData(gameDoc, {
       idField: "id",
-    }) as Observable<GameInfo>
+    }) as Observable<GameFirebaseRow>
   }
 
   ngOnInit(): void {

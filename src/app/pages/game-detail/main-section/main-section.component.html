@@ -20,9 +20,9 @@
         </div>
       </div>
       <mat-card-content>
-        <div class="card-title">{{ game.gameName }}</div>
+        <div class="card-title">{{ game.name }}</div>
         <div class="card-description">
-          {{ game.gameDescription }}
+          {{ game.description }}
         </div>
         <div class="chat-button">
           <button (click)="openTextMessageDialog()" mat-raised-button color="accent" class="btn-rounded">
@@ -31,8 +31,8 @@
           </button>
         </div>
         <div class="card-informations">
-          <span class="game-owner">{{ game.gameOwner }}</span>
-          <span class="console">{{ game.gamePlatform }}</span>
+          <span class="game-owner">{{ game.owner }}</span>
+          <span class="console">{{ game.consoleModel }}</span>
         </div>
       </mat-card-content>
     </mat-card>

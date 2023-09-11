@@ -1,14 +1,13 @@
 import { Timestamp } from "firebase/firestore"
 
-export interface GameInfo {
-  id?: string
-  maxWidth?: string
+export interface GameFirebaseRow {
+  id: string
+  name: string
+  description: string
+  owner: string
+  ownerId: string
   imagesUrls: string[]
-  gameOwner: string
-  gameOwnerId?: string
-  gameName: string
-  gameDescription: string
-  gamePlatform: string
+  consoleModel: string
 }
 
 export interface Message {

@@ -1,6 +1,6 @@
 import { Component, OnInit, inject } from "@angular/core"
-import { Observable, combineLatest, switchMap } from "rxjs"
-import { GameInfo } from "src/app/shared/interfaces/app.interface"
+import { Observable, combineLatest, switchMap, of, tap } from "rxjs"
+import { GameFirebaseRow } from "src/app/shared/interfaces/app.interface"
 import { Firestore, collection, collectionData, query, where } from "@angular/fire/firestore"
 import { LocationFilterService } from "src/app/services/location-filter.service"
 import { Auth, user } from "@angular/fire/auth"
@@ -17,7 +17,7 @@ import { removeDiacritics } from "src/app/utils/string.utils"
 export class HomeMainSectionComponent implements OnInit {
   private firestore = inject(Firestore)
   private gamesCollection = collection(this.firestore, "games")
-  protected games$: Observable<GameInfo[]>
+  protected games$: Observable<GameFirebaseRow[]>
   private locationService = inject(LocationFilterService)
   private searchFilterService = inject(SearchFilterService)
   private auth = inject(Auth)
@@ -33,6 +33,11 @@ export class HomeMainSectionComponent implements OnInit {
     "nintendo-3ds",
   ]
   protected currentConsole: string | null
+
+  toObservable<T>(value: T): Observable<T> {
+    console.log("toObservable", value)
+    return of(value)
+  }
 
   ngOnInit() {
     // Combine latest values of user$ and city$ into one observable array [user, city]
@@ -50,8 +55,13 @@ export class HomeMainSectionComponent implements OnInit {
           queryConstraints.push(where("location", "==", city.id))
         }
 
+        const filter = params.get("filter")
+        if (filter === "all" && user && user.uid) {
+          queryConstraints.push(where("gameOwnerId", "==", user.uid))
+        }
+
         // Apply user constraint if user exists
-        if (user && user.uid) {
+        if (user && user.uid && !filter) {
           queryConstraints.push(where("gameOwnerId", "!=", user.uid))
         }
 
@@ -71,8 +81,9 @@ export class HomeMainSectionComponent implements OnInit {
 
         // Create and return the new query
         const gamesQuery = query(this.gamesCollection, ...queryConstraints)
-        return collectionData(gamesQuery, { idField: "id" }) as Observable<GameInfo[]>
+        return collectionData(gamesQuery, { idField: "id" }) as Observable<GameFirebaseRow[]>
       }),
+      tap((games) => console.log("games", games)),
     )
   }
 }

@@ -2,7 +2,7 @@ import { NgModule } from "@angular/core"
 import { BrowserModule } from "@angular/platform-browser"
 import { provideFirebaseApp, initializeApp } from "@angular/fire/app"
 import { getFirestore, provideFirestore } from "@angular/fire/firestore"
-import { getAuth, provideAuth } from "@angular/fire/auth"
+import { browserLocalPersistence, getAuth, provideAuth, setPersistence } from "@angular/fire/auth"
 import { getStorage, provideStorage } from "@angular/fire/storage"
 
 import { AppRoutingModule } from "./app-routing.module"
@@ -16,8 +16,18 @@ import { ToastrModule } from "ngx-toastr"
   declarations: [AppComponent],
   imports: [
     provideFirebaseApp(() => initializeApp(environment.firebase)),
+    provideAuth(() => {
+      const auth = getAuth()
+      // setPersistence(auth, browserLocalPersistence)
+      //   .then(() => {
+      //     console.log('Persistence set to "local"')
+      //   })
+      //   .catch((error) => {
+      //     console.error(error)
+      //   })
+      return auth
+    }),
     provideFirestore(() => getFirestore()),
-    provideAuth(() => getAuth()),
     provideStorage(() => getStorage()),
     BrowserModule,
     BrowserAnimationsModule,

@@ -15,12 +15,16 @@
         <a>Cadastro</a>
       </li>
     </ng-template>
-    <ng-container *ngIf="currentUser; else loggedOut">
+    <ng-container *rxIf="user$; else loggedOut">
       <li tabindex="1" role="menuitem">
         <mat-icon color="accent" class="menu-icon">publish</mat-icon>
         <a routerLink="/publish">Publicar Jogo</a>
       </li>
       <li tabindex="2" role="menuitem">
+        <mat-icon color="accent" class="menu-icon">gamepad</mat-icon>
+        <a routerLink="/my-games/all">Meus jogos</a>
+      </li>
+      <li tabindex="3" role="menuitem">
         <div class="icon-wrapper">
           <span class="badge" *ngIf="(totalUnread$ | async) ? (totalUnread$ | async) : 0 > 0">{{
             totalUnread$ | async

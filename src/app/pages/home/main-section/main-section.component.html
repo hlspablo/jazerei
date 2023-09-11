@@ -1,16 +1,16 @@
 <section class="main">
-  <ng-container *ngIf="games$ | async as gamesList; else noGames">
+  <ng-container *rxIf="games$; else noGames">
     <div class="showing">
-      <span class="showing-text">{{
+      <!-- <span class="showing-text">{{
         gamesList.length > 0
           ? "Exibindo: " + this.currentConsole
           : "Nenhum Jogo encontrado para os seus filtros."
-      }}</span>
+      }}</span> -->
     </div>
     <div class="cards">
-      <div *ngFor="let game of gamesList">
+      <div *rxFor="let game of games$">
         <a [routerLink]="['/game', game.id]">
-          <app-game-card [gameInfo]="game"></app-game-card>
+          <app-game-card [game$]="toObservable(game)"></app-game-card>
         </a>
       </div>
     </div>

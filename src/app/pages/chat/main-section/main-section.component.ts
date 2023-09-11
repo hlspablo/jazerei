@@ -82,9 +82,6 @@ export class MainSectionComponent implements OnInit {
     this.showHamburgerMenu$ = this.breakpointService.isHandsetOrSmall()
     this.showConversations$ = this.conversationsService.showConversations$
     this.chatRooms$ = (await this.chatService.getChatRooms()).pipe(map((results) => results.rooms))
-    this.authService.user$.subscribe((user) => {
-      this.currentUser = user
-    })
     if (this.activeChatRoom) {
       this.getMessages(this.activeChatRoom)
     }

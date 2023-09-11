@@ -1,107 +1,76 @@
 import { Component, OnInit, inject } from "@angular/core"
-import { FormBuilder, Validators } from "@angular/forms"
-import { Observable } from "rxjs"
+import { NonNullableFormBuilder, Validators } from "@angular/forms"
+import { Observable, map } from "rxjs"
 import { BreakpointService } from "src/app/services/breakpoint-service.service"
-import { GameInfo } from "src/app/shared/interfaces/app.interface"
-import { Storage, uploadBytesResumable, getDownloadURL, ref } from "@angular/fire/storage"
-import { Firestore, collection, addDoc } from "@angular/fire/firestore"
-import { translateConsole } from "src/app/utils/game.translate"
-import { AuthService } from "src/app/services/auth.service"
-import { User } from "@angular/fire/auth"
-import { getFirstTwoNames } from "src/app/utils/string.utils"
+import { GameFirebaseRow } from "src/app/shared/interfaces/app.interface"
 import { ToastrService } from "ngx-toastr"
 import { Router } from "@angular/router"
 import { sleepFor } from "src/app/utils/time.utils"
+import { RxEffects } from "@rx-angular/state/effects"
+import { GameRepository } from "src/app/repositories/game.repository"
+import { RxState } from "@rx-angular/state"
+import { selectSlice } from "@rx-angular/state/selections"
+
+interface PublishState {
+  publishGame: Partial<GameFirebaseRow>
+}
 
 @Component({
   selector: "app-publish-main-section",
   templateUrl: "./main-section.component.html",
   styleUrls: ["./main-section.component.scss"],
+  providers: [RxEffects, RxState],
 })
 export class MainSectionComponent implements OnInit {
-  private fb = inject(FormBuilder)
-  private breakpointService = inject(BreakpointService)
-  imagePreview: string | ArrayBuffer | null = "https://placehold.co/600x400"
-  gameInfo: Partial<GameInfo>
-  private storage = inject(Storage)
-  private firestore = inject(Firestore)
-  private toastr = inject(ToastrService)
-  private router = inject(Router)
+  private _fb = inject(NonNullableFormBuilder)
+  private _breakpointService = inject(BreakpointService)
+  private _toastr = inject(ToastrService)
+  private _router = inject(Router)
+  private _gameRepository = inject(GameRepository)
 
   protected fileNames: string
   protected selectedFiles: File[] = []
-
-  private authService = inject(AuthService)
-  protected currentUser: User | null
+  protected imagePreview: string | ArrayBuffer | null = "https://placehold.co/600x400"
   protected isLoading = false
-
-  protected showHamburgerMenu: Observable<boolean>
-  protected publishForm = this.fb.group({
-    stepOne: this.fb.group({
-      gameName: ["", Validators.required],
-      gameDescription: ["", Validators.required],
+  protected isHandsetOrSmall: Observable<boolean>
+  protected publishForm = this._fb.group({
+    stepOne: this._fb.group({
+      name: ["", Validators.required],
+      description: ["", Validators.required],
       usedTime: ["", Validators.required],
-      gamePlatform: [null, Validators.required],
+      consoleModel: ["", Validators.required],
     }),
-    stepTwo: this.fb.group({
+    stepTwo: this._fb.group({
       fileData: ["", Validators.required],
     }),
     stepThree: true,
   })
 
-  uploadFiles(selectedFiles: File[]): Promise<string[]> {
-    return new Promise<string[]>((resolve, reject) => {
-      let uploadCount = 0
-      const downloadURLs: string[] = []
+  protected game$ = this._state.select("publishGame")
 
-      selectedFiles.forEach((file, index) => {
-        const filePath = `${file.name}_${new Date().getTime()}_${index}`
-        const storageRef = ref(this.storage, filePath)
-        const uploadTask = uploadBytesResumable(storageRef, file)
-
-        uploadTask.on(
-          "state_changed",
-          (snapshot) => {
-            const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100
-            console.log(`Upload of ${file.name} is ${progress}% done`)
-          },
-          (error) => {
-            reject(error)
-          },
-          () => {
-            getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-              downloadURLs.push(downloadURL)
-              uploadCount++
-
-              if (uploadCount === selectedFiles.length) {
-                resolve(downloadURLs)
-              }
-            })
-          },
-        )
-      })
-    })
-  }
-
-  updateGameOwner(): void {
-    console.log("Called updateAvatarUrl")
-    this.gameInfo = {
-      ...this.gameInfo,
-      gameOwner: this.getDisplayName(),
-    }
-  }
-
-  mapFormToGameInfo(value: typeof this.publishForm.value): void {
-    const stepOne = value.stepOne
-    const stepTwo = value.stepTwo
-    if (!stepOne || !stepTwo) return
-
-    this.gameInfo = {
-      ...this.gameInfo,
-      gameName: stepOne.gameName || "Default Game Title",
-      gameDescription: stepOne.gameDescription || "Default Description",
-      gamePlatform: stepOne.gamePlatform || "Default Platform",
-    }
+  constructor(
+    //private _rxEffect: RxEffects,
+    private _state: RxState<PublishState>,
+  ) {
+    this._state.connect(
+      "publishGame",
+      this.publishForm.valueChanges.pipe(
+        map((formValues) => {
+          // id: string
+          // name: string
+          // description: string
+          // owner: string
+          // ownerId: string
+          // imagesUrls: string[]
+          // consoleModel: string
+          return {
+            name: formValues.stepOne?.name,
+            description: formValues.stepOne?.description,
+            consoleModel: formValues.stepOne?.consoleModel,
+          }
+        }),
+      ),
+    )
   }
 
   onFileSelected(event: Event): void {
@@ -126,10 +95,6 @@ export class MainSectionComponent implements OnInit {
     }
   }
 
-  getDisplayName(): string {
-    return getFirstTwoNames(this.currentUser?.displayName) || ""
-  }
-
   async submit() {
     if (this.publishForm.valid) {
       this.isLoading = true
@@ -138,24 +103,21 @@ export class MainSectionComponent implements OnInit {
         if (values) {
           const { stepOne, stepTwo } = values
           if (stepOne && stepTwo) {
-            const { gameName, gameDescription, gamePlatform, usedTime } = stepOne
+            const { name, description, consoleModel, usedTime } = stepOne
+            if (!name || !description || !consoleModel || !usedTime) return
+            const imagesUrls = await this._gameRepository.uploadGameImages(this.selectedFiles)
 
-            const imagesUrls = await this.uploadFiles(this.selectedFiles)
-
-            await addDoc(collection(this.firestore, "games"), {
-              gameName,
-              gameOwner: this.getDisplayName(),
-              gameOwnerId: this.currentUser?.uid,
-              gameDescription,
-              gamePlatform: translateConsole(gamePlatform),
-              usedTime,
-              approved: false,
+            this._gameRepository.createGame({
+              name,
+              consoleModel,
+              description,
               imagesUrls,
+              usedTime,
             })
-            this.toastr.success("O Anúncio do seu jogo foi publicado.", "Sucesso!")
-            // await one second to show the success message
+
             await sleepFor(500)
-            this.router.navigate(["/"])
+            this._toastr.success("O Anúncio do seu jogo foi publicado.", "Sucesso!")
+            this._router.navigate(["/"])
           }
         }
       } catch (error) {
@@ -167,19 +129,6 @@ export class MainSectionComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.gameInfo = {}
-
-    this.showHamburgerMenu = this.showHamburgerMenu = this.breakpointService.isHandsetOrSmall()
-
-    this.publishForm.valueChanges.subscribe((value) => {
-      this.mapFormToGameInfo(value)
-    })
-
-    this.currentUser = this.authService.getCachedUser()
-    this.updateGameOwner()
-    this.authService.user$.subscribe((user) => {
-      this.currentUser = user
-      this.updateGameOwner()
-    })
+    this.isHandsetOrSmall = this._breakpointService.isHandsetOrSmall()
   }
 }

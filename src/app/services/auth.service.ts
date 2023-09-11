@@ -1,7 +1,8 @@
-import { Injectable, OnDestroy, OnInit, inject } from "@angular/core"
+import { Injectable, inject } from "@angular/core"
 import { Auth, signInWithEmailAndPassword, createUserWithEmailAndPassword, updateProfile, user, User } from "@angular/fire/auth"
-import * as fire from "@angular/fire/firestore"
-import { Subscription } from "rxjs"
+import { Firestore, setDoc, doc } from "@angular/fire/firestore"
+import { RxState } from "@rx-angular/state"
+import { firstValueFrom, map } from "rxjs"
 
 interface UserData {
   email: string
@@ -11,32 +12,46 @@ interface UserData {
   location: string
 }
 
+interface AuthState {
+  user: User | null
+}
+
 @Injectable({
   providedIn: "root",
 })
-export class AuthService implements OnDestroy, OnInit {
-  private auth: Auth = inject(Auth)
-  private firestore: fire.Firestore = inject(fire.Firestore)
-  user$ = user(this.auth)
-  userSubscription: Subscription
+export class AuthService extends RxState<AuthState>{
+  private _auth: Auth = inject(Auth)
+  private _firestore = inject(Firestore)
+  private _user$ = user(this._auth)
   currentUser: User | null
 
-  getCachedUser(): User | null {
-    return this.currentUser
+
+  constructor() {
+    super()
+    this.set({ user: null })
+    this.connect("user", this._user$)
+  }
+
+  getUser() {
+    return this.select("user")
+  }
+
+  getCurrentUserSnapshot() {
+    return firstValueFrom(this._user$)
   }
 
   async login(email: string, password: string) {
-    await signInWithEmailAndPassword(this.auth, email, password)
+    await signInWithEmailAndPassword(this._auth, email, password)
   }
 
   async register(userData: UserData) {
-    const { user } = await createUserWithEmailAndPassword(this.auth, userData.email, userData.password)
+    const { user } = await createUserWithEmailAndPassword(this._auth, userData.email, userData.password)
 
     await updateProfile(user, {
       displayName: userData.name,
     })
 
-    await fire.setDoc(fire.doc(this.firestore, "profiles", user.uid), {
+    await setDoc(doc(this._firestore, "profiles", user.uid), {
       name: userData.name,
       cpf: userData.cpf,
       location: userData.location,
@@ -44,16 +59,7 @@ export class AuthService implements OnDestroy, OnInit {
   }
 
   async logout() {
-    await this.auth.signOut()
+    await this._auth.signOut()
   }
 
-  ngOnInit(): void {
-    this.userSubscription = this.user$.subscribe((aUser: User | null) => {
-      this.currentUser = aUser
-    })
-  }
-
-  ngOnDestroy(): void {
-    this.userSubscription.unsubscribe()
-  }
 }

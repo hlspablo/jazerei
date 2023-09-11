@@ -1,6 +1,6 @@
 <section class="main-section">
   <h2>Publicar Jogo</h2>
-  <div class="form-container" [class.mobile]="showHamburgerMenu | async">
+  <div class="form-container" [class.mobile]="isHandsetOrSmall | async">
     <form [formGroup]="publishForm">
       <mat-horizontal-stepper #stepper linear="true" [disableRipple]="true">
         <mat-step formGroupName="stepOne">
@@ -8,13 +8,13 @@
           <div class="field-container">
             <mat-form-field floatLabel="always">
               <mat-label>Name do Jogo</mat-label>
-              <input matInput formControlName="gameName" type="text" placeholder="Nome do Jogo" />
+              <input matInput formControlName="name" type="text" placeholder="Nome do Jogo" />
             </mat-form-field>
           </div>
           <div class="field-container">
             <mat-form-field floatLabel="always">
               <mat-label>Descrição do Jogo</mat-label>
-              <textarea matInput formControlName="gameDescription" required placeholder="Informaçooes adicionais sobre o jogo" rows="4"></textarea>
+              <textarea matInput formControlName="description" required placeholder="Informaçooes adicionais sobre o jogo" rows="4"></textarea>
             </mat-form-field>
           </div>
           <div class="field-container">
@@ -24,7 +24,7 @@
             </mat-form-field>
           </div>
           <div class="field-container">
-            <mat-radio-group aria-label="Plataforma" name="platform" formControlName="gamePlatform">
+            <mat-radio-group aria-label="Plataforma" name="platform" formControlName="consoleModel">
               <mat-radio-button value="ps5">PS5</mat-radio-button>
               <mat-radio-button value="ps4">PS4</mat-radio-button>
               <mat-radio-button value="ps3">PS3</mat-radio-button>
@@ -65,7 +65,7 @@
         <mat-step formGroupName="stepThree">
           <ng-template matStepLabel>Pré-visualização</ng-template>
           <div class="card-preview">
-            <app-game-card [previewMode]="true" [gameInfo]="gameInfo" [imageSourcePreview]="imagePreview"></app-game-card>
+            <app-game-card [previewMode]="true" [game$]="game$" [imagePreview]="imagePreview"></app-game-card>
           </div>
           <div class="actions">
             <button mat-button matStepperPrevious>Voltar</button>
