@@ -8,7 +8,7 @@
   >
     <ng-container *rxFor="let chatRoom of chatRooms$; trackBy: 'id'">
       <a (click)="setChatRoom(chatRoom.id)" (keyup)="(null)" tabindex="0">
-        <div class="chat-item" [class.active]="activeChatRoom === chatRoom.id">
+        <div class="chat-item" [class.active]="(activeChatRoom$ | push ) === chatRoom.id">
           <div class="left-container">
             <div class="owner">{{ chatRoom.userName | getFirstTwoNames }}</div>
             <div class="game">{{ chatRoom.gameName }}</div>
@@ -22,20 +22,20 @@
     </ng-container>
   </div>
   <div class="chat-container">
-    <div class="chat-messages" #chatMessages>
+    <div class="chat-messages" #chatMessages *rxLet="currentUser$; let currentUser">
       <ng-container *rxFor="let message of messages$; trackBy: 'id'">
         <div
           class="message-wrapper"
           [ngClass]="{
-            sent: message.userId === currentUser?.uid,
-            received: message.userId !== currentUser?.uid
+            sent: message.userId === currentUser.uid,
+            received: message.userId !== currentUser.uid
           }"
         >
           <div
             class="message"
             [ngClass]="{
-              sent: message.userId === currentUser?.uid,
-              received: message.userId !== currentUser?.uid
+              sent: message.userId === currentUser.uid,
+              received: message.userId !== currentUser.uid
             }"
           >
             <div class="message-content">
@@ -44,7 +44,7 @@
               <span
                 class="message-read-indicator"
                 [class.read]="message.read"
-                *ngIf="message.userId === currentUser?.uid"
+                *ngIf="message.userId === currentUser.uid"
               ></span>
             </div>
           </div>
@@ -57,11 +57,12 @@
           matInput
           type="text"
           placeholder="Digite sua mensagem..."
-          [(ngModel)]="currentMessageValue"
+          [ngModel]="currentMessageValue$ | push"
+          (ngModelChange)="updateMessageValue($event)"
           (keydown)="handleEnterKey($event)"
         />
       </mat-form-field>
-      <button mat-icon-button class="send-button" (click)="sendMessage()">
+      <button mat-icon-button class="send-button" (click)="uiActions.sendMessageTrigger()">
         <mat-icon>send</mat-icon>
       </button>
     </div>

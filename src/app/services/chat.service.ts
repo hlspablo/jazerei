@@ -1,10 +1,7 @@
 import { Injectable, inject } from "@angular/core"
 import { Observable, combineLatest, map, of, switchMap } from "rxjs"
-import {
-  ChatRoom,
-  UserChatRoom,
-} from "../shared/interfaces/app.interface"
-import { switchValue } from "../utils/numbers.utils"
+import { ChatRoom, UserChatRoom } from "../shared/interfaces/app.interface"
+import { switchMemberIndex } from "../utils/numbers.utils"
 import { ChatRoomRepository } from "../repositories/chat-room.repository"
 import { AuthService } from "./auth.service"
 
@@ -15,15 +12,34 @@ export class ChatService {
   private _chatRoomRepository = inject(ChatRoomRepository)
   private _authService = inject(AuthService)
 
-  async createChatRoom(receiverId: string, relatedGameId: string, relatedGameName: string, initialMessage?: string) {
+  async sendMessage(chatRoomId: string, message: string) {
+    const currentUser = await this._authService.getCurrentUserOrThrow()
+    return this._chatRoomRepository.writeChatRoomMessage(currentUser, chatRoomId, message)
+  }
+
+  async createChatRoom(
+    receiverId: string,
+    relatedGameId: string,
+    relatedGameName: string,
+    initialMessage?: string,
+  ) {
     const currentUser = await this._authService.getCurrentUserOrThrow()
 
-    const chatRoomId = await this._chatRoomRepository.checkIfChatRoomExists(currentUser, receiverId, relatedGameId)
+    const chatRoomId = await this._chatRoomRepository.checkIfChatRoomExists(
+      currentUser,
+      receiverId,
+      relatedGameId,
+    )
     if (chatRoomId) {
       if (initialMessage) {
         this.sendMessage(chatRoomId, initialMessage)
-      } else  {
-        this._chatRoomRepository.createChatRoom(currentUser, receiverId, relatedGameId, relatedGameName)
+      } else {
+        this._chatRoomRepository.createChatRoom(
+          currentUser,
+          receiverId,
+          relatedGameId,
+          relatedGameName,
+        )
       }
     }
   }
@@ -45,7 +61,7 @@ export class ChatService {
           const currentUserIndex = chatRoom.members.findIndex(
             (memberId) => memberId === currentUser.uid,
           )
-          const receiverIndex = switchValue(currentUserIndex)
+          const receiverIndex = switchMemberIndex(currentUserIndex)
           const location = chatRoom.locations[receiverIndex]
           const userName = chatRoom.names[receiverIndex]
           const gameName = chatRoom.relatedGameName
@@ -70,8 +86,8 @@ export class ChatService {
     return this._chatRoomRepository.getChatRoomMessages(chatRoomId)
   }
 
-  async sendMessage(chatRoomId: string, message: string) {
+  async setAllMessagesToRead(chatRoomId: string) {
     const currentUser = await this._authService.getCurrentUserOrThrow()
-    return this._chatRoomRepository.writeChatRoomMessage(currentUser, chatRoomId, message)
+    return this._chatRoomRepository.setAllMessagesToRead(chatRoomId, currentUser.uid)
   }
 }

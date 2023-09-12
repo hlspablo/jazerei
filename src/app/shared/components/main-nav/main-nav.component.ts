@@ -1,6 +1,6 @@
 import { Component, OnInit, inject } from "@angular/core"
 import { MatDialog } from "@angular/material/dialog"
-import { Observable, of} from "rxjs"
+import { Observable, map, of} from "rxjs"
 import { BreakpointService } from "src/app/services/breakpoint-service.service"
 import { LoginDialogComponent } from "../login-dialog/login-dialog.component"
 import { RegistrationDialogComponent } from "../registration-dialog/registration-dialog.component"
@@ -59,12 +59,13 @@ export class MainNavComponent implements OnInit {
   }
 
   async ngOnInit() {
+    // TODO fix this
     this.showHamburgerMenu = this._breakpointService.isHandsetOrSmall()
     this._locationService.city$.subscribe((city) => {
       this.cityName = city?.name ?? "Localização"
     })
-    // TODO initialize chat service
-    //await this._chatService.initialize()
-    this.totalUnread$ = this._chatService.getTotalUnreadMessagesCount()
+    this.totalUnread$ = (await this._chatService.getChatRooms()).pipe(
+      map(({ totalUnread }) => totalUnread),
+    )
   }
 }
