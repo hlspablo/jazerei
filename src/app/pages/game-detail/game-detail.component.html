@@ -1,3 +1,60 @@
 <app-main-nav></app-main-nav>
 <app-sub-nav></app-sub-nav>
-<app-game-detail-main-section [game$]="game$"></app-game-detail-main-section>
+<section class="main-section">
+  <div class="game-container" *rxIf="game$; let game; else: loading">
+    <mat-card *rxLet="photoIndex$; let photoIndex" class="responsive-card">
+      <div class="slider-container">
+        <img
+          [src]="game.imagesUrls[photoIndex]"
+          alt="Image"
+          [class.mobile]="isHandsetOrSmall$ | push"
+          class="slider-image"
+        />
+        <button mat-mini-fab class="arrow left" (click)="prevImage()">
+          <mat-icon>arrow_back</mat-icon>
+        </button>
+        <button mat-mini-fab class="arrow right" (click)="nextImage()">
+          <mat-icon>arrow_forward</mat-icon>
+        </button>
+        <div class="dots">
+          <span
+            *rxFor="let imageUrl of game.imagesUrls; let i = index"
+            [class.active]="i === photoIndex"
+            tabindex="1"
+            (keyup)="(null)"
+            (click)="goToImage(i)"
+          ></span>
+        </div>
+      </div>
+      <mat-card-content>
+        <div class="card-title">{{ game.name }}</div>
+        <div class="card-description">
+          {{ game.description }}
+        </div>
+      </mat-card-content>
+      <div class="info-container">
+        <div class="card-informations">
+          <span class="game-owner">{{ game.owner }}</span>
+          <span class="console">{{ game.consoleModel | translateConsole }}</span>
+          <span class="used-time">{{ game.usedTime }} meses de uso</span>
+        </div>
+        <div class="chat-button">
+          <button
+            (click)="openTextMessageDialog()"
+            mat-raised-button
+            color="accent"
+            class="btn-rounded"
+          >
+            <mat-icon>chat</mat-icon>
+            Negociar
+          </button>
+        </div>
+      </div>
+    </mat-card>
+  </div>
+  <ng-template #loading>
+    <div class="loading-container">
+      <mat-spinner color="accent"></mat-spinner>
+    </div>
+  </ng-template>
+</section>

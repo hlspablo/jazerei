@@ -8,6 +8,7 @@ export interface GameFirebaseRow {
   ownerId: string
   imagesUrls: string[]
   consoleModel: string
+  usedTime: number
 }
 
 export interface Message {

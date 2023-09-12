@@ -1,5 +1,15 @@
 import { Injectable, inject } from "@angular/core"
-import { Firestore, QueryFieldFilterConstraint, QueryFilterConstraint, addDoc, collection, collectionData, query } from "@angular/fire/firestore"
+import {
+  Firestore,
+  QueryFieldFilterConstraint,
+  QueryFilterConstraint,
+  addDoc,
+  collection,
+  collectionData,
+  doc,
+  docData,
+  query,
+} from "@angular/fire/firestore"
 import { AuthService } from "../services/auth.service"
 import { Storage, getDownloadURL, uploadBytesResumable, ref } from "@angular/fire/storage"
 import { Observable } from "rxjs"
@@ -20,8 +30,6 @@ export class GameRepository {
   private _firestore = inject(Firestore)
   private _authService = inject(AuthService)
   private _gamesCollection = collection(this._firestore, "games")
-
-
 
   uploadGameImages(selectedFiles: File[]): Promise<string[]> {
     return new Promise<string[]>((resolve, reject) => {
@@ -88,5 +96,12 @@ export class GameRepository {
   getGames(queryConstraints: QueryFieldFilterConstraint[]) {
     const gamesQuery = query(this._gamesCollection, ...queryConstraints)
     return collectionData(gamesQuery, { idField: "id" }) as Observable<GameFirebaseRow[]>
+  }
+
+  getGameById(gameId: string) {
+    const gameDoc = doc(this._gamesCollection, gameId)
+    return docData(gameDoc, {
+      idField: "id",
+    }) as Observable<GameFirebaseRow>
   }
 }

@@ -33,6 +33,7 @@ import { GetHumanTimePipe } from "../pipes/get-human-time.pipe"
 import { RxIf } from '@rx-angular/template/if';
 import { RxLet } from '@rx-angular/template/let';
 import { RxFor } from '@rx-angular/template/for';
+import { RxPush } from '@rx-angular/template/push';
 import { TranslateConsolePipe } from "../pipes/translate-console.pipe"
 
 @NgModule({
@@ -76,7 +77,7 @@ import { TranslateConsolePipe } from "../pipes/translate-console.pipe"
     RxIf,
     RxLet,
     RxFor,
-
+    RxPush,
   ],
   exports: [
     LoginDialogComponent,
@@ -94,6 +95,7 @@ import { TranslateConsolePipe } from "../pipes/translate-console.pipe"
     RxIf,
     RxLet,
     RxFor,
+    RxPush,
   ],
 })
 export class SharedModule {}
