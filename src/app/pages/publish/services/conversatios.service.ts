@@ -6,10 +6,13 @@ import { BehaviorSubject } from "rxjs"
 })
 export class ConversationsService {
   private showConversationsSource = new BehaviorSubject<boolean>(false)
-  showConversations$ = this.showConversationsSource.asObservable()
+  private _showConversations$ = this.showConversationsSource.asObservable()
+
+  getShowConversations() {
+    return this._showConversations$
+  }
 
   toggleConversations() {
-    const currentValue = this.showConversationsSource.getValue()
-    this.showConversationsSource.next(!currentValue)
+    this.showConversationsSource.next(!this.showConversationsSource.getValue())
   }
 }

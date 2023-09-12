@@ -1,6 +1,6 @@
 import { Component, OnInit } from "@angular/core"
 import { Observable } from "rxjs"
-import { ConversationsService } from "src/app/pages/chat/services/conversatios.service"
+import { ConversationsService } from "src/app/services/conversatios.service"
 import { BreakpointService } from "src/app/services/breakpoint-service.service"
 
 @Component({
@@ -20,7 +20,6 @@ export class SubNavComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.showHamburgerMenu = this.showHamburgerMenu =
-      this.breakpointService.isHandsetOrSmall()
+    this.showHamburgerMenu = this.showHamburgerMenu = this.breakpointService.isHandsetOrSmall()
   }
 }

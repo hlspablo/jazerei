@@ -20,12 +20,12 @@ interface UserData {
   location: string
 }
 
-type CompleteUser = User & {
+export type CompleteUser = User & {
   cpf: string
   location: MyLocation
 }
 
-interface AuthState {
+export interface AuthState {
   user: CompleteUser | null
 }
 
@@ -67,17 +67,22 @@ export class AuthService extends RxState<AuthState> {
   getCurrentUserSnapshot() {
     return firstValueFrom(this.getUser())
   }
+  async getCurrentUserOrThrow() {
+    const currentUser = await firstValueFrom(this.getUser())
+    if (!currentUser) throw new Error("User not logged in")
+    return currentUser
+  }
 
   async getProfile(userId: string) {
     const profileDocRef = doc(this._firestore, `profiles/${userId}`)
     const profileSnap = await getDoc(profileDocRef)
     const data = profileSnap.data() as Profile
-    const cpf = data.cpf
+    const { cpf, name } = data
 
     const locationRef = doc(this._firestore, `locations/${data.location}`)
     const locationSnap = await getDoc(locationRef)
     const location = locationSnap.data() as MyLocation
-    return { cpf, location }
+    return { cpf, location, name }
   }
 
   async login(email: string, password: string) {

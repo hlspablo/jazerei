@@ -11,7 +11,8 @@ export interface GameFirebaseRow {
   usedTime: number
 }
 
-export interface Message {
+export interface ChatMessageFirebaseRow {
+  id: string
   message: string
   timestamp: Timestamp
   userId: string

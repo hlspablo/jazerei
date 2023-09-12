@@ -1,3 +1,69 @@
 <app-main-nav></app-main-nav>
 <app-sub-nav></app-sub-nav>
-<app-chat-main-section></app-chat-main-section>
+<section class="main-section">
+  <div
+    class="chat-selection"
+    [class.hide]="isHandsetOrSmall$ | push"
+    [class.active]="showConversations$ | push"
+  >
+    <ng-container *rxFor="let chatRoom of chatRooms$; trackBy: 'id'">
+      <a (click)="setChatRoom(chatRoom.id)" (keyup)="(null)" tabindex="0">
+        <div class="chat-item" [class.active]="activeChatRoom === chatRoom.id">
+          <div class="left-container">
+            <div class="owner">{{ chatRoom.userName | getFirstTwoNames }}</div>
+            <div class="game">{{ chatRoom.gameName }}</div>
+            <div class="location">{{ chatRoom.location }}</div>
+          </div>
+          <div class="right-container">
+            <div class="messages-count">{{ chatRoom.unreadMessages }}</div>
+          </div>
+        </div>
+      </a>
+    </ng-container>
+  </div>
+  <div class="chat-container">
+    <div class="chat-messages" #chatMessages>
+      <ng-container *rxFor="let message of messages$; trackBy: 'id'">
+        <div
+          class="message-wrapper"
+          [ngClass]="{
+            sent: message.userId === currentUser?.uid,
+            received: message.userId !== currentUser?.uid
+          }"
+        >
+          <div
+            class="message"
+            [ngClass]="{
+              sent: message.userId === currentUser?.uid,
+              received: message.userId !== currentUser?.uid
+            }"
+          >
+            <div class="message-content">
+              {{ message.message }}
+              <span class="message-time">{{ message.timestamp | getHumanTime }}</span>
+              <span
+                class="message-read-indicator"
+                [class.read]="message.read"
+                *ngIf="message.userId === currentUser?.uid"
+              ></span>
+            </div>
+          </div>
+        </div>
+      </ng-container>
+    </div>
+    <div class="chat-input-container" [class.full]="isHandsetOrSmall$ | push">
+      <mat-form-field class="chat-input-field">
+        <input
+          matInput
+          type="text"
+          placeholder="Digite sua mensagem..."
+          [(ngModel)]="currentMessageValue"
+          (keydown)="handleEnterKey($event)"
+        />
+      </mat-form-field>
+      <button mat-icon-button class="send-button" (click)="sendMessage()">
+        <mat-icon>send</mat-icon>
+      </button>
+    </div>
+  </div>
+</section>

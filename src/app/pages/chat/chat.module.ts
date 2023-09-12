@@ -3,7 +3,6 @@ import { CommonModule } from "@angular/common"
 import { ChatPageComponent } from "./chat.component"
 import { MatCardModule } from "@angular/material/card"
 import { SharedModule } from "src/app/shared/shared.module"
-import { MainSectionComponent } from "./main-section/main-section.component"
 import { ChatRoutingModule } from "./chat-routing.module"
 import { MatIconModule } from "@angular/material/icon"
 import { MatButtonModule } from "@angular/material/button"
@@ -12,7 +11,7 @@ import { MatInputModule } from "@angular/material/input"
 import { FormsModule } from "@angular/forms"
 
 @NgModule({
-  declarations: [ChatPageComponent, MainSectionComponent],
+  declarations: [ChatPageComponent],
   imports: [
     CommonModule,
     ChatRoutingModule,
