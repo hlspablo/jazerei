@@ -12,8 +12,6 @@ import { LocationRepository } from "src/app/repositories/location.repository"
 
 interface UIActions {
   searchCity: string
-  searchCityTrigger: void
-  removeFilter: void
 }
 interface State {
   locations: MyLocation[]

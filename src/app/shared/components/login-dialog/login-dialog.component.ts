@@ -1,5 +1,5 @@
-import { Component } from "@angular/core"
-import { FormBuilder, FormGroup, Validators } from "@angular/forms"
+import { Component, inject } from "@angular/core"
+import { Validators, NonNullableFormBuilder } from "@angular/forms"
 import { MatDialog } from "@angular/material/dialog"
 import { AuthService } from "src/app/services/auth.service"
 import { loginErrorTranslate } from "src/app/utils/firebase.translate"
@@ -16,30 +16,27 @@ interface LoginFormValues {
   styleUrls: ["./login-dialog.component.scss"],
 })
 export class LoginDialogComponent {
-  loginForm: FormGroup
-  isLoading = false
-  loginErrorMessage = ""
+  private _fb = inject(NonNullableFormBuilder)
+  private _authService = inject(AuthService)
+  private _dialogService = inject(MatDialog)
 
-  constructor(
-    private fb: FormBuilder,
-    private authService: AuthService,
-    private dialog: MatDialog,
-  ) {
-    this.loginForm = this.fb.group({
-      email: ["", [Validators.required, Validators.email]],
-      password: ["", Validators.required],
-    })
-  }
+  protected isLoading = false
+  protected loginErrorMessage = ""
+
+  protected loginForm = this._fb.group({
+    email: ["", [Validators.required, Validators.email]],
+    password: ["", Validators.required],
+  })
 
   async onSubmit() {
     if (this.loginForm.valid) {
       this.isLoading = true
       const { email, password } = this.loginForm.value as LoginFormValues
       try {
-        await this.authService.login(email, password)
+        await this._authService.login(email, password)
         await sleepFor(500)
         this.loginErrorMessage = ""
-        this.dialog.closeAll()
+        this._dialogService.closeAll()
       } catch (error) {
         this.loginErrorMessage = loginErrorTranslate(error)
       } finally {
