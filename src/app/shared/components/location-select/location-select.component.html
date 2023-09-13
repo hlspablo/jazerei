@@ -2,17 +2,16 @@
   <mat-dialog-content>
     <ng-select
       class="location-select"
-      [items]="locations$ | async"
+      [items]="locations$ | push"
+      (change)="onChange($event)"
       (search)="onSearch($event)"
       placeholder="Pesquisa uma cidade"
       [clearable]="true"
       bindLabel="name"
       bindValue="id"
       appearance="outline"
-      notFoundText="Cidade não encontrada."
-      [formControl]="searchControl"
+      notFoundText="Cidade não encontrada para o termo pesquisado"
       appendTo="body"
-      (change)="onChange($event)"
     >
     </ng-select>
   </mat-dialog-content>

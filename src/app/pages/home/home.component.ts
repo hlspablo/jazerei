@@ -78,7 +78,7 @@ export class HomePageComponent implements OnInit {
 
         this.filtersApplied = filters.length > 0 ? filters.join(" | ") : "Todos os Jogos"
 
-        return this._gameRepository.getGames(queryConstraints)
+        return this._gameRepository.getGamesFilter(queryConstraints)
       }),
     )
   }

@@ -93,7 +93,7 @@ export class GameRepository {
     }
   }
 
-  getGames(queryConstraints: QueryFieldFilterConstraint[]) {
+  getGamesFilter(queryConstraints: QueryFieldFilterConstraint[]) {
     const gamesQuery = query(this._gamesCollection, ...queryConstraints)
     return collectionData(gamesQuery, { idField: "id" }) as Observable<GameFirebaseRow[]>
   }

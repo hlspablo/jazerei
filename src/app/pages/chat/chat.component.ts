@@ -3,13 +3,11 @@ import { BreakpointService } from "src/app/services/breakpoint-service.service"
 import { Observable, map, of, switchMap, withLatestFrom } from "rxjs"
 import { ChatService } from "src/app/services/chat.service"
 import { ChatMessageFirebaseRow, UserChatRoom } from "src/app/shared/interfaces/app.interface"
-import { User } from "@angular/fire/auth"
-import { AuthService, CompleteUser } from "src/app/services/auth.service"
+import { CompleteUser } from "src/app/services/auth.service"
 import { ConversationsService } from "../publish/services/conversatios.service"
 import { RxState } from "@rx-angular/state"
 import { RxEffects } from "@rx-angular/state/effects"
 import { RxActionFactory } from "@rx-angular/state/actions"
-import { selectSlice } from "@rx-angular/state/selections"
 
 interface ChatPageState {
   chatRooms: UserChatRoom[]

@@ -36,7 +36,6 @@ export class AuthService extends RxState<AuthState> {
   private _auth: Auth = inject(Auth)
   private _firestore = inject(Firestore)
   private _user$ = user(this._auth)
-  currentUser: User | null
 
   constructor() {
     super()
