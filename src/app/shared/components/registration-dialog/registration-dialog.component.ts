@@ -5,85 +5,90 @@ import { cpfValidator } from "./cpf.validator"
 import { registerErrorTranslate } from "src/app/utils/firebase.translate"
 import { MatDialog } from "@angular/material/dialog"
 import { sleepFor } from "src/app/utils/time.utils"
-import { Firestore, collection, collectionData, query, where } from "@angular/fire/firestore"
-import { Observable, Subject, debounceTime, startWith, switchMap } from "rxjs"
+import { debounceTime, switchMap } from "rxjs"
 import { MyLocation } from "../../interfaces/app.interface"
 import { removeDiacritics } from "src/app/utils/string.utils"
+import { RxActionFactory } from "@rx-angular/state/actions"
+import { RxState } from "@rx-angular/state"
+import { where } from "@angular/fire/firestore"
+import { LocationRepository } from "src/app/repositories/location.repository"
 
+interface UIActions {
+  searchCity: string
+}
+interface State {
+  locations: MyLocation[]
+}
+
+interface registrationForm {
+  stepOne: {
+    email: string
+    password: string
+  }
+  stepTwo: {
+    name: string
+    cpf: string
+    selectedLocationId: string | null
+  }
+}
 @Component({
   selector: "app-registration-dialog",
   templateUrl: "./registration-dialog.component.html",
   styleUrls: ["./registration-dialog.component.scss"],
+  providers: [RxActionFactory, RxState],
 })
 export class RegistrationDialogComponent implements OnInit, AfterViewInit {
-  private fb = inject(NonNullableFormBuilder)
-  private authService = inject(AuthService)
-  private matDialog = inject(MatDialog)
-  private firestore = inject(Firestore)
+  private _fb = inject(NonNullableFormBuilder)
+  private _authService = inject(AuthService)
+  private _matDialogService = inject(MatDialog)
+  private _locationRepository = inject(LocationRepository)
+
+  protected uiActions = new RxActionFactory<UIActions>().create()
+  protected locations$ = this._state.select("locations")
   protected registerErrorMessage = ""
   protected isLoading = false
-
-  searchTerms = new Subject<string>()
-  private locationCollection = collection(this.firestore, "locations")
-  protected locations$: Observable<MyLocation[]>
-
-  @ViewChild('emailInput') emailInput: ElementRef;
-
-  ngAfterViewInit() {
-    console.log(this.emailInput)
-    setTimeout(() => {
-      this.emailInput.nativeElement.focus();
-    }, 300);
-  }
-
-  onSearch(event: { term: string }) {
-    const searchTerm = event.term
-    const preparedSearchTerm = removeDiacritics(searchTerm.trim().toLowerCase())
-    this.searchTerms.next(preparedSearchTerm)
-  }
-
-  protected registrationForm = this.fb.group({
-    stepOne: this.fb.group({
+  protected registrationForm = this._fb.group({
+    stepOne: this._fb.group({
       email: ["", [Validators.required, Validators.email]],
       password: ["", Validators.required],
     }),
-    stepTwo: this.fb.group({
+    stepTwo: this._fb.group({
       name: ["", Validators.required],
       cpf: ["", [Validators.required, cpfValidator]],
-      selectedLocation: [null, Validators.required],
+      selectedLocationId: [null, Validators.required],
     }),
   })
 
-  private loadLocationsFromFirebase(term: string): Observable<MyLocation[]> {
-    if (!term || term.trim() === "") {
-      return new Observable((observer) => {
-        observer.next([])
-        observer.complete()
-      })
-    }
-    const locationQuery = query(this.locationCollection, where("name_lowercase", ">=", term), where("name_lowercase", "<=", term + "\uf8ff"))
-    const locationData$ = collectionData(locationQuery, { idField: "id" }) as Observable<MyLocation[]>
+  @ViewChild("emailInput") emailInput: ElementRef
 
-    return locationData$
+  constructor(private _state: RxState<State>) {}
+
+  ngAfterViewInit() {
+    setTimeout(() => {
+      this.emailInput.nativeElement.focus()
+    }, 300)
+  }
+
+  onSearch(event: { term: string }) {
+    this.uiActions.searchCity(removeDiacritics(event.term.trim().toLowerCase()))
   }
 
   async submit() {
-    console.log("Submitting registration form")
     if (this.registrationForm.valid) {
-      const values = this.registrationForm.value
+      const values = this.registrationForm.value as registrationForm
       if (values) {
         try {
           this.registerErrorMessage = ""
           this.isLoading = true
-          await this.authService.register({
-            email: values.stepOne?.email || "",
-            password: values.stepOne?.password || "",
-            name: values.stepTwo?.name || "",
-            cpf: values.stepTwo?.cpf || "",
-            location: values.stepTwo?.selectedLocation || "",
+          await this._authService.register({
+            email: values.stepOne.email,
+            password: values.stepOne.password,
+            name: values.stepTwo.name,
+            cpf: values.stepTwo.cpf,
+            location: values.stepTwo.selectedLocationId || "",
           })
           await sleepFor(500)
-          this.matDialog.closeAll()
+          this._matDialogService.closeAll()
         } catch (error) {
           this.registerErrorMessage = registerErrorTranslate(error)
         } finally {
@@ -94,10 +99,18 @@ export class RegistrationDialogComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit(): void {
-    this.locations$ = this.searchTerms.pipe(
-      startWith(""),
-      debounceTime(300), // Wait for 300ms pause in events
-      switchMap((term: string) => this.loadLocationsFromFirebase(term)),
+    this._state.connect(
+      "locations",
+      this.uiActions.searchCity$.pipe(
+        debounceTime(300),
+        switchMap((term) => {
+          const queryConstraints = [
+            where("name_lowercase", ">=", term),
+            where("name_lowercase", "<=", term + "\uf8ff"),
+          ]
+          return this._locationRepository.getLocationsFilter(queryConstraints)
+        }),
+      ),
     )
   }
 }

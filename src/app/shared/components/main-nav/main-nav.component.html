@@ -1,10 +1,10 @@
-<nav class="main-nav">
-  <div class="logo" [class.mobile-logo]="showHamburgerMenu | async">
+<nav class="main-nav" *rxLet="isHandsetOrSmall$; let isHandsetOrSmall">
+  <div class="logo" [class.mobile-logo]="isHandsetOrSmall">
     <a routerLink="/">
       <img src="assets/images/logo.png" alt="Logo" height="70" />
     </a>
   </div>
-  <ul role="menubar" class="links stretch" *ngIf="(showHamburgerMenu | async) === false">
+  <ul role="menubar" class="links stretch" *rxIf="isHandsetOrSmall === false">
     <ng-template #loggedOut>
       <li (click)="openLoginDialog()" (keyup.enter)="(null)" tabindex="2" role="menuitem">
         <mat-icon color="accent" class="menu-icon">login</mat-icon>
@@ -26,7 +26,7 @@
       </li>
       <li tabindex="3" role="menuitem">
         <div class="icon-wrapper">
-          <span class="badge" *ngIf="(totalUnread$ | async) ? (totalUnread$ | async) : 0 > 0">{{
+          <span class="badge" *rxIf="(totalUnread$ | async) ? (totalUnread$ | async) : 0 > 0">{{
             totalUnread$ | async
           }}</span>
           <mat-icon color="accent" class="menu-icon">sms</mat-icon>
@@ -44,16 +44,14 @@
     class="location"
     (keyup)="(null)"
     tabindex="0"
-    *ngIf="(showHamburgerMenu | async) === false"
+    *rxIf="isHandsetOrSmall === false"
   >
     <mat-icon color="accent">gps_fixed</mat-icon>
-    <button mat-raised-button color="accent">{{ cityName }}</button>
+    <button mat-raised-button color="accent" *rxLet="selectedLocation$; let location">
+      {{ location ? location.name : "Filtrar por cidade" }}
+    </button>
   </div>
-  <div
-    class="mobile-menu"
-    *ngIf="showHamburgerMenu | async"
-    [class.mobile-menu-end]="showHamburgerMenu | async"
-  >
+  <div class="mobile-menu" *rxIf="isHandsetOrSmall" [class.mobile-menu-end]="isHandsetOrSmall">
     <button mat-button color="primary" (click)="slidingMenu.toggleMenu()">
       <mat-icon color="accent" class="menu-icon">menu</mat-icon>
     </button>

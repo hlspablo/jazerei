@@ -8,6 +8,7 @@ import { LocationSelectComponent } from "../location-select/location-select.comp
 import { AuthService } from "src/app/services/auth.service"
 import { LocationFilterService } from "src/app/services/location-filter.service"
 import { ChatService } from "src/app/services/chat.service"
+import { MyLocation } from "../../interfaces/app.interface"
 
 @Component({
   selector: "app-main-nav",
@@ -21,11 +22,10 @@ export class MainNavComponent implements OnInit {
   private _dialogService = inject(MatDialog)
   private _authService = inject(AuthService)
 
-  protected showHamburgerMenu: Observable<boolean>
-  protected cityName: string
-  protected incomingMessagesCount = 20
-  protected totalUnread$ = of(0)
+  protected isHandsetOrSmall$: Observable<boolean>
+  protected totalUnread$: Observable<number>
   protected user$ =  this._authService.getUser()
+  protected selectedLocation$: Observable<MyLocation | null>
 
   openLocationDialog() {
     this._dialogService.open(LocationSelectComponent, {
@@ -59,11 +59,8 @@ export class MainNavComponent implements OnInit {
   }
 
   async ngOnInit() {
-    // TODO fix this
-    this.showHamburgerMenu = this._breakpointService.isHandsetOrSmall()
-    this._locationService.city$.subscribe((city) => {
-      this.cityName = city?.name ?? "Localização"
-    })
+    this.isHandsetOrSmall$ = this._breakpointService.isHandsetOrSmall()
+    this.selectedLocation$ = this._locationService.city$
     this.totalUnread$ = (await this._chatService.getChatRooms()).pipe(
       map(({ totalUnread }) => totalUnread),
     )

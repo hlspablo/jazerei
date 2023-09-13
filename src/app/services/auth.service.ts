@@ -12,7 +12,7 @@ import { RxState } from "@rx-angular/state"
 import { firstValueFrom, from, map, of, switchMap } from "rxjs"
 import { MyLocation, Profile } from "../shared/interfaces/app.interface"
 
-interface UserData {
+interface UserRegisterDTO {
   email: string
   password: string
   name: string
@@ -88,7 +88,7 @@ export class AuthService extends RxState<AuthState> {
     await signInWithEmailAndPassword(this._auth, email, password)
   }
 
-  async register(userData: UserData) {
+  async register(userData: UserRegisterDTO) {
     // TODO handle errors
     const { user } = await createUserWithEmailAndPassword(
       this._auth,
