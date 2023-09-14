@@ -64,10 +64,11 @@ export class AuthService extends RxState<AuthState> {
   }
 
   getCurrentUserSnapshot() {
-    return firstValueFrom(this.getUser())
+    return this.get("user")
   }
-  async getCurrentUserOrThrow() {
-    const currentUser = await firstValueFrom(this.getUser())
+
+  getCurrentUserOrThrow() {
+    const currentUser = this.getCurrentUserSnapshot()
     if (!currentUser) throw new Error("User not logged in")
     return currentUser
   }

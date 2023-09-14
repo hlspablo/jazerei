@@ -12,8 +12,8 @@ export class ChatService {
   private _chatRoomRepository = inject(ChatRoomRepository)
   private _authService = inject(AuthService)
 
-  async sendMessage(chatRoomId: string, message: string) {
-    const currentUser = await this._authService.getCurrentUserOrThrow()
+  sendMessage(chatRoomId: string, message: string) {
+    const currentUser = this._authService.getCurrentUserOrThrow()
     return this._chatRoomRepository.writeChatRoomMessage(currentUser, chatRoomId, message)
   }
 
@@ -23,7 +23,7 @@ export class ChatService {
     relatedGameName: string,
     initialMessage?: string,
   ) {
-    const currentUser = await this._authService.getCurrentUserOrThrow()
+    const currentUser = this._authService.getCurrentUserOrThrow()
 
     const chatRoomId = await this._chatRoomRepository.checkIfChatRoomExists(
       currentUser,
@@ -44,8 +44,8 @@ export class ChatService {
     }
   }
 
-  async getChatRooms(): Promise<Observable<{ rooms: UserChatRoom[]; totalUnread: number }>> {
-    const currentUser = await this._authService.getCurrentUserOrThrow()
+  getChatRooms(): Observable<{ rooms: UserChatRoom[]; totalUnread: number }> {
+    const currentUser = this._authService.getCurrentUserOrThrow()
     const chatRooms$ = this._chatRoomRepository.getChatRooms(currentUser)
 
     return chatRooms$.pipe(
@@ -86,8 +86,8 @@ export class ChatService {
     return this._chatRoomRepository.getChatRoomMessages(chatRoomId)
   }
 
-  async setAllMessagesToRead(chatRoomId: string) {
-    const currentUser = await this._authService.getCurrentUserOrThrow()
+  setAllMessagesToRead(chatRoomId: string) {
+    const currentUser = this._authService.getCurrentUserOrThrow()
     return this._chatRoomRepository.setAllMessagesToRead(chatRoomId, currentUser.uid)
   }
 }

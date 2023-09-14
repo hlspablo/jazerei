@@ -6,7 +6,7 @@ import { Component } from "@angular/core"
   styleUrls: ["./sliding-menu.component.scss"],
 })
 export class SlidingMenuComponent {
-  menuOpen = false
+  protected menuOpen = false
 
   toggleMenu() {
     this.menuOpen = !this.menuOpen

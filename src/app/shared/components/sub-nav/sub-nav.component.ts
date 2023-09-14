@@ -1,4 +1,4 @@
-import { Component, OnInit } from "@angular/core"
+import { Component, OnInit, inject } from "@angular/core"
 import { Observable } from "rxjs"
 import { ConversationsService } from "src/app/services/conversatios.service"
 import { BreakpointService } from "src/app/services/breakpoint-service.service"
@@ -9,17 +9,17 @@ import { BreakpointService } from "src/app/services/breakpoint-service.service"
   styleUrls: ["./sub-nav.component.scss"],
 })
 export class SubNavComponent implements OnInit {
-  showHamburgerMenu: Observable<boolean>
-  constructor(
-    private breakpointService: BreakpointService,
-    private conversationsService: ConversationsService,
-  ) {}
+  private _breakpointService = inject(BreakpointService)
+  private conversationsService = inject(ConversationsService)
+
+  protected isHandsetOrSmall$: Observable<boolean>
+
 
   toggleConversations() {
     this.conversationsService.toggleConversations()
   }
 
   ngOnInit() {
-    this.showHamburgerMenu = this.showHamburgerMenu = this.breakpointService.isHandsetOrSmall()
+    this.isHandsetOrSmall$ = this._breakpointService.isHandsetOrSmall()
   }
 }

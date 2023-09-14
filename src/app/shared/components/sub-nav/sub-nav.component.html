@@ -1,8 +1,8 @@
 <nav class="sub-nav">
   <app-search-bar></app-search-bar>
 </nav>
-<nav class="sub-nav-bottom">
-  <ul class="consoles" *ngIf="(showHamburgerMenu | async) === false">
+<nav class="sub-nav-bottom" *rxLet="isHandsetOrSmall$; let isHandsetOrSmall">
+  <ul class="consoles" *ngIf="isHandsetOrSmall === false">
     <li>
       <a routerLink="/console/ps5"
         ><img
@@ -67,7 +67,7 @@
       /></a>
     </li>
   </ul>
-  <div class="location" *ngIf="showHamburgerMenu | async">
+  <div class="location" *ngIf="isHandsetOrSmall">
     <mat-icon color="accent">gps_fixed</mat-icon>
     <button mat-raised-button color="accent">Localização</button>
   </div>
@@ -76,7 +76,7 @@
     (keyup)="(null)"
     tabindex="0"
     class="location"
-    *ngIf="showHamburgerMenu | async"
+    *ngIf="isHandsetOrSmall"
   >
     <mat-icon color="accent">sms</mat-icon>
     <button mat-raised-button color="accent">Conversas</button>

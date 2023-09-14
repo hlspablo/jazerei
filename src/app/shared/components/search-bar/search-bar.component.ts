@@ -9,6 +9,7 @@ import { RxState } from "@rx-angular/state"
   selector: "app-search-bar",
   templateUrl: "./search-bar.component.html",
   styleUrls: ["./search-bar.component.scss"],
+  providers: [RxState],
 })
 export class SearchBarComponent implements OnInit {
   private _searchFilterService = inject(SearchFilterService)

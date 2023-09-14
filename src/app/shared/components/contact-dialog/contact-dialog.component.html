@@ -1,7 +1,7 @@
-<h2 mat-dialog-title>Chat com: {{ gameData.game.owner | getFirstTwoNames }}</h2>
+<h2 mat-dialog-title>Chat com: {{ game.owner | getFirstTwoNames }}</h2>
 <mat-dialog-content>
   <div class="form-container">
-    <form [formGroup]="textMessageForm" (ngSubmit)="onSubmit()">
+    <form [formGroup]="contactForm" (ngSubmit)="onSubmit()">
       <div class="field-container">
         <mat-form-field floatLabel="always">
           <mat-label>Mensagem</mat-label>
@@ -14,5 +14,5 @@
 </mat-dialog-content>
 <mat-dialog-actions class="text-message-actions">
   <button mat-button mat-dialog-close>Cancelar</button>
-  <button mat-button (click)="onSubmit()" [disabled]="textMessageForm.invalid">Enviar</button>
+  <button mat-button (click)="onSubmit()" [disabled]="contactForm.invalid">Enviar</button>
 </mat-dialog-actions>

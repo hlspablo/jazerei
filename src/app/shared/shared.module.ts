@@ -17,7 +17,7 @@ import { RegistrationDialogComponent } from "./components/registration-dialog/re
 import { SearchBarComponent } from "./components/search-bar/search-bar.component"
 import { SlidingMenuComponent } from "./components/sliding-menu/sliding-menu.component"
 import { SubNavComponent } from "./components/sub-nav/sub-nav.component"
-import { TextMessageDialogComponent } from "./components/text-message-dialog/text-message-dialog.component"
+import { ContatDialogComponent } from "./components/contact-dialog/contact-dialog.component"
 import { LocationSelectComponent } from "./components/location-select/location-select.component"
 import { MatMenuModule } from "@angular/material/menu"
 import { MatSelectModule } from "@angular/material/select"
@@ -30,10 +30,10 @@ import { NgSelectModule } from "@ng-select/ng-select"
 import { EllipsisModule } from "ngx-ellipsis"
 import { GetFirstTwoNamesPipe } from "../pipes/get-first-two-names.pipe"
 import { GetHumanTimePipe } from "../pipes/get-human-time.pipe"
-import { RxIf } from '@rx-angular/template/if';
-import { RxLet } from '@rx-angular/template/let';
-import { RxFor } from '@rx-angular/template/for';
-import { RxPush } from '@rx-angular/template/push';
+import { RxIf } from "@rx-angular/template/if"
+import { RxLet } from "@rx-angular/template/let"
+import { RxFor } from "@rx-angular/template/for"
+import { RxPush } from "@rx-angular/template/push"
 import { TranslateConsolePipe } from "../pipes/translate-console.pipe"
 
 @NgModule({
@@ -44,7 +44,7 @@ import { TranslateConsolePipe } from "../pipes/translate-console.pipe"
     SearchBarComponent,
     SlidingMenuComponent,
     SubNavComponent,
-    TextMessageDialogComponent,
+    ContatDialogComponent,
     LocationSelectComponent,
     GameCardComponent,
     GetFirstNamePipe,
@@ -86,7 +86,7 @@ import { TranslateConsolePipe } from "../pipes/translate-console.pipe"
     SearchBarComponent,
     SlidingMenuComponent,
     SubNavComponent,
-    TextMessageDialogComponent,
+    ContatDialogComponent,
     GameCardComponent,
     GetFirstTwoNamesPipe,
     GetFirstNamePipe,

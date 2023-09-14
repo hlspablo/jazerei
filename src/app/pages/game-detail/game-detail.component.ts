@@ -1,6 +1,6 @@
 import { Component, OnInit, inject } from "@angular/core"
 import { Observable, switchMap } from "rxjs"
-import { TextMessageDialogComponent } from "src/app/shared/components/text-message-dialog/text-message-dialog.component"
+import { ContatDialogComponent } from "src/app/shared/components/contact-dialog/contact-dialog.component"
 import { MatDialog } from "@angular/material/dialog"
 import { GameFirebaseRow } from "src/app/shared/interfaces/app.interface"
 import { BreakpointService } from "src/app/services/breakpoint-service.service"
@@ -38,10 +38,8 @@ export class GameDetailPageComponent implements OnInit {
   }
 
   openTextMessageDialog() {
-    this._dialogService.open(TextMessageDialogComponent, {
-      // data: {
-      //   game: this.game,
-      // },
+    this._dialogService.open(ContatDialogComponent, {
+      data: this._state.get("game"),
       autoFocus: true,
       position: {
         top: "10vh",
