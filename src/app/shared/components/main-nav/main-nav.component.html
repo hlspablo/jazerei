@@ -16,21 +16,27 @@
     <ul role="menubar" class="links flex-grow" *rxLet="user$; let user; suspense: suspense">
       <ng-container *rxIf="user; else loggedOut">
         <li tabindex="1" role="menuitem">
-          <mat-icon color="accent" class="menu-icon">publish</mat-icon>
-          <a routerLink="/publish">Publicar Jogo</a>
+          <a routerLink="/publish">
+            <mat-icon color="accent" class="menu-icon">publish</mat-icon>
+            Publicar Jogo
+          </a>
         </li>
         <li tabindex="2" role="menuitem">
-          <mat-icon color="accent" class="menu-icon">gamepad</mat-icon>
-          <a routerLink="/my-games/all">Meus jogos</a>
+          <a routerLink="/my-games">
+            <mat-icon color="accent" class="menu-icon">gamepad</mat-icon>
+            Meus jogos
+          </a>
         </li>
         <li tabindex="3" role="menuitem">
           <div class="icon-wrapper">
             <span class="badge" *rxIf="(totalUnread$ | async) ? (totalUnread$ | async) : 0 > 0">{{
               totalUnread$ | async
             }}</span>
-            <mat-icon color="accent" class="menu-icon">sms</mat-icon>
           </div>
-          <a routerLink="/chat">Conversas</a>
+          <a routerLink="/chat">
+            <mat-icon color="accent" class="menu-icon">sms</mat-icon>
+            Conversas
+          </a>
         </li>
         <button mat-raised-button color="accent" (click)="logout()">
           Sair, {{ user.displayName | getFirstName }}
@@ -39,12 +45,16 @@
       </ng-container>
       <ng-template #loggedOut>
         <li (click)="openLoginDialog()" (keyup.enter)="(null)" tabindex="2" role="menuitem">
-          <mat-icon color="accent" class="menu-icon">login</mat-icon>
-          <a>Login</a>
+          <a>
+            <mat-icon color="accent" class="menu-icon">login</mat-icon>
+            Login
+          </a>
         </li>
         <li (click)="openRegistrationDialog()" (keyup.enter)="(null)" tabindex="3" role="menuitem">
-          <mat-icon color="accent" class="menu-icon">person_add</mat-icon>
-          <a>Cadastro</a>
+          <a>
+            <mat-icon color="accent" class="menu-icon">person_add</mat-icon>
+            Cadastro
+          </a>
         </li>
       </ng-template>
     </ul>

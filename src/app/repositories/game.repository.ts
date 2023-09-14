@@ -65,14 +65,9 @@ export class GameRepository {
     })
   }
 
-  async createGame(gameDTO: CreateGameDTO): Promise<void> {
-    const user = await this._authService.getCurrentUserSnapshot()
-    const { consoleModel, description, imagesUrls, name, usedTime } = gameDTO
-
-    if (!user) {
-      console.error("User is not authenticated")
-      return
-    }
+  async createGame(gameData: CreateGameDTO): Promise<void> {
+    const user = this._authService.getCurrentUserOrThrow()
+    const { consoleModel, description, imagesUrls, name, usedTime } = gameData
 
     try {
       await addDoc(collection(this._firestore, "games"), {

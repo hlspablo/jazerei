@@ -9,6 +9,7 @@ import { GameRepository } from "src/app/repositories/game.repository"
 import { RxState } from "@rx-angular/state"
 import { GameCardInput } from "src/app/shared/components/game-card/game-card.component"
 import { AuthService } from "src/app/services/auth.service"
+import { RxEffects } from "@rx-angular/state/effects"
 
 interface PublishState {
   publishGame: GameCardInput
@@ -18,7 +19,7 @@ interface PublishState {
   selector: "app-publish",
   templateUrl: "./publish.component.html",
   styleUrls: ["./publish.component.scss"],
-  providers: [RxState],
+  providers: [RxState, RxEffects],
 })
 export class PublishPageComponent implements OnInit {
   private _fb = inject(NonNullableFormBuilder)
@@ -48,7 +49,10 @@ export class PublishPageComponent implements OnInit {
     stepThree: true,
   })
 
-  constructor(private _state: RxState<PublishState>) {}
+  constructor(
+    private _state: RxState<PublishState>,
+    private _effects: RxEffects,
+  ) {}
 
   onFileSelected(event: Event): void {
     const input = event.target as HTMLInputElement
@@ -107,17 +111,19 @@ export class PublishPageComponent implements OnInit {
   async ngOnInit() {
     this.isHandsetOrSmall = this._breakpointService.isHandsetOrSmall()
 
-    const user = await this._authService.getCurrentUserSnapshot()
-    this._state.set("publishGame", (_) => ({
-      id: "",
-      name: "",
-      description: "",
-      consoleModel: "",
-      usedTime: "",
-      imagesUrls: [],
-      owner: user?.displayName || "",
-      ownerId: user?.uid || "",
-    }))
+    this._effects.register(this._authService.getUser(), (user) => {
+      if (!user) return
+      this._state.set("publishGame", (_) => ({
+        id: "",
+        name: "",
+        description: "",
+        consoleModel: "",
+        usedTime: "",
+        imagesUrls: [],
+        owner: user.displayName || "",
+        ownerId: user.uid,
+      }))
+    })
 
     this._state.connect(
       "publishGame",

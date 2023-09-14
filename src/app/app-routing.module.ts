@@ -19,6 +19,10 @@ const routes: Routes = [
     path: "publish",
     loadChildren: () => import("./pages/publish/publish.module").then((m) => m.PublishPageModule),
   },
+  {
+    path: "my-games",
+    loadChildren: () => import("./pages/my-games/my-games.module").then((m) => m.MyGamesPageModule),
+  },
 ]
 
 @NgModule({

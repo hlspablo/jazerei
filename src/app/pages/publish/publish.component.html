@@ -110,7 +110,12 @@
               [disabled]="publishForm.invalid || isLoading"
             >
               <mat-spinner *ngIf="isLoading; else buttonText" diameter="24"></mat-spinner>
-              <ng-template #buttonText>Publicar</ng-template>
+              <ng-template #buttonText>
+                <div class="flex items-center">
+                  <mat-icon>publish</mat-icon>
+                  Publicar
+                </div>
+              </ng-template>
             </button>
           </div>
         </mat-step>

@@ -13,8 +13,12 @@
   }
   li a {
     margin-left: 10px;
-    display: inline-block;
+    display: flex;
+    align-items: center;
     cursor: pointer;
+    mat-icon {
+      margin-right: 10px;
+    }
   }
 }
 

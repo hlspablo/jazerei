@@ -1,6 +1,7 @@
 import { Injectable, inject } from "@angular/core"
 import {
   Firestore,
+  Timestamp,
   addDoc,
   collection,
   collectionData,
@@ -28,19 +29,22 @@ export class ChatRoomRepository {
     receiverId: string,
     relatedGameId: string,
     relatedGameName: string,
-  ) {
+  ): Promise<string> {
     const { location, name } = await this._authService.getProfile(receiverId)
 
     const members = [currentUser.uid, receiverId]
     const names = [currentUser.displayName, name]
     const locations = [currentUser.location.name, location.name]
-    await addDoc(this._collection, {
+
+    const docRef = await addDoc(this._collection, {
       members,
       names,
       locations,
       relatedGameId,
       relatedGameName,
     })
+
+    return docRef.id
   }
 
   getChatRooms(currentUser: CompleteUser) {
@@ -93,11 +97,16 @@ export class ChatRoomRepository {
       this._collection,
       where("members", "array-contains", currentUser.uid),
       where("relatedGameId", "==", relatedGameId),
-      where("members", "array-contains", receivedId),
     )
     const chatRoomsDocs = await getDocs(chatRoomsQuery)
 
-    return chatRoomsDocs.docs.length > 0 ? chatRoomsDocs.docs[0].data()["id"] : null
+    const matchingChatRooms = chatRoomsDocs.docs.filter((doc) => {
+      const data = doc.data() as ChatRoom
+      const result = data.members.includes(receivedId)
+      return result
+    })
+
+    return matchingChatRooms.length > 0 ? matchingChatRooms[0].id : null
   }
 
   getChatRoomMessages(chatRoomId: string) {
@@ -109,7 +118,7 @@ export class ChatRoomRepository {
     await addDoc(this.getMessagesCollection(chatRoomId), {
       userId: currentUser.uid,
       message,
-      timestamp: Date(),
+      timestamp: Timestamp.now(),
       read: false,
     })
   }

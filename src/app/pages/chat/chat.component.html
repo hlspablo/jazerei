@@ -22,7 +22,7 @@
     </ng-container>
   </div>
   <div class="chat-container">
-    <div class="chat-messages" #chatMessages *rxLet="currentUser$; let currentUser">
+    <div class="chat-messages" #chatMessages *rxIf="user$; let currentUser">
       <ng-container *rxFor="let message of messages$; trackBy: 'id'">
         <div
           class="message-wrapper"

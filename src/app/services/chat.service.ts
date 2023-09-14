@@ -24,7 +24,6 @@ export class ChatService {
     initialMessage?: string,
   ) {
     const currentUser = this._authService.getCurrentUserOrThrow()
-
     const chatRoomId = await this._chatRoomRepository.checkIfChatRoomExists(
       currentUser,
       receiverId,
@@ -33,13 +32,16 @@ export class ChatService {
     if (chatRoomId) {
       if (initialMessage) {
         this.sendMessage(chatRoomId, initialMessage)
-      } else {
-        this._chatRoomRepository.createChatRoom(
-          currentUser,
-          receiverId,
-          relatedGameId,
-          relatedGameName,
-        )
+      }
+    } else {
+      const chatRoomId = await this._chatRoomRepository.createChatRoom(
+        currentUser,
+        receiverId,
+        relatedGameId,
+        relatedGameName,
+      )
+      if (initialMessage) {
+        this.sendMessage(chatRoomId, initialMessage)
       }
     }
   }
@@ -75,7 +77,6 @@ export class ChatService {
             unreadMessages,
           }
         })
-
         const totalUnread = unreadCounts.reduce((acc, count) => acc + count, 0)
         return { rooms, totalUnread }
       }),

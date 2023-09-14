@@ -3,15 +3,14 @@ import { BreakpointService } from "src/app/services/breakpoint-service.service"
 import { Observable, map, of, switchMap, withLatestFrom } from "rxjs"
 import { ChatService } from "src/app/services/chat.service"
 import { ChatMessageFirebaseRow, UserChatRoom } from "src/app/shared/interfaces/app.interface"
-import { CompleteUser } from "src/app/services/auth.service"
 import { ConversationsService } from "../publish/services/conversatios.service"
 import { RxState } from "@rx-angular/state"
 import { RxEffects } from "@rx-angular/state/effects"
 import { RxActionFactory } from "@rx-angular/state/actions"
+import { AuthService } from "src/app/services/auth.service"
 
-interface ChatPageState {
+interface State {
   chatRooms: UserChatRoom[]
-  currentUser: CompleteUser
   activeChatRoom: string
   currentMessageValue: string
   messages: ChatMessageFirebaseRow[]
@@ -35,15 +34,17 @@ export class ChatPageComponent implements OnInit {
   private _chatService = inject(ChatService)
   private _breakpointService = inject(BreakpointService)
   private _conversationsService = inject(ConversationsService)
+  private _authService = inject(AuthService)
 
   protected showConversations$: Observable<boolean>
   protected isHandsetOrSmall$: Observable<boolean>
 
   protected chatRooms$ = this._state.select("chatRooms")
   protected messages$ = this._state.select("messages")
-  protected currentUser$ = this._state.select("currentUser")
   protected activeChatRoom$ = this._state.select("activeChatRoom")
   protected currentMessageValue$ = this._state.select("currentMessageValue")
+
+  protected user$ = this._authService.getUser()
 
   protected uiActions = new RxActionFactory<UIActions>().create()
 
@@ -53,11 +54,22 @@ export class ChatPageComponent implements OnInit {
   )
 
   constructor(
-    private _state: RxState<ChatPageState>,
+    private _state: RxState<State>,
     private _effects: RxEffects,
   ) {
     this._effects.register(this.messages$, () => {
       this.scrollToBottom()
+      setTimeout(() => {
+        this._chatService.setAllMessagesToRead(this._state.get("activeChatRoom"))
+      }, 600)
+    })
+
+    this._effects.register(this.user$, (user) => {
+      if (!user) return
+      this._state.connect(
+        "chatRooms",
+        this._chatService.getChatRooms().pipe(map(({ rooms }) => rooms)),
+      )
     })
 
     this._state.hold(this.sendMessageAction$, ({ activeChatRoom, currentMessageValue }) => {
@@ -70,10 +82,6 @@ export class ChatPageComponent implements OnInit {
 
   private scrollToBottom(): void {
     try {
-      console.log(
-        this.chatMessages.nativeElement.scrollHeight,
-        this.chatMessages.nativeElement.scrollTop,
-      )
       setTimeout(() => {
         this.chatMessages.nativeElement.scrollTop = this.chatMessages.nativeElement.scrollHeight
       }, 300)
@@ -91,7 +99,7 @@ export class ChatPageComponent implements OnInit {
 
     setTimeout(() => {
       this._chatService.setAllMessagesToRead(chatRoomId)
-    }, 1500)
+    }, 600)
   }
 
   handleEnterKey(event: KeyboardEvent) {

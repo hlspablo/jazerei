@@ -74,15 +74,23 @@ export class AuthService extends RxState<AuthState> {
   }
 
   async getProfile(userId: string) {
-    const profileDocRef = doc(this._firestore, `profiles/${userId}`)
-    const profileSnap = await getDoc(profileDocRef)
-    const data = profileSnap.data() as Profile
-    const { cpf, name } = data
+    try {
+      const profileDocRef = doc(this._firestore, `profiles/${userId}`)
+      const profileSnap = await getDoc(profileDocRef)
+      const data = profileSnap.data() as Profile
+      const { cpf, name } = data
 
-    const locationRef = doc(this._firestore, `locations/${data.location}`)
-    const locationSnap = await getDoc(locationRef)
-    const location = locationSnap.data() as MyLocation
-    return { cpf, location, name }
+      const locationRef = doc(this._firestore, `locations/${data.location}`)
+      const locationSnap = await getDoc(locationRef)
+      const location = locationSnap.data() as MyLocation
+      return { cpf, location: {
+        ...location,
+        id: locationSnap.id
+      }, name }
+    } catch (error) {
+      console.log(error)
+      throw error
+    }
   }
 
   async login(email: string, password: string) {
