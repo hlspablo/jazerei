@@ -18,6 +18,7 @@ interface PublishState {
   selector: "app-publish",
   templateUrl: "./publish.component.html",
   styleUrls: ["./publish.component.scss"],
+  providers: [RxState],
 })
 export class PublishPageComponent implements OnInit {
   private _fb = inject(NonNullableFormBuilder)

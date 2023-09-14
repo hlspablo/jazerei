@@ -33,9 +33,9 @@ export class MainNavComponent implements OnInit {
   constructor(private _effects: RxEffects) {
     this._effects.register(this.user$, async (user) => {
       if (user) {
-        this.totalUnread$ = this._chatService.getChatRooms().pipe(
-          map(({ totalUnread }) => totalUnread),
-        )
+        this.totalUnread$ = this._chatService
+          .getChatRooms()
+          .pipe(map(({ totalUnread }) => totalUnread))
       }
     })
   }

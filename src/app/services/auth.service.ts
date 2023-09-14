@@ -39,7 +39,7 @@ export class AuthService extends RxState<AuthState> {
 
   constructor() {
     super()
-    this.set({ user: null })
+    //this.set({ user: null })
     this.connect(
       "user",
       this._user$.pipe(

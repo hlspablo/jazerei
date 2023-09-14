@@ -11,6 +11,7 @@ import { GameRepository } from "src/app/repositories/game.repository"
 interface GameDetailState {
   game: GameFirebaseRow
   photoIndex: number
+  slideImageLoaded: boolean
 }
 
 @Component({
@@ -30,10 +31,12 @@ export class GameDetailPageComponent implements OnInit {
   protected isHandsetOrSmall$: Observable<boolean>
   protected game$ = this._state.select("game")
   protected photoIndex$ = this._state.select("photoIndex")
+  protected imageIsLoaded$ = this._state.select("slideImageLoaded")
 
   constructor(private _state: RxState<GameDetailState>) {
     this._state.set({
       photoIndex: 0,
+      slideImageLoaded: false,
     })
   }
 
@@ -45,6 +48,10 @@ export class GameDetailPageComponent implements OnInit {
         top: "10vh",
       },
     })
+  }
+
+  showLoadedImage() {
+    this._state.set("slideImageLoaded", (_) => true)
   }
 
   prevImage() {

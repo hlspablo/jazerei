@@ -8,7 +8,9 @@
           [src]="game.imagesUrls[photoIndex]"
           alt="Image"
           [class.mobile]="isHandsetOrSmall$ | push"
+          [class.image-loaded]="imageIsLoaded$ | push"
           class="slider-image"
+          (load)="showLoadedImage()"
         />
         <button mat-mini-fab class="arrow left" (click)="prevImage()">
           <mat-icon>arrow_back</mat-icon>

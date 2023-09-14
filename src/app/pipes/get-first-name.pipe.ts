@@ -5,7 +5,7 @@ import { Pipe, PipeTransform } from "@angular/core"
 })
 export class GetFirstNamePipe implements PipeTransform {
   transform(value: string | null): string {
-    if (!value) return ""
-    return value.split(" ")[0]
+    if (!value) return "Usuário"
+    return value.split(" ").length > 0 ? value.split(" ")[0] : value
   }
 }

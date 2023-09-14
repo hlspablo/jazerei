@@ -1,6 +1,7 @@
 .main-section {
   padding-top: 50px;
   padding-bottom: 100px;
+  height: 100%;
 }
 .game-container {
   display: flex;
@@ -17,12 +18,21 @@
 .slider-container {
   position: relative;
   display: flex;
+  justify-content: center;
 }
 .slider-container img {
   margin: 0 auto;
 }
 .slider-image {
-  object-fit: cover;
+  aspect-ratio: 4/3;
+  object-fit: contain;
+  object-position: center;
+  min-height: 600px;
+  opacity: 0;
+  transition: opacity 0.5s ease-in-out;
+}
+.slider-image.image-loaded {
+  opacity: 1;
 }
 .arrow {
   position: absolute;

@@ -1,44 +1,54 @@
-<nav class="main-nav" *rxLet="isHandsetOrSmall$; let isHandsetOrSmall">
+<nav class="main-nav flex h-[100px]" *rxLet="isHandsetOrSmall$; let isHandsetOrSmall">
   <div class="logo" [class.mobile-logo]="isHandsetOrSmall">
     <a routerLink="/">
       <img src="assets/images/logo.png" alt="Logo" height="70" />
     </a>
   </div>
-  <ul role="menubar" class="links stretch" *rxIf="isHandsetOrSmall === false">
-    <ng-template #loggedOut>
-      <li (click)="openLoginDialog()" (keyup.enter)="(null)" tabindex="2" role="menuitem">
-        <mat-icon color="accent" class="menu-icon">login</mat-icon>
-        <a>Login</a>
-      </li>
-      <li (click)="openRegistrationDialog()" (keyup.enter)="(null)" tabindex="3" role="menuitem">
-        <mat-icon color="accent" class="menu-icon">person_add</mat-icon>
-        <a>Cadastro</a>
-      </li>
+  <ng-container *rxIf="isHandsetOrSmall === false">
+    <ng-template tabindex="1" #suspense>
+      <ul class="links flex-grow">
+        <li tabindex="1" role="menuitem">
+          <mat-icon color="accent" class="menu-icon">sync</mat-icon>
+          <a>Carregando...</a>
+        </li>
+      </ul>
     </ng-template>
-    <ng-container *rxIf="user$; else loggedOut">
-      <li tabindex="1" role="menuitem">
-        <mat-icon color="accent" class="menu-icon">publish</mat-icon>
-        <a routerLink="/publish">Publicar Jogo</a>
-      </li>
-      <li tabindex="2" role="menuitem">
-        <mat-icon color="accent" class="menu-icon">gamepad</mat-icon>
-        <a routerLink="/my-games/all">Meus jogos</a>
-      </li>
-      <li tabindex="3" role="menuitem">
-        <div class="icon-wrapper">
-          <span class="badge" *rxIf="(totalUnread$ | async) ? (totalUnread$ | async) : 0 > 0">{{
-            totalUnread$ | async
-          }}</span>
-          <mat-icon color="accent" class="menu-icon">sms</mat-icon>
-        </div>
-        <a routerLink="/chat">Conversas</a>
-      </li>
-      <button mat-raised-button color="accent" (click)="logout()">
-        Sair
-        <mat-icon color="primary" class="menu-icon">logout</mat-icon>
-      </button>
-    </ng-container>
-  </ul>
+    <ul role="menubar" class="links flex-grow" *rxLet="user$; let user; suspense: suspense">
+      <ng-container *rxIf="user; else loggedOut">
+        <li tabindex="1" role="menuitem">
+          <mat-icon color="accent" class="menu-icon">publish</mat-icon>
+          <a routerLink="/publish">Publicar Jogo</a>
+        </li>
+        <li tabindex="2" role="menuitem">
+          <mat-icon color="accent" class="menu-icon">gamepad</mat-icon>
+          <a routerLink="/my-games/all">Meus jogos</a>
+        </li>
+        <li tabindex="3" role="menuitem">
+          <div class="icon-wrapper">
+            <span class="badge" *rxIf="(totalUnread$ | async) ? (totalUnread$ | async) : 0 > 0">{{
+              totalUnread$ | async
+            }}</span>
+            <mat-icon color="accent" class="menu-icon">sms</mat-icon>
+          </div>
+          <a routerLink="/chat">Conversas</a>
+        </li>
+        <button mat-raised-button color="accent" (click)="logout()">
+          Sair, {{ user.displayName | getFirstName }}
+          <mat-icon color="primary" class="menu-icon">logout</mat-icon>
+        </button>
+      </ng-container>
+      <ng-template #loggedOut>
+        <li (click)="openLoginDialog()" (keyup.enter)="(null)" tabindex="2" role="menuitem">
+          <mat-icon color="accent" class="menu-icon">login</mat-icon>
+          <a>Login</a>
+        </li>
+        <li (click)="openRegistrationDialog()" (keyup.enter)="(null)" tabindex="3" role="menuitem">
+          <mat-icon color="accent" class="menu-icon">person_add</mat-icon>
+          <a>Cadastro</a>
+        </li>
+      </ng-template>
+    </ul>
+  </ng-container>
   <div
     (click)="openLocationDialog()"
     class="location"
