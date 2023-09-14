@@ -3,12 +3,12 @@
     <input
       type="text"
       matInput
-      [formControl]="gameControl"
+      [formControl]="searchGameInput"
       placeholder="Digite o nome do jogo"
       value="gameControl.value"
     />
     <button
-      *ngIf="!gameControl.value"
+      *ngIf="!searchGameInput.value"
       matSuffix
       mat-icon-button
       aria-label="Buscar"
@@ -17,11 +17,11 @@
       <mat-icon>search</mat-icon>
     </button>
     <button
-      *ngIf="gameControl.value"
+      *ngIf="searchGameInput.value"
       matSuffix
       mat-icon-button
       aria-label="Limpar"
-      (click)="gameControl.setValue('')"
+      (click)="searchGameInput.setValue('')"
       style="margin-right: 5px"
     >
       <mat-icon>clear</mat-icon>

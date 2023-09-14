@@ -3,6 +3,7 @@ import { FormControl } from "@angular/forms"
 import { inject } from "@angular/core"
 import { SearchFilterService } from "src/app/services/search-filter.service"
 import { debounceTime, tap } from "rxjs"
+import { RxState } from "@rx-angular/state"
 
 @Component({
   selector: "app-search-bar",
@@ -10,17 +11,20 @@ import { debounceTime, tap } from "rxjs"
   styleUrls: ["./search-bar.component.scss"],
 })
 export class SearchBarComponent implements OnInit {
-  gameControl = new FormControl()
-  private searchFilterService = inject(SearchFilterService)
+  private _searchFilterService = inject(SearchFilterService)
+
+  protected searchGameInput = new FormControl()
+
+  constructor(private _state: RxState<{}>) {}
 
   ngOnInit(): void {
-    this.gameControl.valueChanges
-      .pipe(
-        debounceTime(600), // Wait for 300ms pause in events
+    this._state.hold(
+      this.searchGameInput.valueChanges.pipe(
+        debounceTime(350),
         tap((value) => {
-          this.searchFilterService.setSearch(value) // Side-effect: update search query
+          this._searchFilterService.setSearch(value)
         }),
-      )
-      .subscribe()
+      ),
+    )
   }
 }
