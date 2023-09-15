@@ -1,23 +1,16 @@
-.showing {
+.label-container {
   display: flex;
-  flex-direction: row;
-  height: 60px;
   justify-content: center;
-  align-items: center;
-  padding-top: 10px;
+  padding-top: 30px;
+}
+.label-text {
+  font-size: 1.3rem;
 }
 .cards {
   display: flex;
   flex-grow: 1;
-  flex-direction: row;
   flex-wrap: wrap;
   gap: 20px;
   padding: 20px 40px;
   justify-content: center;
-}
-.game-card {
-  max-width: 350px;
-}
-.game-header-image {
-  background-size: cover;
 }

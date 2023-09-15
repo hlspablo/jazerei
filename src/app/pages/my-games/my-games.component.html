@@ -2,10 +2,10 @@
 <app-sub-nav></app-sub-nav>
 <section class="main">
   <ng-container *rxIf="games$; else noGames; let games">
-    <div class="showing">
-      <span class="showing-text">{{
+    <div class="label-container">
+      <span class="label-text">{{
         games.length > 0
-          ? "Seus Jogos"
+          ? "Jogos Publicados"
           : "Publique seu primeiro jogo."
       }}</span>
     </div>
@@ -18,8 +18,8 @@
     </div>
   </ng-container>
   <ng-template #noGames>
-    <div class="showing">
-      <span class="showing-text">Carregando...</span>
+    <div class="label-container">
+      <span class="label-text">Carregando...</span>
     </div>
   </ng-template>
 </section>

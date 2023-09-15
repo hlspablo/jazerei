@@ -25,15 +25,13 @@
   <ul class="mobile-links" role="menubar" *rxLet="user$; let user">
     <ng-container *rxIf="user; else loggedOut">
       <li role="menuitem">
-        <a (click)="localDialogsService.openLoginDialog(); slideMenu.closeMenu()">Publicar Jogo</a>
+        <a routerLink="/publish" (click)="slideMenu.closeMenu()">Publicar Jogo</a>
       </li>
       <li role="menuitem">
-        <a (click)="localDialogsService.openRegistrationDialog(); slideMenu.closeMenu()"
-          >Meus Jogos</a
-        >
+        <a routerLink="/my-games" (click)="slideMenu.closeMenu()">Meus Jogos</a>
       </li>
-      <li role="menuitem">
-        <a (click)="localDialogsService.openRegistrationDialog(); slideMenu.closeMenu()">Sair</a>
+      <li role="menuitem" (click)="logout()">
+        <a (click)="slideMenu.closeMenu()">Sair, {{ user?.displayName | getFirstName }} </a>
       </li>
     </ng-container>
     <ng-template #loggedOut>

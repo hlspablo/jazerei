@@ -8,13 +8,13 @@
       <div class="field-container">
         <mat-form-field floatLabel="always">
           <mat-label>Email</mat-label>
-          <input matInput formControlName="email" required placeholder="Email" type="email" tabindex="0" autofocus />
+          <input matInput formControlName="email" required placeholder="Email" type="email" tabindex="1" autofocus />
         </mat-form-field>
       </div>
       <div class="field-container">
         <mat-form-field floatLabel="always">
           <mat-label>Senha</mat-label>
-          <input matInput type="password" formControlName="password" required placeholder="Senha" tabindex="1" type="password" />
+          <input matInput type="password" formControlName="password" required placeholder="Senha" tabindex="2" type="password" />
         </mat-form-field>
       </div>
       <button type="submit" style="display: none"></button>
@@ -23,7 +23,7 @@
 </mat-dialog-content>
 <mat-dialog-actions class="login-actions">
   <button mat-button mat-dialog-close>Cancelar</button>
-  <button mat-button (click)="onSubmit()" [disabled]="loginForm.invalid || isLoading">
+  <button tabindex="3" mat-button (click)="onSubmit()" [disabled]="loginForm.invalid || isLoading">
     <mat-spinner *ngIf="isLoading; else buttonText" diameter="24"></mat-spinner>
     <ng-template #buttonText>Logar</ng-template>
   </button>

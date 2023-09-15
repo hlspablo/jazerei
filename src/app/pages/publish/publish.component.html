@@ -1,12 +1,18 @@
 <app-main-nav></app-main-nav>
 <app-sub-nav></app-sub-nav>
-<section class="main-section">
+
+<section class="main-section" *rxLet="isHandsetOrSmall$; let isHandsetOrSmall">
   <h2>Publicar Jogo</h2>
-  <div class="form-container" [class.mobile]="isHandsetOrSmall | async">
+  <div class="form-container" [class.mobile]="isHandsetOrSmall">
     <form [formGroup]="publishForm">
-      <mat-horizontal-stepper #stepper linear="true" [disableRipple]="true">
+      <mat-horizontal-stepper
+        #stepper
+        [orientation]="isHandsetOrSmall ? 'vertical' : 'horizontal'"
+        [linear]="true"
+        [disableRipple]="true"
+      >
         <mat-step formGroupName="stepOne">
-          <ng-template matStepLabel>Passo 1</ng-template>
+          <ng-template matStepLabel>Dados do Jogo</ng-template>
           <div class="field-container">
             <mat-form-field floatLabel="always">
               <mat-label>Name do Jogo</mat-label>
@@ -55,10 +61,10 @@
           </div>
         </mat-step>
         <mat-step formGroupName="stepTwo">
-          <ng-template matStepLabel>Passo 2</ng-template>
+          <ng-template matStepLabel>Imagens</ng-template>
           <div class="field-container">
             <div class="upload-container">
-              <mat-form-field appearance="outline">
+              <mat-form-field appearance="outline" class="border-0">
                 <mat-label>Upload das Imagens</mat-label>
                 <input
                   type="file"

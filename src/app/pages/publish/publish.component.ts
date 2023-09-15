@@ -33,14 +33,14 @@ export class PublishPageComponent implements OnInit {
   protected selectedFiles: File[] = []
   protected imagePreview: string | ArrayBuffer | null = "https://placehold.co/600x400"
   protected isLoading = false
-  protected isHandsetOrSmall: Observable<boolean>
+  protected isHandsetOrSmall$ = this._breakpointService.isHandsetOrSmall()
   protected game$ = this._state.select("publishGame")
 
   protected publishForm = this._fb.group({
     stepOne: this._fb.group({
       name: ["", Validators.required],
       description: ["", Validators.required],
-      usedTime: ["", Validators.required],
+      usedTime: [null, Validators.required],
       consoleModel: ["", Validators.required],
     }),
     stepTwo: this._fb.group({
@@ -109,8 +109,6 @@ export class PublishPageComponent implements OnInit {
   }
 
   async ngOnInit() {
-    this.isHandsetOrSmall = this._breakpointService.isHandsetOrSmall()
-
     this._effects.register(this._authService.getUser(), (user) => {
       if (!user) return
       this._state.set("publishGame", (_) => ({
