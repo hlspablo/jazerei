@@ -1,4 +1,7 @@
-import { Component } from "@angular/core"
+import { Component, inject } from "@angular/core"
+import { AuthService } from "src/app/services/auth.service"
+import { DialogService } from "src/app/services/local-dialog.service"
+import { SlideMenuStateService } from "src/app/services/slide-menu-state.service"
 
 @Component({
   selector: "app-sliding-menu",
@@ -6,13 +9,7 @@ import { Component } from "@angular/core"
   styleUrls: ["./sliding-menu.component.scss"],
 })
 export class SlidingMenuComponent {
-  protected menuOpen = false
-
-  toggleMenu() {
-    this.menuOpen = !this.menuOpen
-  }
-
-  closeMenu() {
-    this.menuOpen = false
-  }
+  protected localDialogsService = inject(DialogService)
+  protected slideMenu = inject(SlideMenuStateService)
+  protected user$ = inject(AuthService).getUser()
 }

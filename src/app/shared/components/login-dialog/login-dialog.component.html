@@ -1,5 +1,5 @@
-<h2 mat-dialog-title>Login</h2>
 <mat-dialog-content>
+  <h2 mat-dialog-title>Login</h2>
   <div class="form-container">
     <div *ngIf="loginErrorMessage" class="error-message mat-headline-6">
       {{ loginErrorMessage }}
@@ -8,13 +8,13 @@
       <div class="field-container">
         <mat-form-field floatLabel="always">
           <mat-label>Email</mat-label>
-          <input matInput formControlName="email" required placeholder="Login" type="email" />
+          <input matInput formControlName="email" required placeholder="Email" type="email" tabindex="0" autofocus />
         </mat-form-field>
       </div>
       <div class="field-container">
         <mat-form-field floatLabel="always">
           <mat-label>Senha</mat-label>
-          <input matInput type="password" formControlName="password" required placeholder="Senha" />
+          <input matInput type="password" formControlName="password" required placeholder="Senha" tabindex="1" type="password" />
         </mat-form-field>
       </div>
       <button type="submit" style="display: none"></button>

@@ -1,5 +1,11 @@
-.mobile-logo {
-  margin-left: 0px;
+.logo-img {
+  margin-top: 10px;
+  width: 170px;
+  height: 72px;
+}
+.logo-img.mobile {
+  width: 130px;
+  height: 60px;
 }
 .links {
   display: flex;
@@ -21,7 +27,6 @@
     }
   }
 }
-
 .location {
   display: flex;
   margin-right: 20px;
@@ -29,10 +34,8 @@
   gap: 8px;
   cursor: pointer;
 }
-
 .mobile-menu {
   display: flex;
-  flex-direction: row;
   align-items: center;
   justify-content: center;
   margin-right: 20px;
@@ -50,7 +53,6 @@
   justify-content: flex-end;
   margin-right: 0px;
 }
-
 .icon-wrapper {
   position: relative;
   display: flex;

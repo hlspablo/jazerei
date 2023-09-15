@@ -15,6 +15,9 @@
     color: mat.get-contrast-color-from-palette($primary-palette, 500);
 
   }
+  .sliding-menu li a.active {
+    color: mat.get-color-from-palette($accent-palette, 500);
+  }
 }
 
 @mixin typography($theme) {

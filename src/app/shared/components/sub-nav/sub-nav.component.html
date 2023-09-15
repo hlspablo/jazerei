@@ -67,18 +67,24 @@
       /></a>
     </li>
   </ul>
-  <div class="location" *ngIf="isHandsetOrSmall">
+  <div class="location" *ngIf="isHandsetOrSmall" (click)="localDialogsService.openLocationDialog()">
     <mat-icon color="accent">gps_fixed</mat-icon>
     <button mat-raised-button color="accent">Localização</button>
   </div>
   <div
-    (click)="toggleConversations()"
-    (keyup)="(null)"
+    (click)="conversationsService.toggleConversations()"
     tabindex="0"
     class="location"
     *ngIf="isHandsetOrSmall"
   >
     <mat-icon color="accent">sms</mat-icon>
-    <button mat-raised-button color="accent">Conversas</button>
+    <div class="button-wrapper">
+      <div class="icon-wrapper">
+        <ng-container *rxLet="totalUnread$; let totalUnreadCount">
+          <span class="badge" *rxIf="totalUnreadCount > 0">{{ totalUnreadCount }}</span>
+        </ng-container>
+      </div>
+      <button mat-raised-button color="accent">Conversas</button>
+    </div>
   </div>
 </nav>

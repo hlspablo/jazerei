@@ -10,7 +10,6 @@ import { MatFormFieldModule } from "@angular/material/form-field"
 import { MatInputModule } from "@angular/material/input"
 import { MatAutocompleteModule } from "@angular/material/autocomplete"
 import { MatCardModule } from "@angular/material/card"
-import { MatDialogModule } from "@angular/material/dialog"
 import { LoginDialogComponent } from "./components/login-dialog/login-dialog.component"
 import { MainNavComponent } from "./components/main-nav/main-nav.component"
 import { RegistrationDialogComponent } from "./components/registration-dialog/registration-dialog.component"
@@ -35,6 +34,7 @@ import { RxLet } from "@rx-angular/template/let"
 import { RxFor } from "@rx-angular/template/for"
 import { RxPush } from "@rx-angular/template/push"
 import { TranslateConsolePipe } from "../pipes/translate-console.pipe"
+import { MatDialogModule } from "@angular/material/dialog"
 
 @NgModule({
   declarations: [
@@ -65,7 +65,6 @@ import { TranslateConsolePipe } from "../pipes/translate-console.pipe"
     MatInputModule,
     MatAutocompleteModule,
     MatCardModule,
-    MatDialogModule,
     MatStepperModule,
     MatMenuModule,
     MatSelectModule,
@@ -74,6 +73,7 @@ import { TranslateConsolePipe } from "../pipes/translate-console.pipe"
     MatProgressSpinnerModule,
     NgSelectModule,
     EllipsisModule,
+    MatDialogModule,
     RxIf,
     RxLet,
     RxFor,

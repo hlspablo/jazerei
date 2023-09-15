@@ -1,7 +1,14 @@
 <nav class="main-nav flex h-[100px]" *rxLet="isHandsetOrSmall$; let isHandsetOrSmall">
-  <div class="logo" [class.mobile-logo]="isHandsetOrSmall">
+  <div class="logo-container">
     <a routerLink="/">
-      <img src="assets/images/logo.png" alt="Logo" height="70" />
+      <img
+        src="assets/images/logo.png"
+        alt="Logo"
+        class="logo-img"
+        [class.mobile]="isHandsetOrSmall"
+        width="200"
+        height="98"
+      />
     </a>
   </div>
   <ng-container *rxIf="isHandsetOrSmall === false">
@@ -29,9 +36,9 @@
         </li>
         <li tabindex="3" role="menuitem">
           <div class="icon-wrapper">
-            <span class="badge" *rxIf="(totalUnread$ | async) ? (totalUnread$ | async) : 0 > 0">{{
-              totalUnread$ | async
-            }}</span>
+            <ng-container *rxLet="totalUnread$; let totalUnreadCount">
+              <span class="badge" *rxIf="totalUnreadCount > 0">{{ totalUnreadCount }}</span>
+            </ng-container>
           </div>
           <a routerLink="/chat">
             <mat-icon color="accent" class="menu-icon">sms</mat-icon>
@@ -39,18 +46,18 @@
           </a>
         </li>
         <button mat-raised-button color="accent" (click)="logout()">
-          Sair, {{ user.displayName | getFirstName }}
+          Sair, {{ user?.displayName | getFirstName }}
           <mat-icon color="primary" class="menu-icon">logout</mat-icon>
         </button>
       </ng-container>
       <ng-template #loggedOut>
-        <li (click)="openLoginDialog()" (keyup.enter)="(null)" tabindex="2" role="menuitem">
+        <li (click)="localDialogsService.openLoginDialog()" tabindex="2" role="menuitem">
           <a>
             <mat-icon color="accent" class="menu-icon">login</mat-icon>
             Login
           </a>
         </li>
-        <li (click)="openRegistrationDialog()" (keyup.enter)="(null)" tabindex="3" role="menuitem">
+        <li (click)="localDialogsService.openRegistrationDialog()" tabindex="3" role="menuitem">
           <a>
             <mat-icon color="accent" class="menu-icon">person_add</mat-icon>
             Cadastro
@@ -60,9 +67,8 @@
     </ul>
   </ng-container>
   <div
-    (click)="openLocationDialog()"
+    (click)="localDialogsService.openLocationDialog()"
     class="location"
-    (keyup)="(null)"
     tabindex="0"
     *rxIf="isHandsetOrSmall === false"
   >
@@ -72,7 +78,7 @@
     </button>
   </div>
   <div class="mobile-menu" *rxIf="isHandsetOrSmall" [class.mobile-menu-end]="isHandsetOrSmall">
-    <button mat-button color="primary" (click)="slidingMenu.toggleMenu()">
+    <button mat-button color="primary" (click)="slideMenuService.toggleMenu()">
       <mat-icon color="accent" class="menu-icon">menu</mat-icon>
     </button>
   </div>

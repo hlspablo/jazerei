@@ -1,7 +1,8 @@
-import { Component, inject } from "@angular/core"
+import { Component, OnInit, inject } from "@angular/core"
 import { Validators, NonNullableFormBuilder } from "@angular/forms"
 import { MatDialog } from "@angular/material/dialog"
 import { AuthService } from "src/app/services/auth.service"
+import { BreakpointService } from "src/app/services/breakpoint-service.service"
 import { loginErrorTranslate } from "src/app/utils/firebase.translate"
 import { sleepFor } from "src/app/utils/time.utils"
 

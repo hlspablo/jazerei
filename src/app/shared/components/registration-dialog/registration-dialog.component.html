@@ -1,4 +1,4 @@
-<h6 mat-dialog-title>Registro</h6>
+<h6 mat-dialog-title>Cadastro</h6>
 <div class="form-container">
   <div *ngIf="registerErrorMessage" class="error-message mat-headline-6">
     {{ registerErrorMessage }}
@@ -59,7 +59,7 @@
           <button mat-button matStepperPrevious>Voltar</button>
           <button mat-raised-button color="accent" (click)="submit()" [disabled]="registrationForm.invalid || isLoading">
             <mat-spinner *ngIf="isLoading; else buttonText" diameter="24"></mat-spinner>
-            <ng-template #buttonText>Registrar</ng-template>
+            <ng-template #buttonText>Cadastrar</ng-template>
           </button>
         </div>
       </mat-step>

@@ -31,10 +31,6 @@ form .mat-horizontal-content-container {
 .btn-rounded {
   border-radius: 20px !important;
 }
-.disabled-typography {
-  color: rgba(0, 0, 0, 0.38); /* You can adjust the color and opacity */
-  pointer-events: none; /* Optional: to make it non-interactive */
-}
 .chat-input-field .mat-mdc-form-field-subscript-wrapper {
   display: none !important;
 }

@@ -14,4 +14,9 @@ export class BreakpointService {
       .observe([Breakpoints.Handset, Breakpoints.Small])
       .pipe(map((result) => result.matches))
   }
+  isWeb(): Observable<boolean> {
+    return this.breakpointObserver
+      .observe([Breakpoints.Web])
+      .pipe(map((result) => result.matches))
+  }
 }

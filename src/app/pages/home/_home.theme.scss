@@ -11,7 +11,7 @@
     height: 100vh;
     background-color: mat.get-color-from-palette($background-palette, 50);
   }
-  .showing-text {
+  .filter-text {
     color: mat.get-contrast-color-from-palette($background-palette, 50);
   }
 }

@@ -1,40 +1,90 @@
 <div
   class="overlay"
   tabindex="0"
-  (click)="closeMenu()"
-  (keyup.enter)="closeMenu()"
-  [class.open]="menuOpen"
+  (click)="slideMenu.closeMenu()"
+  (keyup.enter)="slideMenu.closeMenu()"
+  [class.open]="slideMenu.menuSubject$ | push"
 ></div>
-<nav class="sliding-menu" [class.open]="menuOpen">
+<nav class="sliding-menu" [class.open]="slideMenu.menuSubject$ | push">
   <div class="slide-header">
     <div class="logo">
-      <a href="#">
+      <a routerLink="/console/ps4">
         <img src="assets/images/logo.png" alt="Logo" height="80" />
       </a>
     </div>
     <button
       mat-button
       color="primary"
-      (click)="closeMenu()"
-      (keyup.enter)="closeMenu()"
+      (click)="slideMenu.closeMenu()"
+      (keyup.enter)="slideMenu.closeMenu()"
     >
       <mat-icon color="accent" class="medium-icon">close</mat-icon>
     </button>
   </div>
   <mat-divider></mat-divider>
-  <ul class="mobile-links" role="menubar">
-    <li role="menuitem"><a href="#">Login</a></li>
-    <li role="menuitem"><a href="#">Cadastro</a></li>
+  <ul class="mobile-links" role="menubar" *rxLet="user$; let user">
+    <ng-container *rxIf="user; else loggedOut">
+      <li role="menuitem">
+        <a (click)="localDialogsService.openLoginDialog(); slideMenu.closeMenu()">Publicar Jogo</a>
+      </li>
+      <li role="menuitem">
+        <a (click)="localDialogsService.openRegistrationDialog(); slideMenu.closeMenu()"
+          >Meus Jogos</a
+        >
+      </li>
+      <li role="menuitem">
+        <a (click)="localDialogsService.openRegistrationDialog(); slideMenu.closeMenu()">Sair</a>
+      </li>
+    </ng-container>
+    <ng-template #loggedOut>
+      <li role="menuitem">
+        <a (click)="localDialogsService.openLoginDialog(); slideMenu.closeMenu()">Login</a>
+      </li>
+      <li role="menuitem">
+        <a (click)="localDialogsService.openRegistrationDialog(); slideMenu.closeMenu()"
+          >Cadastro</a
+        >
+      </li>
+    </ng-template>
   </ul>
   <mat-divider></mat-divider>
   <ul class="mobile-links" role="menubar">
-    <li role="menuitem"><a href="#">PS5</a></li>
-    <li role="menuitem"><a href="#">PS4</a></li>
-    <li role="menuitem"><a href="#">PS3</a></li>
-    <li role="menuitem"><a href="#">Xbox One</a></li>
-    <li role="menuitem"><a href="#">Xbox 360</a></li>
-    <li role="menuitem"><a href="#">Nitendo Switch</a></li>
-    <li role="menuitem"><a href="#">Nitendo 3DS</a></li>
+    <li role="menuitem">
+      <a (click)="slideMenu.closeMenu()" routerLink="/console/ps5" [routerLinkActive]="['active']"
+        >PS5</a
+      >
+    </li>
+    <li role="menuitem">
+      <a (click)="slideMenu.closeMenu()" routerLink="/console/ps4" [routerLinkActive]="['active']"
+        >PS4</a
+      >
+    </li>
+    <li role="menuitem">
+      <a (click)="slideMenu.closeMenu()" routerLink="/console/ps3" [routerLinkActive]="['active']"
+        >PS3</a
+      >
+    </li>
+    <li role="menuitem">
+      <a
+        (click)="slideMenu.closeMenu()"
+        routerLink="/console/xbox-one"
+        [routerLinkActive]="['active']"
+        >Xbox One</a
+      >
+    </li>
+    <li role="menuitem">
+      <a
+        (click)="slideMenu.closeMenu()"
+        routerLink="/console/xbox-360"
+        [routerLinkActive]="['active']"
+        >Xbox 360</a
+      >
+    </li>
+    <li (click)="slideMenu.closeMenu()" role="menuitem">
+      <a routerLink="/console/nintendo-switch" [routerLinkActive]="['active']">Nitendo Switch</a>
+    </li>
+    <li (click)="slideMenu.closeMenu()" role="menuitem">
+      <a routerLink="/console/nintendo-3ds" [routerLinkActive]="['active']">Nitendo 3DS</a>
+    </li>
   </ul>
-  <!-- Add more links as needed -->
 </nav>
