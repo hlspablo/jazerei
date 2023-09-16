@@ -13,10 +13,18 @@
     width 1s ease,
     opacity 0.5s ease;
 }
+.chat-selection.mobile {
+  width: 100%;
+}
 .chat-selection.hide {
   width: 0;
   opacity: 0;
   padding: 20px 0;
+}
+.chat-selection.mobile.active {
+  width: 100%;
+  opacity: 1;
+  padding: 20px 15px;
 }
 .chat-selection.active {
   width: 250px;
@@ -147,4 +155,8 @@
 }
 .message.sent {
   background-color: #dcf8c6;
+}
+.loading-text {
+  font-size: 1rem;
+  font-weight: bold;
 }

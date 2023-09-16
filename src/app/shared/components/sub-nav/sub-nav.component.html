@@ -75,7 +75,7 @@
     (click)="conversationsService.toggleConversations()"
     tabindex="0"
     class="location"
-    *ngIf="isHandsetOrSmall"
+    *rxIf="isHandsetOrSmall && (user$ | push)"
   >
     <mat-icon color="accent">sms</mat-icon>
     <div class="button-wrapper">

@@ -3,7 +3,7 @@ import { BreakpointService } from "src/app/services/breakpoint-service.service"
 import { Observable, map, of, switchMap, withLatestFrom } from "rxjs"
 import { ChatService } from "src/app/services/chat.service"
 import { ChatMessageFirebaseRow, UserChatRoom } from "src/app/shared/interfaces/app.interface"
-import { ConversationsService } from "../publish/services/conversatios.service"
+import { ConversationsService } from "../../services/conversatios.service"
 import { RxState } from "@rx-angular/state"
 import { RxEffects } from "@rx-angular/state/effects"
 import { RxActionFactory } from "@rx-angular/state/actions"
@@ -14,6 +14,7 @@ interface State {
   activeChatRoom: string
   currentMessageValue: string
   messages: ChatMessageFirebaseRow[]
+  isHandsetOrSmall: boolean
 }
 
 interface UIActions {
@@ -37,7 +38,7 @@ export class ChatPageComponent implements OnInit {
   private _authService = inject(AuthService)
 
   protected showConversations$: Observable<boolean>
-  protected isHandsetOrSmall$: Observable<boolean>
+  protected isHandsetOrSmall$ = this._state.select("isHandsetOrSmall")
 
   protected chatRooms$ = this._state.select("chatRooms")
   protected messages$ = this._state.select("messages")
@@ -97,6 +98,10 @@ export class ChatPageComponent implements OnInit {
   setChatRoom(chatRoomId: string) {
     this._state.set("activeChatRoom", (_) => chatRoomId)
 
+    if (this._state.get("isHandsetOrSmall")) {
+      this._conversationsService.closeConversations()
+    }
+
     setTimeout(() => {
       this._chatService.setAllMessagesToRead(chatRoomId)
     }, 600)
@@ -109,9 +114,11 @@ export class ChatPageComponent implements OnInit {
   }
 
   async ngOnInit() {
-    this.isHandsetOrSmall$ = this._breakpointService.isHandsetOrSmall()
     this.showConversations$ = this._conversationsService.getShowConversations()
-
+    this._state.connect("isHandsetOrSmall", this._breakpointService.isHandsetOrSmall())
+    setTimeout(() => {
+      this._conversationsService.showConversations()
+    }, 300)
     this._state.connect(
       "messages",
       this._state.select("activeChatRoom").pipe(
