@@ -12,13 +12,13 @@
         </a>
       </div>
       <div *rxIf="games.length <= 0" class="text-base text-center">
-          Jogos não encontrados para os filtros atuais.
+        Jogos não encontrados para os filtros atuais.
       </div>
     </div>
   </ng-container>
   <ng-template #noGames>
-    <div class="showing">
-      <span class="showing-text">Carregando...</span>
+    <div class="filter-container">
+      <span class="filter-text">Carregando...</span>
     </div>
   </ng-template>
 </section>

@@ -97,7 +97,7 @@ export class PublishPageComponent implements OnInit {
 
             await sleepFor(500)
             this._toastr.success("O Anúncio do seu jogo foi publicado.", "Sucesso!")
-            this._router.navigate(["/"])
+            this._router.navigate(["/my-games"])
           }
         }
       } catch (error) {

@@ -6,6 +6,7 @@ import {
   addDoc,
   collection,
   collectionData,
+  deleteDoc,
   doc,
   docData,
   query,
@@ -98,5 +99,16 @@ export class GameRepository {
     return docData(gameDoc, {
       idField: "id",
     }) as Observable<GameFirebaseRow>
+  }
+
+  async deleteGameById(gameId: string): Promise<void> {
+    try {
+      const gameDoc = doc(this._gamesCollection, gameId)
+      await deleteDoc(gameDoc)
+      console.log("Game document deleted successfully")
+    } catch (error) {
+      // TODO handle errors
+      console.error("Error deleting game document:", error)
+    }
   }
 }

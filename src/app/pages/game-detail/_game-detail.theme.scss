@@ -26,6 +26,9 @@
   .chat-button button {
     @include mat.typography-level($typography-config, button);
   }
+  .delete-hint {
+    @include mat.typography-level($typography-config, button);
+  }
 
   .card-informations {
     @include mat.typography-level($typography-config, body-2);

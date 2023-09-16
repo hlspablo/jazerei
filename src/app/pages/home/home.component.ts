@@ -32,7 +32,14 @@ export class HomePageComponent implements OnInit {
   protected filtersApplied: string
   protected games$ = this._state.select("games")
 
+  protected deleteProgress = 0
+
   constructor(private _state: RxState<State>) {}
+
+  onDeleteClick(progress: number) {
+    this.deleteProgress = progress / 20
+    console.log("onDeleteClick", progress)
+  }
 
   ngOnInit() {
     this._state.connect(

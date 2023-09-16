@@ -35,6 +35,8 @@ import { RxFor } from "@rx-angular/template/for"
 import { RxPush } from "@rx-angular/template/push"
 import { TranslateConsolePipe } from "../pipes/translate-console.pipe"
 import { MatDialogModule } from "@angular/material/dialog"
+import { ProgressButtonComponent } from "./components/progress-button/progress-button.component"
+import { HoldableDirective } from "../directives/holdable.directive"
 
 @NgModule({
   declarations: [
@@ -45,12 +47,14 @@ import { MatDialogModule } from "@angular/material/dialog"
     SlidingMenuComponent,
     SubNavComponent,
     ContatDialogComponent,
+    ProgressButtonComponent,
     LocationSelectComponent,
     GameCardComponent,
     GetFirstNamePipe,
     GetFirstTwoNamesPipe,
     GetHumanTimePipe,
     TranslateConsolePipe,
+    HoldableDirective,
   ],
   imports: [
     CommonModule,
@@ -85,6 +89,7 @@ import { MatDialogModule } from "@angular/material/dialog"
     RegistrationDialogComponent,
     SearchBarComponent,
     SlidingMenuComponent,
+    ProgressButtonComponent,
     SubNavComponent,
     ContatDialogComponent,
     GameCardComponent,
@@ -96,6 +101,7 @@ import { MatDialogModule } from "@angular/material/dialog"
     RxLet,
     RxFor,
     RxPush,
+    HoldableDirective
   ],
 })
 export class SharedModule {}

@@ -11,7 +11,7 @@ import { environment } from "../environments/environment"
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations"
 import { provideEnvironmentNgxMask } from "ngx-mask"
 import { ToastrModule } from "ngx-toastr"
-import { MatDialogModule, MatDialogConfig } from "@angular/material/dialog"
+import { MatDialogModule } from "@angular/material/dialog"
 import { NgSelectModule } from "@ng-select/ng-select"
 
 @NgModule({

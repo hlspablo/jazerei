@@ -4,9 +4,12 @@ import { ContatDialogComponent } from "src/app/shared/components/contact-dialog/
 import { MatDialog } from "@angular/material/dialog"
 import { GameFirebaseRow } from "src/app/shared/interfaces/app.interface"
 import { BreakpointService } from "src/app/services/breakpoint-service.service"
-import { ActivatedRoute } from "@angular/router"
+import { ActivatedRoute, Router } from "@angular/router"
 import { RxState } from "@rx-angular/state"
 import { GameRepository } from "src/app/repositories/game.repository"
+import { AuthService } from "src/app/services/auth.service"
+import { ToastrService } from "ngx-toastr"
+import { Location } from "@angular/common"
 
 interface GameDetailState {
   game: GameFirebaseRow
@@ -21,10 +24,14 @@ interface GameDetailState {
   providers: [RxState],
 })
 export class GameDetailPageComponent implements OnInit {
-  private _routesService = inject(ActivatedRoute)
+  private _routerService = inject(Router)
+  private _location = inject(Location)
+  private _activeRouterService = inject(ActivatedRoute)
   private _dialogService = inject(MatDialog)
   private _breakpointService = inject(BreakpointService)
   private _gameRepository = inject(GameRepository)
+  private _authService = inject(AuthService)
+  private _toastService = inject(ToastrService)
 
   protected currentSlideIndex = 0
 
@@ -32,12 +39,24 @@ export class GameDetailPageComponent implements OnInit {
   protected game$ = this._state.select("game")
   protected photoIndex$ = this._state.select("photoIndex")
   protected imageIsLoaded$ = this._state.select("slideImageLoaded")
+  protected user$ = this._authService.getUser()
+
+  deleteProgress = 0
 
   constructor(private _state: RxState<GameDetailState>) {
     this._state.set({
       photoIndex: 0,
       slideImageLoaded: false,
     })
+  }
+
+  onDeleteHold(progress: number) {
+    this.deleteProgress = progress / 20
+    if (this.deleteProgress > 100) {
+      this._gameRepository.deleteGameById(this._state.get("game").id)
+      this._toastService.success("Jogo deletado com sucesso!")
+      this._routerService.navigate(["/my-games"])
+    }
   }
 
   openTextMessageDialog() {
@@ -74,7 +93,7 @@ export class GameDetailPageComponent implements OnInit {
   ngOnInit(): void {
     this._state.connect(
       "game",
-      this._routesService.paramMap.pipe(
+      this._activeRouterService.paramMap.pipe(
         switchMap((params) => {
           const gameId = params.get("id")!
           return this._gameRepository.getGameById(gameId)
