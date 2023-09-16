@@ -1,6 +1,6 @@
 <app-main-nav></app-main-nav>
 <app-sub-nav></app-sub-nav>
-<section class="main-section" *rxIf="user$; let user">
+<section class="main-section" *rxLet="user$; let user">
   <div class="game-container" *rxIf="game$; let game; else: loading">
     <mat-card *rxLet="photoIndex$; let photoIndex" class="responsive-card">
       <div class="slider-container">
@@ -35,13 +35,26 @@
         </div>
       </mat-card-content>
       <div class="info-container">
-        <ng-container *rxIf="user.uid !== game.ownerId; else userActions;">
-          <div class="card-informations">
-            <span class="game-owner">{{ game.owner }}</span>
-            <span class="console">{{ game.consoleModel | translateConsole }}</span>
-            <span class="used-time">{{ game.usedTime }} meses de uso</span>
+        <ng-container *rxIf="user && user.uid === game.ownerId; else normalActions">
+          <div class="actions">
+            <div class="delete-action">
+              <app-progress-button
+                holdable
+                (holdTime)="onDeleteHold($event)"
+                [progress]="deleteProgress"
+              ></app-progress-button>
+              <span class="delete-hint">Segure o botão para deletar</span>
+            </div>
           </div>
-          <div class="chat-button">
+        </ng-container>
+        <ng-template #normalActions>
+          <div class="card-informations">
+            <span class="game-owner"><mat-icon>person</mat-icon> {{ game.owner }}</span>
+            <span class="console"><mat-icon>videogame_asset</mat-icon> {{ game.consoleModel | translateConsole }}</span>
+            <span class="used-time"><mat-icon>schedule</mat-icon> {{ game.usedTime }} meses de uso</span>
+            <span class="login-info"><mat-icon>login</mat-icon> Faça login para negociar</span>
+          </div>
+          <div class="chat-button" *rxIf="user">
             <button
               (click)="openTextMessageDialog()"
               mat-raised-button
@@ -51,14 +64,6 @@
               <mat-icon>chat</mat-icon>
               Negociar
             </button>
-          </div>
-        </ng-container>
-        <ng-template #userActions>
-          <div class="actions">
-            <div class="delete-action">
-              <app-progress-button holdable (holdTime)="onDeleteHold($event)" [progress]="deleteProgress"></app-progress-button>
-              <span class="delete-hint">Segure o botão para deletar</span>
-            </div>
           </div>
         </ng-template>
       </div>

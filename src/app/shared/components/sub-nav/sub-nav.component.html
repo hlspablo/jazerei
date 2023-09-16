@@ -84,7 +84,9 @@
           <span class="badge" *rxIf="totalUnreadCount > 0">{{ totalUnreadCount }}</span>
         </ng-container>
       </div>
-      <button mat-raised-button color="accent">Conversas</button>
+      <button mat-raised-button color="accent">
+        <a routerLink="/chat">Conversas</a>
+      </button>
     </div>
   </div>
 </nav>

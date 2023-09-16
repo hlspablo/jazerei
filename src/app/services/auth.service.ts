@@ -11,6 +11,7 @@ import { Firestore, setDoc, doc, getDoc } from "@angular/fire/firestore"
 import { RxState } from "@rx-angular/state"
 import { firstValueFrom, from, map, of, switchMap } from "rxjs"
 import { MyLocation, Profile } from "../shared/interfaces/app.interface"
+import { Router } from "@angular/router"
 
 interface UserRegisterDTO {
   email: string
@@ -36,6 +37,7 @@ export class AuthService extends RxState<AuthState> {
   private _auth: Auth = inject(Auth)
   private _firestore = inject(Firestore)
   private _user$ = user(this._auth)
+  private _routerService = inject(Router)
 
   constructor() {
     super()
@@ -71,6 +73,9 @@ export class AuthService extends RxState<AuthState> {
     const currentUser = this.getCurrentUserSnapshot()
     if (!currentUser) throw new Error("User not logged in")
     return currentUser
+  }
+  isAuthenticated() {
+    return this._user$.pipe(map((user) => !!user))
   }
 
   async getProfile(userId: string) {
@@ -118,5 +123,6 @@ export class AuthService extends RxState<AuthState> {
 
   async logout() {
     await this._auth.signOut()
+    this._routerService.navigate(["/"])
   }
 }
