@@ -15,6 +15,12 @@
         Jogos não encontrados para os filtros atuais.
       </div>
     </div>
+    <div class="see-more">
+      <button mat-raised-button color="accent" (click)="seeMoreClicks$.next()">
+        <mat-icon>expand_more</mat-icon>
+        Ver Mais
+      </button>
+    </div>
   </ng-container>
   <ng-template #noGames>
     <div class="filter-container">

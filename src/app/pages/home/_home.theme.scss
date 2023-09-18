@@ -24,6 +24,9 @@
       @include mixins.headline-7;
     }
   }
+  .see-more button {
+    @include mat.typography-level($typography-config, button);
+  }
 }
 
 @mixin theme($theme) {
@@ -37,7 +40,6 @@
     @include typography($theme);
   }
 }
-
 
 @mixin apply-theme($theme) {
   @include theme($theme);

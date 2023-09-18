@@ -2,19 +2,23 @@ import { Injectable, inject } from "@angular/core"
 import {
   Firestore,
   QueryFieldFilterConstraint,
-  QueryFilterConstraint,
+  Timestamp,
   addDoc,
   collection,
   collectionData,
   deleteDoc,
   doc,
   docData,
+  limit,
+  orderBy,
   query,
+  startAfter,
 } from "@angular/fire/firestore"
 import { AuthService } from "../services/auth.service"
 import { Storage, getDownloadURL, uploadBytesResumable, ref } from "@angular/fire/storage"
 import { Observable } from "rxjs"
 import { GameFirebaseRow } from "../shared/interfaces/app.interface"
+import { DocumentData, DocumentSnapshot, getDoc } from "firebase/firestore"
 
 interface CreateGameDTO {
   name: string
@@ -74,6 +78,7 @@ export class GameRepository {
       await addDoc(collection(this._firestore, "games"), {
         name,
         description,
+        createdAt: Timestamp.now(),
         ownerId: user.uid,
         owner: user.displayName,
         location: user.location.id,
@@ -92,6 +97,28 @@ export class GameRepository {
   getGamesFilter(queryConstraints: QueryFieldFilterConstraint[]) {
     const gamesQuery = query(this._gamesCollection, ...queryConstraints)
     return collectionData(gamesQuery, { idField: "id" }) as Observable<GameFirebaseRow[]>
+  }
+
+  getGamesWithLimit(
+    queryConstraints: QueryFieldFilterConstraint[],
+    latestDocSnapshot: DocumentSnapshot<DocumentData> | null,
+  ): Observable<GameFirebaseRow[]> {
+    let gamesQuery = query(
+      this._gamesCollection,
+      ...queryConstraints,
+      orderBy("createdAt", "desc"),
+      limit(2),
+    )
+    if (latestDocSnapshot) {
+      gamesQuery = query(gamesQuery, startAfter(latestDocSnapshot))
+    }
+    return collectionData(gamesQuery, { idField: "id" }) as Observable<GameFirebaseRow[]>
+  }
+
+  async getGameSnapshot(gameId: string) {
+    const gameDoc = doc(this._gamesCollection, gameId)
+    const gameDocSnapshot = await getDoc(gameDoc)
+    return gameDocSnapshot
   }
 
   getGameById(gameId: string) {

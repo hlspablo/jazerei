@@ -101,7 +101,9 @@ import { HoldableDirective } from "../directives/holdable.directive"
     RxLet,
     RxFor,
     RxPush,
-    HoldableDirective
+    HoldableDirective,
+    MatIconModule,
+    MatButtonModule,
   ],
 })
 export class SharedModule {}
