@@ -1,5 +1,15 @@
 import { Component, HostListener, OnInit, inject } from "@angular/core"
-import { BehaviorSubject, Subject, combineLatest, concatMap, from, mergeAll, scan, switchMap, tap } from "rxjs"
+import {
+  BehaviorSubject,
+  Subject,
+  combineLatest,
+  concatMap,
+  from,
+  mergeAll,
+  scan,
+  switchMap,
+  tap,
+} from "rxjs"
 import {
   DocumentData,
   DocumentReference,
@@ -56,20 +66,6 @@ export class HomePageComponent implements OnInit {
   protected latestGameSnapshot: DocumentSnapshot<DocumentData>
 
   constructor(private _state: RxState<State>) {}
-
-  @HostListener("window:scroll", ["$event"])
-  onScroll(): void {
-    if (window.innerWidth <= 768) {
-      const pos =
-        (document.documentElement.scrollTop || document.body.scrollTop) +
-        document.documentElement.offsetHeight
-      const max = document.documentElement.scrollHeight
-
-      if (pos >= max) {
-        this.seeMoreClicks$.next()
-      }
-    }
-  }
 
   getQueryConstrainsAsArray() {
     return Object.values(this.queryConstraints).flat() as QueryFieldFilterConstraint[]
