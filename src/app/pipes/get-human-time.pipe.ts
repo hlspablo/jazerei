@@ -8,7 +8,6 @@ import { convertTimestampToTime } from "../utils/time.utils"
 export class GetHumanTimePipe implements PipeTransform {
   transform(value: Timestamp | null): string {
     if (!value) return ""
-    console.log("TIMESTAMP =>", typeof value)
     return convertTimestampToTime(value)
   }
 }

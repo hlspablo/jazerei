@@ -141,11 +141,6 @@ export class HomePageComponent implements OnInit {
             this.queryConstraints.locations = []
           }
 
-          if (user && user.uid) {
-            this.queryConstraints.users = []
-            this.queryConstraints.users.push(where("ownerId", "!=", user.uid))
-          }
-
           const selectedConsole = params.get("console")
           if (selectedConsole && validConsoles.includes(selectedConsole)) {
             this.queryConstraints.consoles = []

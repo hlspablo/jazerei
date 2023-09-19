@@ -5,12 +5,14 @@
     <mat-card *rxLet="photoIndex$; let photoIndex" class="responsive-card">
       <div class="slider-container">
         <img
-          [src]="game.imagesUrls[photoIndex]"
+          [ngSrc]="game.imagesUrls[photoIndex]"
           alt="Image"
           [class.mobile]="isHandsetOrSmall$ | push"
           [class.image-loaded]="imageIsLoaded$ | push"
           class="slider-image"
           (load)="showLoadedImage()"
+          width="950"
+          height="600"
         />
         <button mat-mini-fab class="arrow left" (click)="prevImage()">
           <mat-icon>arrow_back</mat-icon>

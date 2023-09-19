@@ -11,11 +11,11 @@
           <app-game-card [game]="game"></app-game-card>
         </a>
       </div>
-      <div *rxIf="games.length <= 0" class="text-base text-center">
-        Jogos não encontrados para os filtros atuais.
+      <div *rxIf="games.length <= 0" class="text-lg">
+        Não há jogos para os filtros atuais.
       </div>
     </div>
-    <div class="see-more" *rxIf="!searchWord">
+    <div class="see-more" *rxIf="!searchWord && games.length > 0">
       <button mat-raised-button color="accent" (click)="seeMoreClicks$.next()">
         <mat-icon>expand_more</mat-icon>
         {{ loadingMore ? "Carregando..." : "Ver mais" }}

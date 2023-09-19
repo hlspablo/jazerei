@@ -67,7 +67,7 @@ export class GameRepository {
       this._gamesCollection,
       ...queryConstraints,
       orderBy("createdAt", "desc"),
-      limit(1),
+      limit(12),
     )
     return collectionData(gamesQuery, { idField: "id" }) as Observable<GameFirebaseRow[]>
   }
@@ -80,7 +80,7 @@ export class GameRepository {
       this._gamesCollection,
       ...queryConstraints,
       orderBy("createdAt", "desc"),
-      limit(2),
+      limit(12),
     )
     if (latestDocSnapshot) {
       gamesQuery = query(gamesQuery, startAfter(latestDocSnapshot))
