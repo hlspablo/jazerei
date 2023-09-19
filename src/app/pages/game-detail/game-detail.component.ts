@@ -1,5 +1,5 @@
 import { Component, OnInit, inject } from "@angular/core"
-import { Observable, switchMap } from "rxjs"
+import { switchMap } from "rxjs"
 import { ContatDialogComponent } from "src/app/shared/components/contact-dialog/contact-dialog.component"
 import { MatDialog } from "@angular/material/dialog"
 import { GameFirebaseRow } from "src/app/shared/interfaces/app.interface"
@@ -15,6 +15,7 @@ interface GameDetailState {
   game: GameFirebaseRow
   photoIndex: number
   slideImageLoaded: boolean
+  isHandsetOrSmall: boolean
 }
 
 @Component({
@@ -32,10 +33,11 @@ export class GameDetailPageComponent implements OnInit {
   private _gameRepository = inject(GameRepository)
   private _authService = inject(AuthService)
   private _toastService = inject(ToastrService)
+  //private _dialogService = inject(DialogService)
 
   protected currentSlideIndex = 0
 
-  protected isHandsetOrSmall$: Observable<boolean>
+  protected isHandsetOrSmall$ = this._state.select("isHandsetOrSmall")
   protected game$ = this._state.select("game")
   protected photoIndex$ = this._state.select("photoIndex")
   protected imageIsLoaded$ = this._state.select("slideImageLoaded")
@@ -63,6 +65,7 @@ export class GameDetailPageComponent implements OnInit {
     this._dialogService.open(ContatDialogComponent, {
       data: this._state.get("game"),
       autoFocus: true,
+      width: this._state.get("isHandsetOrSmall") ? "100%" : `calc(100% / 2.5)`,
       position: {
         top: "10vh",
       },
@@ -101,6 +104,6 @@ export class GameDetailPageComponent implements OnInit {
       ),
     )
 
-    this.isHandsetOrSmall$ = this._breakpointService.isHandsetOrSmall()
+    this._state.connect("isHandsetOrSmall", this._breakpointService.isHandsetOrSmall())
   }
 }

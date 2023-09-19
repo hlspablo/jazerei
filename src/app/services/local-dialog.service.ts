@@ -35,7 +35,7 @@ export class DialogService {
         this._dialogService.open(component, {
           autoFocus: true,
           delayFocusTrap: true,
-          width: isHandsetOrSmall ? width : `calc(${width} / 2)`,
+          width: isHandsetOrSmall ? width : `calc(${width} / 2.5)`,
           position: {
             top,
           },

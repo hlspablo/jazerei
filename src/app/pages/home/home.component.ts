@@ -1,18 +1,13 @@
-import { Component, HostListener, OnInit, inject } from "@angular/core"
+import { Component, OnInit, inject } from "@angular/core"
 import {
-  BehaviorSubject,
   Subject,
   combineLatest,
   concatMap,
-  from,
-  mergeAll,
-  scan,
   switchMap,
   tap,
 } from "rxjs"
 import {
   DocumentData,
-  DocumentReference,
   DocumentSnapshot,
   QueryFieldFilterConstraint,
   where,
@@ -21,7 +16,6 @@ import { LocationFilterService } from "src/app/services/location-filter.service"
 import { ActivatedRoute } from "@angular/router"
 import { translateConsole } from "src/app/utils/game.translate"
 import { SearchFilterService } from "src/app/services/search-filter.service"
-import { GameCardInput } from "src/app/shared/components/game-card/game-card.component"
 import { AuthService } from "src/app/services/auth.service"
 import { GameRepository } from "src/app/repositories/game.repository"
 import { validConsoles } from "src/app/shared/interfaces/app.arrays"
