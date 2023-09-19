@@ -1,5 +1,5 @@
 import { Component, HostListener, OnInit, inject } from "@angular/core"
-import { BehaviorSubject, combineLatest, from, scan, switchMap } from "rxjs"
+import { BehaviorSubject, combineLatest, from, scan, switchMap, tap } from "rxjs"
 import { where } from "@angular/fire/firestore"
 import { LocationFilterService } from "src/app/services/location-filter.service"
 import { ActivatedRoute } from "@angular/router"
@@ -11,6 +11,7 @@ import { GameRepository } from "src/app/repositories/game.repository"
 import { validConsoles } from "src/app/shared/interfaces/app.arrays"
 import { RxState } from "@rx-angular/state"
 import { GameFirebaseRow } from "src/app/shared/interfaces/app.interface"
+import { removeDiacritics } from "src/app/utils/string.utils"
 
 interface State {
   games: GameCardInput[]
@@ -29,13 +30,17 @@ export class HomePageComponent implements OnInit {
   private _routes = inject(ActivatedRoute)
   private _gameRepository = inject(GameRepository)
 
-  protected filtersApplied: string
-  protected games$ = this._state.select("games")
+  filtersApplied: string
+  games$ = this._state.select("games")
   seeMoreClicks$ = new BehaviorSubject<void>(undefined)
+  loadingMore = false
+  currentSearchQuery = ""
+  shouldMerge = false
 
   constructor(private _state: RxState<State>) {}
 
   @HostListener("window:scroll", ["$event"])
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   onScroll(event: Event): void {
     if (window.innerWidth <= 768) {
       // 768px is a common breakpoint for mobile screens
@@ -57,9 +62,14 @@ export class HomePageComponent implements OnInit {
         this._authService.getUser(),
         this._locationService.city$,
         this._routes.paramMap,
+        this._searchFilterService.searchQuery$,
         this.seeMoreClicks$,
       ]).pipe(
-        switchMap(([user, city, params]) => {
+        tap(([, , , searchQuery]) => {
+          this.currentSearchQuery = searchQuery
+          this.loadingMore = true
+        }),
+        switchMap(([user, city, params, searchQuery]) => {
           return from(
             (async () => {
               const games = this._state.get("games")
@@ -87,13 +97,42 @@ export class HomePageComponent implements OnInit {
                 filters.push(translateConsole(selectedConsole))
               }
 
+              if (searchQuery) {
+                const searchQueryNoDiacritics = removeDiacritics(searchQuery).toLowerCase()
+                queryConstraints.push(
+                  where("name_lowercase", ">=", searchQueryNoDiacritics),
+                  where("name_lowercase", "<=", searchQueryNoDiacritics + "\uf8ff"),
+                )
+                filters.push(`Palavra chave: ${searchQuery}`)
+              }
+
               this.filtersApplied = filters.length > 0 ? filters.join(" | ") : "Todos os Jogos"
 
-              return this._gameRepository.getGamesWithLimit(queryConstraints, lastGameSnapshot)
+              if (searchQuery) {
+                return this._gameRepository.getGamesFilter(queryConstraints)
+              } else {
+                return this._gameRepository.getGamesStartAfter(
+                  queryConstraints,
+                  this.shouldMerge ? lastGameSnapshot : null,
+                )
+              }
             })(),
           ).pipe(switchMap((innerObs) => innerObs))
         }),
-        scan((acc: GameFirebaseRow[], newGames) => [...acc, ...newGames], []),
+        scan((acc: GameFirebaseRow[], newGames) => {
+          if (this.currentSearchQuery) {
+            this.shouldMerge = false
+            return [...newGames]
+          } else {
+            if (!this.shouldMerge) {
+              this.shouldMerge = true
+              return [...newGames]
+            } else {
+              return [...acc, ...newGames]
+            }
+          }
+        }, []),
+        tap(() => (this.loadingMore = false)),
       ),
     )
   }

@@ -15,10 +15,10 @@
         Jogos não encontrados para os filtros atuais.
       </div>
     </div>
-    <div class="see-more">
+    <div class="see-more" *rxIf="!currentSearchQuery">
       <button mat-raised-button color="accent" (click)="seeMoreClicks$.next()">
         <mat-icon>expand_more</mat-icon>
-        Ver Mais
+        {{ loadingMore ? "Carregando..." : "Ver mais" }}
       </button>
     </div>
   </ng-container>
