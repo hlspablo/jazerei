@@ -11,9 +11,11 @@
   <div class="image-container">
     <img
       mat-card-image
-      [src]="previewMode ? imagePreview : game.imagesUrls[0]"
+      [ngSrc]="previewMode ? imagePreview! : formatCoverUrl(game.imagesUrls[0])"
       class="rounded-image"
       alt="Imagem do Jogo"
+      width="330"
+      height="330"
     />
   </div>
   <mat-card-content class="description" ellipsis [ellipsis-content]="game.description">

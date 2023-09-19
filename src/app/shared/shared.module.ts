@@ -37,6 +37,7 @@ import { TranslateConsolePipe } from "../pipes/translate-console.pipe"
 import { MatDialogModule } from "@angular/material/dialog"
 import { ProgressButtonComponent } from "./components/progress-button/progress-button.component"
 import { HoldableDirective } from "../directives/holdable.directive"
+import { NgOptimizedImage } from '@angular/common';
 
 @NgModule({
   declarations: [
@@ -78,6 +79,7 @@ import { HoldableDirective } from "../directives/holdable.directive"
     NgSelectModule,
     EllipsisModule,
     MatDialogModule,
+    NgOptimizedImage,
     RxIf,
     RxLet,
     RxFor,
@@ -104,6 +106,7 @@ import { HoldableDirective } from "../directives/holdable.directive"
     HoldableDirective,
     MatIconModule,
     MatButtonModule,
+    NgOptimizedImage,
   ],
 })
 export class SharedModule {}

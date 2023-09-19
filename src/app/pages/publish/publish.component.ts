@@ -10,6 +10,7 @@ import { RxState } from "@rx-angular/state"
 import { GameCardInput } from "src/app/shared/components/game-card/game-card.component"
 import { AuthService } from "src/app/services/auth.service"
 import { RxEffects } from "@rx-angular/state/effects"
+import { StorageService } from "src/app/services/storage.service"
 
 interface PublishState {
   publishGame: GameCardInput
@@ -28,10 +29,11 @@ export class PublishPageComponent implements OnInit {
   private _router = inject(Router)
   private _gameRepository = inject(GameRepository)
   private _authService = inject(AuthService)
+  private _storageService = inject(StorageService)
 
   protected fileNames: string
   protected selectedFiles: File[] = []
-  protected imagePreview: string | ArrayBuffer | null = "https://placehold.co/600x400"
+  protected imagePreview: string | ArrayBuffer | null = "https://placehold.co/330x330"
   protected isLoading = false
   protected isHandsetOrSmall$ = this._breakpointService.isHandsetOrSmall()
   protected game$ = this._state.select("publishGame")
@@ -85,7 +87,7 @@ export class PublishPageComponent implements OnInit {
           if (stepOne && stepTwo) {
             const { name, description, consoleModel, usedTime } = stepOne
             if (!name || !description || !consoleModel || !usedTime) return
-            const imagesUrls = await this._gameRepository.uploadGameImages(this.selectedFiles)
+            const imagesUrls = await this._storageService.uploadGameImages(this.selectedFiles)
 
             this._gameRepository.createGame({
               name,

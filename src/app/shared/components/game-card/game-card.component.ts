@@ -29,6 +29,10 @@ export class GameCardComponent implements OnInit {
 
   protected avatarUrl: string
 
+  formatCoverUrl(url: string): string {
+    return url.replace("_950x600", "_330x330")
+  }
+
   ngOnInit(): void {
     this.avatarUrl = `https://ui-avatars.com/api/?name=${encodeURIComponent(this.game.owner)}`
   }

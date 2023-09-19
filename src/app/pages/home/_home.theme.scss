@@ -8,7 +8,6 @@
   $background-palette: map.get($theme, "custom-background");
 
   .main {
-    height: 100vh;
     background-color: mat.get-color-from-palette($background-palette, 50);
   }
   .filter-text {

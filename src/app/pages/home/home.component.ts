@@ -1,6 +1,12 @@
 import { Component, HostListener, OnInit, inject } from "@angular/core"
-import { BehaviorSubject, combineLatest, from, scan, switchMap, tap } from "rxjs"
-import { where } from "@angular/fire/firestore"
+import { BehaviorSubject, Subject, combineLatest, concatMap, from, mergeAll, scan, switchMap, tap } from "rxjs"
+import {
+  DocumentData,
+  DocumentReference,
+  DocumentSnapshot,
+  QueryFieldFilterConstraint,
+  where,
+} from "@angular/fire/firestore"
 import { LocationFilterService } from "src/app/services/location-filter.service"
 import { ActivatedRoute } from "@angular/router"
 import { translateConsole } from "src/app/utils/game.translate"
@@ -14,7 +20,12 @@ import { GameFirebaseRow } from "src/app/shared/interfaces/app.interface"
 import { removeDiacritics } from "src/app/utils/string.utils"
 
 interface State {
-  games: GameCardInput[]
+  games: GameFirebaseRow[]
+}
+interface QueryConstraints {
+  locations: QueryFieldFilterConstraint[]
+  consoles: QueryFieldFilterConstraint[]
+  users: QueryFieldFilterConstraint[]
 }
 
 @Component({
@@ -30,20 +41,25 @@ export class HomePageComponent implements OnInit {
   private _routes = inject(ActivatedRoute)
   private _gameRepository = inject(GameRepository)
 
-  filtersApplied: string
+  protected filtersApplied: string
   games$ = this._state.select("games")
-  seeMoreClicks$ = new BehaviorSubject<void>(undefined)
+  seeMoreClicks$ = new Subject<void>()
   loadingMore = false
-  currentSearchQuery = ""
-  shouldMerge = false
+
+  protected queryConstraints: QueryConstraints = {
+    locations: [],
+    consoles: [],
+    users: [],
+  }
+  protected filters: string[] = []
+  protected searchWord: string
+  protected latestGameSnapshot: DocumentSnapshot<DocumentData>
 
   constructor(private _state: RxState<State>) {}
 
   @HostListener("window:scroll", ["$event"])
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  onScroll(event: Event): void {
+  onScroll(): void {
     if (window.innerWidth <= 768) {
-      // 768px is a common breakpoint for mobile screens
       const pos =
         (document.documentElement.scrollTop || document.body.scrollTop) +
         document.documentElement.offsetHeight
@@ -55,84 +71,90 @@ export class HomePageComponent implements OnInit {
     }
   }
 
+  getQueryConstrainsAsArray() {
+    return Object.values(this.queryConstraints).flat() as QueryFieldFilterConstraint[]
+  }
+
+  async getLatestSnapshot() {
+    const games = this._state.get("games")
+    if (games && games.length > 0) {
+      const lastGame = games[games.length - 1]
+      console.log("Getting latest snapshot", lastGame.id)
+      this.latestGameSnapshot = await this._gameRepository.getGameSnapshot(lastGame.id)
+    }
+  }
+
   ngOnInit() {
+    this._state.hold(
+      this.seeMoreClicks$.pipe(
+        tap(() => console.log("See more clicked")),
+        concatMap(async () => {
+          this.loadingMore = true
+          await this.getLatestSnapshot()
+          return this._gameRepository.getGamesStartAfter(
+            this.getQueryConstrainsAsArray(),
+            this.latestGameSnapshot,
+          )
+        }),
+        switchMap((games) => games),
+        tap((newGames) => {
+          const stateGames = this._state.get("games")
+          const games = [...stateGames, ...newGames]
+          this._state.set("games", (_) => games)
+          this.loadingMore = false
+        }),
+      ),
+    )
+
+    this._state.connect(
+      "games",
+      this._searchFilterService.searchQuery$.pipe(
+        switchMap((searchQuery) => {
+          if (searchQuery) {
+            this.searchWord = searchQuery
+            const searchQueryNoDiacritics = removeDiacritics(searchQuery).toLowerCase()
+            return this._gameRepository.getGamesSearch([
+              where("name_lowercase", ">=", searchQueryNoDiacritics),
+              where("name_lowercase", "<=", searchQueryNoDiacritics + "\uf8ff"),
+            ])
+          } else {
+            return this._gameRepository.getGamesOrderBy(this.getQueryConstrainsAsArray())
+          }
+        }),
+      ),
+    )
+
     this._state.connect(
       "games",
       combineLatest([
         this._authService.getUser(),
         this._locationService.city$,
         this._routes.paramMap,
-        this._searchFilterService.searchQuery$,
-        this.seeMoreClicks$,
       ]).pipe(
-        tap(([, , , searchQuery]) => {
-          this.currentSearchQuery = searchQuery
-          this.loadingMore = true
-        }),
-        switchMap(([user, city, params, searchQuery]) => {
-          return from(
-            (async () => {
-              const games = this._state.get("games")
-              let lastGameSnapshot = null
-              if (games && games.length > 0) {
-                const lastGame = games[games.length - 1]
-                lastGameSnapshot = await this._gameRepository.getGameSnapshot(lastGame.id)
-              }
-
-              const queryConstraints = []
-              const filters = []
-
-              if (city && city.id) {
-                queryConstraints.push(where("location", "==", city.id))
-                filters.push(city.name)
-              }
-
-              if (user && user.uid) {
-                queryConstraints.push(where("ownerId", "!=", user.uid))
-              }
-
-              const selectedConsole = params.get("console")
-              if (selectedConsole && validConsoles.includes(selectedConsole)) {
-                queryConstraints.push(where("consoleModel", "==", selectedConsole))
-                filters.push(translateConsole(selectedConsole))
-              }
-
-              if (searchQuery) {
-                const searchQueryNoDiacritics = removeDiacritics(searchQuery).toLowerCase()
-                queryConstraints.push(
-                  where("name_lowercase", ">=", searchQueryNoDiacritics),
-                  where("name_lowercase", "<=", searchQueryNoDiacritics + "\uf8ff"),
-                )
-                filters.push(`Palavra chave: ${searchQuery}`)
-              }
-
-              this.filtersApplied = filters.length > 0 ? filters.join(" | ") : "Todos os Jogos"
-
-              if (searchQuery) {
-                return this._gameRepository.getGamesFilter(queryConstraints)
-              } else {
-                return this._gameRepository.getGamesStartAfter(
-                  queryConstraints,
-                  this.shouldMerge ? lastGameSnapshot : null,
-                )
-              }
-            })(),
-          ).pipe(switchMap((innerObs) => innerObs))
-        }),
-        scan((acc: GameFirebaseRow[], newGames) => {
-          if (this.currentSearchQuery) {
-            this.shouldMerge = false
-            return [...newGames]
+        switchMap(([user, city, params]) => {
+          this.filters = []
+          if (city && city.id) {
+            this.queryConstraints.locations = []
+            this.queryConstraints.locations.push(where("location", "==", city.id))
+            this.filters.push(city.name)
           } else {
-            if (!this.shouldMerge) {
-              this.shouldMerge = true
-              return [...newGames]
-            } else {
-              return [...acc, ...newGames]
-            }
+            this.queryConstraints.locations = []
           }
-        }, []),
-        tap(() => (this.loadingMore = false)),
+
+          if (user && user.uid) {
+            this.queryConstraints.users = []
+            this.queryConstraints.users.push(where("ownerId", "!=", user.uid))
+          }
+
+          const selectedConsole = params.get("console")
+          if (selectedConsole && validConsoles.includes(selectedConsole)) {
+            this.queryConstraints.consoles = []
+            this.queryConstraints.consoles.push(where("consoleModel", "==", selectedConsole))
+            this.filters.push(translateConsole(selectedConsole))
+          }
+
+          return this._gameRepository.getGamesOrderBy(this.getQueryConstrainsAsArray())
+        }),
       ),
     )
   }

@@ -88,10 +88,14 @@ export class AuthService extends RxState<AuthState> {
       const locationRef = doc(this._firestore, `locations/${data.location}`)
       const locationSnap = await getDoc(locationRef)
       const location = locationSnap.data() as MyLocation
-      return { cpf, location: {
-        ...location,
-        id: locationSnap.id
-      }, name }
+      return {
+        cpf,
+        location: {
+          ...location,
+          id: locationSnap.id,
+        },
+        name,
+      }
     } catch (error) {
       console.log(error)
       throw error

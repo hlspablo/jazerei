@@ -30,7 +30,7 @@ export class MyGamesPageComponent {
     this._effects.register(this.user$, async (user) => {
       if(!user) return
       const filter = [where("ownerId", "==", user.uid)]
-      this._state.connect("games", this._gameRepository.getGamesFilter(filter))
+      this._state.connect("games", this._gameRepository.getGamesOrderBy(filter))
     })
   }
 }
