@@ -21,23 +21,22 @@
   align-content: center;
   text-align: center;
 }
-.rating-container {
-  padding-top: 20px;
+.reputation,
+.city {
+  color: #827070;
+  font-weight: 600;
 }
 .rating {
   display: flex;
+  padding-top: 12px;
   justify-content: center;
 }
-
 .star {
   cursor: pointer;
-  margin: 0 5px;
+  margin: 0 2px;
 }
-
-.star img {
-  transition: transform 0.2s;
-}
-
-.star.selected img {
-  transform: scale(1.1);
+.large-star {
+  font-size: 38px;
+  width: 38px;
+  height: 38px;
 }

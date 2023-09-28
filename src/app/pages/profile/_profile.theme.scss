@@ -10,6 +10,10 @@
 
 @mixin typography($theme) {
   $typography-config: mat.get-typography-config($theme);
+
+  .reputation, .city {
+    @include mat.typography-level($typography-config, body-1);
+  }
 }
 
 @mixin theme($theme) {

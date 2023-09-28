@@ -10,10 +10,8 @@
     <div class="city">Cidade: Teresina</div>
     <div class="rating">
       <mat-icon
-        class="star"
+        class="star large-star"
         *ngFor="let star of stars; let i = index"
-        (mouseenter)="hoverStar(i + 1)"
-        (mouseleave)="resetStars()"
         (click)="setRating(i + 1)"
         (keyup)="(null)"
         tabindex="0"
@@ -21,6 +19,11 @@
         {{ star === "star" ? "star" : "star_border" }}
       </mat-icon>
     </div>
-    <p class="selected-rating-text">Sua avaliação: {{ selectedRating }}</p>
+  </div>
+  <div class="see-games mt-5">
+    <button mat-raised-button color="accent" class="btn-rounded">
+      <mat-icon>gamepad</mat-icon>
+      Ver Jogos
+    </button>
   </div>
 </section>
