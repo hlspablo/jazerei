@@ -121,7 +121,9 @@
   display: flex;
   align-items: center;
 }
-
 mat-icon {
-  margin-right: 8px; /* Optional: Adds some space between the icon and text */
+  margin-right: 8px;
+}
+.game-owner {
+  text-decoration: underline;
 }

@@ -2,11 +2,8 @@ import { Injectable, inject } from "@angular/core"
 import {
   Firestore,
   QueryFieldFilterConstraint,
-  addDoc,
   collection,
   collectionData,
-  doc,
-  docData,
   query,
 } from "@angular/fire/firestore"
 import { Observable } from "rxjs"

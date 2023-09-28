@@ -25,7 +25,10 @@ const routes: Routes = [
   {
     path: "my-games",
     loadChildren: () => import("./pages/my-games/my-games.module").then((m) => m.MyGamesPageModule),
-    canActivate: [authGuard],
+  },
+  {
+    path: "my-games/:id",
+    loadChildren: () => import("./pages/my-games/my-games.module").then((m) => m.MyGamesPageModule),
   },
   {
     path: "profile/:id",

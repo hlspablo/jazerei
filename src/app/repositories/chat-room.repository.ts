@@ -12,16 +12,17 @@ import {
   where,
   writeBatch,
 } from "@angular/fire/firestore"
-import { AuthService, CompleteUser } from "../services/auth.service"
+import { CompleteUser } from "../services/auth.service"
 import { Observable, map } from "rxjs"
 import { ChatMessageFirebaseRow, ChatRoom } from "../shared/interfaces/app.interface"
+import { UserRepository } from "./user.repository"
 
 @Injectable({
   providedIn: "root",
 })
 export class ChatRoomRepository {
   private _firestore = inject(Firestore)
-  private _authService = inject(AuthService)
+  private _userRepository = inject(UserRepository)
   private _collection = collection(this._firestore, "chatRooms")
 
   async createChatRoom(
@@ -30,7 +31,7 @@ export class ChatRoomRepository {
     relatedGameId: string,
     relatedGameName: string,
   ): Promise<string> {
-    const { location, name } = await this._authService.getProfile(receiverId)
+    const { location, name } = await this._userRepository.getProfile(receiverId)
 
     const members = [currentUser.uid, receiverId]
     const names = [currentUser.displayName, name]

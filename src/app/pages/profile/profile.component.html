@@ -1,29 +1,34 @@
 <app-main-nav></app-main-nav>
 <app-sub-nav></app-sub-nav>
-<section class="main-section">
+<section class="main-section" *rxLet="user$ as user">
   <div class="avatar">
     <img src="assets/images/avatar.png" alt="User Avatar" />
   </div>
   <div class="user-info">
-    <h2>Pablo Henrique</h2>
-    <div class="reputation">Reputação: <span>4.5/5</span></div>
-    <div class="city">Cidade: Teresina</div>
-    <div class="rating">
-      <mat-icon
-        class="star large-star"
-        *ngFor="let star of stars; let i = index"
-        (click)="setRating(i + 1)"
-        (keyup)="(null)"
-        tabindex="0"
-      >
-        {{ star === "star" ? "star" : "star_border" }}
-      </mat-icon>
+    <h2>{{ profileName }}</h2>
+    <div class="reputation">
+      Reputação:
+      <span>{{ currentReputation > 0 ? currentReputation + "/5" : "Sem reputação" }}</span>
     </div>
+    <div class="city">Cidade: {{ locationName }}</div>
+      <div class="rating" *rxIf="user && user.uid !== id">
+        <mat-icon
+          class="star large-star"
+          *ngFor="let star of stars; let i = index"
+          (click)="setRating(i + 1)"
+          (keyup)="(null)"
+          tabindex="0"
+        >
+          {{ star === "star" ? "star" : "star_border" }}
+        </mat-icon>
+      </div>
   </div>
   <div class="see-games mt-5">
-    <button mat-raised-button color="accent" class="btn-rounded">
-      <mat-icon>gamepad</mat-icon>
-      Ver Jogos
-    </button>
+    <a [routerLink]="['/my-games/', id]">
+      <button mat-raised-button color="accent" class="btn-rounded">
+        <mat-icon>gamepad</mat-icon>
+        Ver Jogos
+      </button>
+    </a>
   </div>
 </section>

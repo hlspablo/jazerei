@@ -33,7 +33,6 @@ export class GameDetailPageComponent implements OnInit {
   private _gameRepository = inject(GameRepository)
   private _authService = inject(AuthService)
   private _toastService = inject(ToastrService)
-  //private _dialogService = inject(DialogService)
 
   protected currentSlideIndex = 0
 

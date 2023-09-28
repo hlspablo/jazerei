@@ -51,10 +51,16 @@
         </ng-container>
         <ng-template #normalActions>
           <div class="card-informations">
-            <span class="game-owner"><mat-icon>person</mat-icon> {{ game.owner }}</span>
-            <span class="console"><mat-icon>videogame_asset</mat-icon> {{ game.consoleModel | translateConsole }}</span>
+            <a [routerLink]="['/profile/', game.ownerId]">
+              <span class="game-owner"><mat-icon>person</mat-icon> {{ game.owner }}</span>
+            </a>
+            <span class="console"
+              ><mat-icon>videogame_asset</mat-icon> {{ game.consoleModel | translateConsole }}</span
+            >
             <span class="used-time"><mat-icon>schedule</mat-icon> {{ game.usedTime }} de uso</span>
-            <span class="login-info" *rxIf="!user"><mat-icon>login</mat-icon> Faça login para negociar</span>
+            <span class="login-info" *rxIf="!user"
+              ><mat-icon>login</mat-icon> Faça login para negociar</span
+            >
           </div>
           <div class="chat-button" *rxIf="user">
             <button

@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from "@angular/core"
+import { Component, Input, OnInit, inject } from "@angular/core"
 import { where } from "@angular/fire/firestore"
 import { GameCardInput } from "src/app/shared/components/game-card/game-card.component"
 import { AuthService } from "src/app/services/auth.service"
@@ -16,7 +16,9 @@ interface State {
   styleUrls: ["./my-games.component.scss"],
   providers: [RxState, RxEffects],
 })
-export class MyGamesPageComponent {
+export class MyGamesPageComponent implements OnInit {
+  @Input() id: string
+
   private _authService = inject(AuthService)
   private _gameRepository = inject(GameRepository)
 
@@ -28,9 +30,14 @@ export class MyGamesPageComponent {
     private _effects: RxEffects,
   ) {
     this._effects.register(this.user$, async (user) => {
-      if(!user) return
+      if (!user || this.id) return
       const filter = [where("ownerId", "==", user.uid)]
       this._state.connect("games", this._gameRepository.getGamesOrderBy(filter))
     })
+  }
+
+  ngOnInit(): void {
+    const filter = [where("ownerId", "==", this.id)]
+    this._state.connect("games", this._gameRepository.getGamesOrderBy(filter))
   }
 }
