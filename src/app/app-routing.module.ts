@@ -27,10 +27,18 @@ const routes: Routes = [
     loadChildren: () => import("./pages/my-games/my-games.module").then((m) => m.MyGamesPageModule),
     canActivate: [authGuard],
   },
+  {
+    path: "profile/:id",
+    loadChildren: () => import("./pages/profile/profile.module").then((m) => m.ProfilePageModule),
+  },
 ]
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes)],
+  imports: [
+    RouterModule.forRoot(routes, {
+      bindToComponentInputs: true,
+    }),
+  ],
   exports: [RouterModule],
 })
 export class AppRoutingModule {}

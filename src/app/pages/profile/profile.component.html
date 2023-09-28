@@ -1,0 +1,26 @@
+<app-main-nav></app-main-nav>
+<app-sub-nav></app-sub-nav>
+<section class="main-section">
+  <div class="avatar">
+    <img src="assets/images/avatar.png" alt="User Avatar" />
+  </div>
+  <div class="user-info">
+    <h2>Pablo Henrique</h2>
+    <div class="reputation">Reputação: <span>4.5/5</span></div>
+    <div class="city">Cidade: Teresina</div>
+    <div class="rating">
+      <mat-icon
+        class="star"
+        *ngFor="let star of stars; let i = index"
+        (mouseenter)="hoverStar(i + 1)"
+        (mouseleave)="resetStars()"
+        (click)="setRating(i + 1)"
+        (keyup)="(null)"
+        tabindex="0"
+      >
+        {{ star === "star" ? "star" : "star_border" }}
+      </mat-icon>
+    </div>
+    <p class="selected-rating-text">Sua avaliação: {{ selectedRating }}</p>
+  </div>
+</section>

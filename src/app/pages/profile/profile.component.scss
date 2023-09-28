@@ -1,0 +1,43 @@
+.main-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 30px;
+  height: 130%;
+}
+.avatar {
+  width: 220px;
+  height: 220px;
+  border-radius: 50%;
+  overflow: hidden;
+}
+.avatar img {
+  width: 100%;
+  height: auto;
+}
+.user-info {
+  display: flex;
+  flex-direction: column;
+  align-content: center;
+  text-align: center;
+}
+.rating-container {
+  padding-top: 20px;
+}
+.rating {
+  display: flex;
+  justify-content: center;
+}
+
+.star {
+  cursor: pointer;
+  margin: 0 5px;
+}
+
+.star img {
+  transition: transform 0.2s;
+}
+
+.star.selected img {
+  transform: scale(1.1);
+}
