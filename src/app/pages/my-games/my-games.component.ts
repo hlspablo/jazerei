@@ -37,7 +37,9 @@ export class MyGamesPageComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    const filter = [where("ownerId", "==", this.id)]
-    this._state.connect("games", this._gameRepository.getGamesOrderBy(filter))
+    if (this.id) {
+      const filter = [where("ownerId", "==", this.id)]
+      this._state.connect("games", this._gameRepository.getGamesOrderBy(filter))
+    }
   }
 }

@@ -31,11 +31,11 @@ export class ChatRoomRepository {
     relatedGameId: string,
     relatedGameName: string,
   ): Promise<string> {
-    const { location, name } = await this._userRepository.getProfile(receiverId)
+    const { locationName, name } = await this._userRepository.getProfile(receiverId)
 
     const members = [currentUser.uid, receiverId]
     const names = [currentUser.displayName, name]
-    const locations = [currentUser.location.name, location.name]
+    const locations = [currentUser.locationName, locationName]
 
     const docRef = await addDoc(this._collection, {
       members,

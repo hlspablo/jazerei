@@ -1,6 +1,6 @@
 import { Injectable, inject } from "@angular/core"
-import { Firestore, doc, getDoc } from "@angular/fire/firestore"
-import { MyLocation, Profile } from "../shared/interfaces/app.interface"
+import { Firestore, doc, getDoc, setDoc } from "@angular/fire/firestore"
+import { Profile } from "../shared/interfaces/app.interface"
 
 @Injectable({
   providedIn: "root",
@@ -8,24 +8,20 @@ import { MyLocation, Profile } from "../shared/interfaces/app.interface"
 export class UserRepository {
   private _firestore = inject(Firestore)
 
+  async createProfile(userId: string, { cpf, locationId, locationName, name }: Profile) {
+    await setDoc(doc(this._firestore, "profiles", userId), {
+      name,
+      cpf,
+      locationId,
+      locationName,
+    })
+  }
+
   async getProfile(userId: string) {
     try {
       const profileDocRef = doc(this._firestore, `profiles/${userId}`)
       const profileSnap = await getDoc(profileDocRef)
-      const data = profileSnap.data() as Profile
-      const { cpf, name } = data
-
-      const locationRef = doc(this._firestore, `locations/${data.location}`)
-      const locationSnap = await getDoc(locationRef)
-      const location = locationSnap.data() as MyLocation
-      return {
-        cpf,
-        location: {
-          ...location,
-          id: locationSnap.id,
-        },
-        name,
-      }
+      return profileSnap.data() as Profile
     } catch (error) {
       console.log(error)
       throw error

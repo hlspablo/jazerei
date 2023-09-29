@@ -43,13 +43,14 @@
             class="location-select"
             [items]="locations$ | async"
             (search)="onSearch($event)"
+            (change)="onChange($event)"
             placeholder="Pesquisa sua cidade"
             [clearable]="true"
             bindLabel="name"
             bindValue="id"
             appearance="outline"
             notFoundText="Cidade não encontrada para o termo pesquisado"
-            formControlName="selectedLocationId"
+            formControlName="selectedLocation"
             appendTo="body"
           >
           </ng-select>

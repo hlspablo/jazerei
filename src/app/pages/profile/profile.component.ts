@@ -43,7 +43,7 @@ export class ProfilePageComponent implements OnInit {
     this.fillStars(this.selectedRating)
     this.currentReputation = await this._ratingService.getUserRate(this.id)
     const profile = await this._userRepository.getProfile(this.id)
-    this.locationName = profile.location.name
+    this.locationName = profile.locationName
     this.profileName = profile.name
 
     this._effects.register(this.user$, async (user) => {

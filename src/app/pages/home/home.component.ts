@@ -1,11 +1,5 @@
 import { Component, OnInit, inject } from "@angular/core"
-import {
-  Subject,
-  combineLatest,
-  concatMap,
-  switchMap,
-  tap,
-} from "rxjs"
+import { Subject, combineLatest, concatMap, switchMap, tap } from "rxjs"
 import {
   DocumentData,
   DocumentSnapshot,
@@ -69,7 +63,6 @@ export class HomePageComponent implements OnInit {
     const games = this._state.get("games")
     if (games && games.length > 0) {
       const lastGame = games[games.length - 1]
-      console.log("Getting latest snapshot", lastGame.id)
       this.latestGameSnapshot = await this._gameRepository.getGameSnapshot(lastGame.id)
     }
   }
@@ -77,7 +70,6 @@ export class HomePageComponent implements OnInit {
   ngOnInit() {
     this._state.hold(
       this.seeMoreClicks$.pipe(
-        tap(() => console.log("See more clicked")),
         concatMap(async () => {
           this.loadingMore = true
           await this.getLatestSnapshot()
@@ -121,11 +113,11 @@ export class HomePageComponent implements OnInit {
         this._locationService.city$,
         this._routes.paramMap,
       ]).pipe(
-        switchMap(([user, city, params]) => {
+        switchMap(([_, city, params]) => {
           this.filters = []
           if (city && city.id) {
             this.queryConstraints.locations = []
-            this.queryConstraints.locations.push(where("location", "==", city.id))
+            this.queryConstraints.locations.push(where("locationId", "==", city.id))
             this.filters.push(city.name)
           } else {
             this.queryConstraints.locations = []

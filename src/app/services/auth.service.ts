@@ -7,25 +7,22 @@ import {
   user,
   User,
 } from "@angular/fire/auth"
-import { Firestore, setDoc, doc } from "@angular/fire/firestore"
 import { RxState } from "@rx-angular/state"
 import { from, map, of, switchMap } from "rxjs"
-import { MyLocation } from "../shared/interfaces/app.interface"
 import { Router } from "@angular/router"
 import { UserRepository } from "../repositories/user.repository"
+import { Profile } from "../shared/interfaces/app.interface"
 
 interface UserRegisterDTO {
   email: string
   password: string
   name: string
   cpf: string
-  location: string
+  locationId: string
+  locationName: string
 }
 
-export type CompleteUser = User & {
-  cpf: string
-  location: MyLocation
-}
+export type CompleteUser = User & Profile
 
 export interface AuthState {
   user: CompleteUser | null
@@ -36,7 +33,6 @@ export interface AuthState {
 })
 export class AuthService extends RxState<AuthState> {
   private _auth: Auth = inject(Auth)
-  private _firestore = inject(Firestore)
   private _user$ = user(this._auth)
   private _routerService = inject(Router)
   private _userRepository = inject(UserRepository)
@@ -51,10 +47,9 @@ export class AuthService extends RxState<AuthState> {
             return of(null)
           }
           return from(this._userRepository.getProfile(user.uid)).pipe(
-            map(({ cpf, location }) => ({
+            map((profile) => ({
               ...user,
-              cpf,
-              location,
+              ...profile,
             })),
           )
         }),
@@ -81,22 +76,23 @@ export class AuthService extends RxState<AuthState> {
     await signInWithEmailAndPassword(this._auth, email, password)
   }
 
-  async register(userData: UserRegisterDTO) {
-    const { user } = await createUserWithEmailAndPassword(
-      this._auth,
-      userData.email,
-      userData.password,
-    )
+  async register({ cpf, email, locationId, locationName, name, password }: UserRegisterDTO) {
+    try {
+      const { user } = await createUserWithEmailAndPassword(this._auth, email, password)
+      await updateProfile(user, {
+        displayName: name,
+      })
 
-    await updateProfile(user, {
-      displayName: userData.name,
-    })
-
-    await setDoc(doc(this._firestore, "profiles", user.uid), {
-      name: userData.name,
-      cpf: userData.cpf,
-      location: userData.location,
-    })
+      this._userRepository.createProfile(user.uid, {
+        cpf,
+        locationId,
+        locationName,
+        name,
+      })
+    } catch (error) {
+      console.log(error)
+      throw error
+    }
   }
 
   async logout() {

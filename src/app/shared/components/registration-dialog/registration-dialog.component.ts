@@ -18,6 +18,7 @@ interface UIActions {
 }
 interface State {
   locations: MyLocation[]
+  selectedLocation: MyLocation | null
 }
 
 interface registrationForm {
@@ -47,6 +48,7 @@ export class RegistrationDialogComponent implements OnInit, AfterViewInit {
   protected locations$ = this._state.select("locations")
   protected registerErrorMessage = ""
   protected isLoading = false
+
   protected registrationForm = this._fb.group({
     stepOne: this._fb.group({
       email: ["", [Validators.required, Validators.email]],
@@ -55,7 +57,7 @@ export class RegistrationDialogComponent implements OnInit, AfterViewInit {
     stepTwo: this._fb.group({
       name: ["", Validators.required],
       cpf: ["", [Validators.required, cpfValidator]],
-      selectedLocationId: [null, Validators.required],
+      selectedLocation: [null, Validators.required],
     }),
   })
 
@@ -73,6 +75,10 @@ export class RegistrationDialogComponent implements OnInit, AfterViewInit {
     this.uiActions.searchCity(removeDiacritics(event.term.trim().toLowerCase()))
   }
 
+  onChange(event: MyLocation) {
+    this._state.set({ selectedLocation: event })
+  }
+
   async submit() {
     if (this.registrationForm.valid) {
       const values = this.registrationForm.value as registrationForm
@@ -85,7 +91,8 @@ export class RegistrationDialogComponent implements OnInit, AfterViewInit {
             password: values.stepOne.password,
             name: values.stepTwo.name,
             cpf: values.stepTwo.cpf,
-            location: values.stepTwo.selectedLocationId || "",
+            locationId: this._state.get("selectedLocation")?.id || "",
+            locationName: this._state.get("selectedLocation")?.name || "",
           })
           await sleepFor(500)
           this._matDialogService.closeAll()

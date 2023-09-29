@@ -46,7 +46,8 @@ export interface UserChatRoom {
 export interface Profile {
   name: string
   cpf: string
-  location: string
+  locationId: string
+  locationName: string
 }
 
 export interface Rating {
