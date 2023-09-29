@@ -10,19 +10,10 @@
   .main {
     background-color: mat.get-color-from-palette($background-palette, 50);
   }
-  .filter-text {
-    color: mat.get-contrast-color-from-palette($background-palette, 50);
-  }
 }
 
 @mixin typography($theme) {
   $typography-config: mat.get-typography-config($theme);
-
-  .showing {
-    .showing-text {
-      @include mixins.headline-7;
-    }
-  }
   .see-more button {
     @include mat.typography-level($typography-config, button);
   }

@@ -46,6 +46,7 @@ export class GameRepository {
         ownerId: user.uid,
         owner: user.displayName,
         location: user.location.id,
+        locationName: user.location.name,
         consoleModel,
         usedTime,
         imagesUrls,

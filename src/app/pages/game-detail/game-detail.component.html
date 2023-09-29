@@ -57,6 +57,9 @@
             <span class="console"
               ><mat-icon>videogame_asset</mat-icon> {{ game.consoleModel | translateConsole }}</span
             >
+            <span class="location"
+              ><mat-icon>tour</mat-icon> {{ game.locationName }}</span
+            >
             <span class="used-time"><mat-icon>schedule</mat-icon> {{ game.usedTime }} de uso</span>
             <span class="login-info" *rxIf="!user"
               ><mat-icon>login</mat-icon> Faça login para negociar</span

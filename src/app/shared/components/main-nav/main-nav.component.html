@@ -84,7 +84,7 @@
     *rxIf="isHandsetOrSmall === false"
   >
     <mat-icon color="accent">gps_fixed</mat-icon>
-    <button mat-raised-button color="accent" *rxLet="selectedLocation$; let location">
+    <button mat-raised-button color="accent" *rxLet="selectedLocation$ as location">
       {{ location ? location.name : "Filtrar por cidade" }}
     </button>
   </div>

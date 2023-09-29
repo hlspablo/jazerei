@@ -7,14 +7,15 @@
   $accent-palette: map.get($color-config, "accent");
   $typography-config: mat.get-typography-config($theme);
 
-  .platform {
+  .actions-info {
     color: mat.get-color-from-palette($primary-palette, 500);
   }
 }
 
 @mixin typography($theme) {
   $typography-config: mat.get-typography-config($theme);
-  .platform {
+
+  .actions-info {
     @include mat.typography-level($typography-config, body-2);
   }
 }

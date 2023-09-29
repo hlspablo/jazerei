@@ -118,6 +118,7 @@ export class PublishPageComponent implements OnInit {
         name: "",
         description: "",
         consoleModel: "",
+        locationName: user.location.name,
         usedTime: "",
         imagesUrls: [],
         owner: user.displayName || "",

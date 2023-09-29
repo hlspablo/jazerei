@@ -20,7 +20,10 @@
   </div>
   <mat-card-content class="description" ellipsis [ellipsis-content]="game.description">
   </mat-card-content>
-  <mat-card-actions align="end">
-    <span class="platform">{{ game.consoleModel | translateConsole }}</span>
+  <mat-card-actions>
+    <div class="actions-info">
+      <span class="item"><mat-icon>videogame_asset</mat-icon>{{ game.locationName }}</span>
+      <span class="item"><mat-icon>tour</mat-icon>{{ game.consoleModel | translateConsole }}</span>
+    </div>
   </mat-card-actions>
 </mat-card>

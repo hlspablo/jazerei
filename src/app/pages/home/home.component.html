@@ -1,5 +1,5 @@
 <app-main-nav></app-main-nav>
-<app-sub-nav></app-sub-nav>
+<app-sub-nav [showSearchBar]="true"></app-sub-nav>
 <section class="main">
   <ng-container *rxIf="games$; else noGames; let games">
     <div class="filter-container" *rxIf="this.filters.length > 0">

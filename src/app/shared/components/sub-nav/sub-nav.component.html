@@ -1,4 +1,4 @@
-<nav class="sub-nav">
+<nav class="sub-nav" *rxIf="showSearchBar">
   <app-search-bar></app-search-bar>
 </nav>
 <nav class="sub-nav-bottom" *rxLet="isHandsetOrSmall$; let isHandsetOrSmall">
@@ -67,13 +67,23 @@
       /></a>
     </li>
   </ul>
-  <div class="location" *ngIf="isHandsetOrSmall" (click)="localDialogsService.openLocationDialog()">
+  <div
+    appClickAndKey
+    tabindex="1"
+    (appClickAndKey)="localDialogsService.openLocationDialog()"
+    class="location"
+    *ngIf="isHandsetOrSmall"
+  >
     <mat-icon color="accent">gps_fixed</mat-icon>
-    <button mat-raised-button color="accent">Localização</button>
+    <button mat-raised-button color="accent" *rxLet="selectedLocation$ as location">
+      {{ location ? location.name : "Filtrar por cidade" }}
+    </button>
+    <!-- <button mat-raised-button color="accent">Localização</button> -->
   </div>
   <div
-    (click)="conversationsService.toggleConversations()"
-    tabindex="0"
+    appClickAndKey
+    tabindex="2"
+    (appClickAndKey)="conversationsService.toggleConversations()"
     class="location"
     *rxIf="isHandsetOrSmall && (user$ | push)"
   >

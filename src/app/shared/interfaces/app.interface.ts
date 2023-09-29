@@ -9,6 +9,7 @@ export interface GameFirebaseRow {
   imagesUrls: string[]
   consoleModel: string
   usedTime: number
+  locationName: string
 }
 
 export interface ChatMessageFirebaseRow {

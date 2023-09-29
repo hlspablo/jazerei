@@ -8,6 +8,7 @@ export interface GameCardInput {
   ownerId: string
   imagesUrls: string[]
   consoleModel: string
+  locationName: string
 }
 
 type CardSizeType = "large" | "small"
