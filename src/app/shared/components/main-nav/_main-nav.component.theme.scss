@@ -7,22 +7,27 @@
   $accent-palette: map.get($color-config, "accent");
   $typography-config: mat.get-typography-config($theme);
 
-  .links li a {
-    color: mat.get-contrast-color-from-palette($primary-palette, 500);
-  }
-  .location-text {
-    color: mat.get-contrast-color-from-palette($primary-palette, 500);
+  .main-nav {
+    background-color: mat.get-color-from-palette($primary-palette, 500);
+    .links li a {
+      color: mat.get-contrast-color-from-palette($primary-palette, 500);
+    }
+    .location-text {
+      color: mat.get-contrast-color-from-palette($primary-palette, 500);
+    }
   }
 }
 
 @mixin typography($theme) {
   $typography-config: mat.get-typography-config($theme);
 
-  .links li a {
-    @include mat.typography-level($typography-config, headline-6);
-  }
-  .location-text {
-    @include mat.typography-level($typography-config, headline-6);
+  .main-nav {
+    .links li a {
+      @include mat.typography-level($typography-config, headline-6);
+    }
+    .location-text {
+      @include mat.typography-level($typography-config, headline-6);
+    }
   }
 }
 
