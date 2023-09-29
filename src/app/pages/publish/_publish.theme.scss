@@ -16,7 +16,7 @@
   $typography-config: mat.get-typography-config($theme);
 }
 
-@mixin theme($theme) {
+@mixin _theme($theme) {
   $color-config: mat.get-color-config($theme);
   @if $color-config != null {
     @include color($theme);
@@ -28,7 +28,6 @@
   }
 }
 
-
 @mixin apply-theme($theme) {
-  @include theme($theme);
+  @include _theme($theme);
 }

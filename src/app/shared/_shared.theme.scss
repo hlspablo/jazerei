@@ -4,8 +4,8 @@
 @use "./components/game-card/game-card.component.theme" as game-card;
 
 @mixin apply-theme($theme) {
-  @include main-nav.theme($theme);
-  @include sliding-menu.theme($theme);
-  @include sub-nav.theme($theme);
-  @include game-card.theme($theme);
+  @include main-nav.apply_theme($theme);
+  @include sliding-menu.apply_theme($theme);
+  @include sub-nav.apply_theme($theme);
+  @include game-card.apply_theme($theme);
 }

@@ -37,7 +37,8 @@ import { TranslateConsolePipe } from "../pipes/translate-console.pipe"
 import { MatDialogModule } from "@angular/material/dialog"
 import { ProgressButtonComponent } from "./components/progress-button/progress-button.component"
 import { HoldableDirective } from "../directives/holdable.directive"
-import { NgOptimizedImage } from '@angular/common';
+import { NgOptimizedImage } from "@angular/common"
+import { ClickAndKeyDirective } from "../directives/click-and-key.directive"
 
 @NgModule({
   declarations: [
@@ -56,6 +57,7 @@ import { NgOptimizedImage } from '@angular/common';
     GetHumanTimePipe,
     TranslateConsolePipe,
     HoldableDirective,
+    ClickAndKeyDirective,
   ],
   imports: [
     CommonModule,
@@ -104,6 +106,7 @@ import { NgOptimizedImage } from '@angular/common';
     RxFor,
     RxPush,
     HoldableDirective,
+    ClickAndKeyDirective,
     MatIconModule,
     MatButtonModule,
     NgOptimizedImage,

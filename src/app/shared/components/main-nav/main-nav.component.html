@@ -51,13 +51,23 @@
         </button>
       </ng-container>
       <ng-template #loggedOut>
-        <li (click)="localDialogsService.openLoginDialog()" tabindex="2" role="menuitem">
+        <li
+          appClickAndKey
+          (appClickAndKey)="localDialogsService.openLoginDialog()"
+          tabindex="2"
+          role="menuitem"
+        >
           <a>
             <mat-icon color="accent" class="menu-icon">login</mat-icon>
             Login
           </a>
         </li>
-        <li (click)="localDialogsService.openRegistrationDialog()" tabindex="3" role="menuitem">
+        <li
+          appClickAndKey
+          (appClickAndKey)="localDialogsService.openRegistrationDialog()"
+          tabindex="3"
+          role="menuitem"
+        >
           <a>
             <mat-icon color="accent" class="menu-icon">person_add</mat-icon>
             Cadastro
@@ -67,7 +77,8 @@
     </ul>
   </ng-container>
   <div
-    (click)="localDialogsService.openLocationDialog()"
+    appClickAndKey
+    (appClickAndKey)="localDialogsService.openLocationDialog()"
     class="location"
     tabindex="0"
     *rxIf="isHandsetOrSmall === false"
