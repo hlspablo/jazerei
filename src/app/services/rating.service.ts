@@ -21,7 +21,6 @@ export class RatingService {
   }
 
   async getMyRate(profileId: string, currentUserId: string) {
-    console.log("getMyRate", profileId, currentUserId)
     const rate = await this._ratingRepository.getRating(profileId, currentUserId)
     return rate?.rating || 0
   }

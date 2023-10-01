@@ -43,7 +43,6 @@ export class RatingRepository {
       )
       const docSnapshot = await getDoc(ratingDocRef)
       if (docSnapshot.exists()) {
-        console.log("Exists")
         return docSnapshot.data() as Rating
       } else {
         return null
