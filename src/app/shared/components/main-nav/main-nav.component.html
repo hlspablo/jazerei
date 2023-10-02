@@ -23,13 +23,13 @@
     <ul role="menubar" class="links flex-grow" *rxLet="user$; let user; suspense: suspense">
       <ng-container *rxIf="user; else loggedOut">
         <li tabindex="1" role="menuitem">
-          <a routerLink="/publish">
+          <a routerLink="/publish" [routerLinkActive]="['active']">
             <mat-icon color="accent" class="menu-icon">publish</mat-icon>
             Publicar Jogo
           </a>
         </li>
         <li tabindex="2" role="menuitem">
-          <a routerLink="/my-games">
+          <a routerLink="/my-games" [routerLinkActive]="['active']">
             <mat-icon color="accent" class="menu-icon">gamepad</mat-icon>
             Meus jogos
           </a>
@@ -40,7 +40,7 @@
               <span class="badge" *rxIf="totalUnreadCount > 0">{{ totalUnreadCount }}</span>
             </ng-container>
           </div>
-          <a routerLink="/chat">
+          <a routerLink="/chat" [routerLinkActive]="['active']">
             <mat-icon color="accent" class="menu-icon">sms</mat-icon>
             Conversas
           </a>

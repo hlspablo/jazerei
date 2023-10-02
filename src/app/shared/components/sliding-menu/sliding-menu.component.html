@@ -25,21 +25,27 @@
   <ul class="mobile-links" role="menubar" *rxLet="user$; let user">
     <ng-container *rxIf="user; else loggedOut">
       <li role="menuitem">
-        <a routerLink="/publish" (click)="slideMenu.closeMenu()">Publicar Jogo</a>
+        <a routerLink="/publish" [routerLinkActive]="['active']" (click)="slideMenu.closeMenu()">Publicar Jogo</a>
       </li>
       <li role="menuitem">
-        <a routerLink="/my-games" (click)="slideMenu.closeMenu()">Meus Jogos</a>
+        <a routerLink="/my-games" [routerLinkActive]="['active']" (click)="slideMenu.closeMenu()">Meus Jogos</a>
       </li>
-      <li role="menuitem" (click)="logout()">
-        <a (click)="slideMenu.closeMenu()">Sair, {{ user?.displayName | getFirstName }} </a>
+      <li role="menuitem" appClickAndKey (appClickAndKey)="logout()">
+        <a appClickAndKey (appClickAndKey)="slideMenu.closeMenu()"
+          >Sair, {{ user?.displayName | getFirstName }}
+        </a>
       </li>
     </ng-container>
     <ng-template #loggedOut>
       <li role="menuitem">
-        <a (click)="localDialogsService.openLoginDialog(); slideMenu.closeMenu()">Login</a>
+        <a
+          appClickAndKey
+          (appClickAndKey)="localDialogsService.openLoginDialog(); slideMenu.closeMenu()"
+          >Login</a
+        >
       </li>
       <li role="menuitem">
-        <a (click)="localDialogsService.openRegistrationDialog(); slideMenu.closeMenu()"
+        <a appClickAndKey (appClickAndKey)="localDialogsService.openRegistrationDialog(); slideMenu.closeMenu()"
           >Cadastro</a
         >
       </li>
@@ -78,10 +84,10 @@
         >Xbox 360</a
       >
     </li>
-    <li (click)="slideMenu.closeMenu()" role="menuitem">
-      <a routerLink="/console/nintendo-switch" [routerLinkActive]="['active']">Nitendo Switch</a>
+    <li appClickAndKey (appClickAndKey)="slideMenu.closeMenu()" role="menuitem">
+      <a  routerLink="/console/nintendo-switch" [routerLinkActive]="['active']">Nitendo Switch</a>
     </li>
-    <li (click)="slideMenu.closeMenu()" role="menuitem">
+    <li appClickAndKey (appClickAndKey)="slideMenu.closeMenu()" role="menuitem">
       <a routerLink="/console/nintendo-3ds" [routerLinkActive]="['active']">Nitendo 3DS</a>
     </li>
   </ul>
